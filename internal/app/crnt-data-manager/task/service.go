@@ -4,10 +4,10 @@ import (
 	"github.com/Constantine27K/crnt-data-manager/pkg/task"
 )
 
-type impl struct {
+type Implementation struct {
 	task.UnimplementedTaskRegistryServer
 }
 
-func NewService() *impl {
-	return &impl{}
+func NewService() *Implementation {
+	return &Implementation{}
 }

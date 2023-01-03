@@ -7,6 +7,6 @@ import (
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/task"
 )
 
-func (i *impl) Get(ctx context.Context, req *desc.TaskGetRequest) (*desc.TaskGetResponse, error) {
+func (i *Implementation) Get(ctx context.Context, req *desc.TaskGetRequest) (*desc.TaskGetResponse, error) {
 	return nil, errors.New("unimplemented")
 }

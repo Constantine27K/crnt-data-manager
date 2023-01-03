@@ -46,31 +46,30 @@ LOCAL_BIN=$(CURDIR)/bin
 .PHONY: .bin-deps
 .bin-deps:
 	$(info Installing binary dependencies)
-	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.11.2
-	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.11.2
-	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
-	GOBIN=$(LOCAL_BIN) go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0
-	GOBIN=$(LOCAL_BIN) go install github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto@v0.3.0
-	GOBIN=$(LOCAL_BIN) go install github.com/mitchellh/gox@v1.0.1
-	GOBIN=$(LOCAL_BIN) go install golang.org/x/tools/cmd/goimports@v0.1.9
-	GOBIN=$(LOCAL_BIN) go install github.com/bufbuild/buf/cmd/buf
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.11.2
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.11.2
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0
+	go install github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto@v0.3.0
+	go install github.com/mitchellh/gox@v1.0.1
+	go install golang.org/x/tools/cmd/goimports@v0.1.9
+	go install github.com/bufbuild/buf/cmd/buf
 
 .PHONY: .install-lint
 .install-lint:
 	$(info Installing linter)
-	GOBIN=$(LOCAL_BIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint
 
 .PHONY: lint
 lint:
 	golangci-lint run
 
-.PHONY: .deps-pb
-.deps-pb:
-	protogen clean
-	protogen vendor
-
 .PHONY: generate
-generate: .bin-deps .deps-pb .generate
+generate: .bin-deps .generate
 
 .PHONY: fast-generate
 fast-generate: .generate
+
+.PHONY: run
+run:
+	go run ./cmd/crnt-data-manager/main.go --local-config-enabled --bind-localhost
