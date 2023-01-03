@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.sprint;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/sprint;sprint";
+
+message Sprint {
+	int64 id = 1;
+	string name = 2;
+	google.protobuf.Timestamp started_at = 3;
+	google.protobuf.Timestamp finished_at = 4;
+}
