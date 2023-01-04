@@ -1,4 +1,0 @@
-version: v1
-name: buf.build/Constantine27K/crnt-data-manager
-deps:
-  - buf.build/googleapis/googleapis
