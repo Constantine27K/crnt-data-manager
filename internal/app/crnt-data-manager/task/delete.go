@@ -2,11 +2,12 @@ package task
 
 import (
 	"context"
-	"errors"
 
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/task"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) Delete(ctx context.Context, req *desc.TaskDeleteRequest) (*desc.TaskDeleteResponse, error) {
-	return nil, errors.New("unimplemented")
+	return nil, status.Errorf(codes.Unimplemented, "Kostya has not implemented this yet")
 }
