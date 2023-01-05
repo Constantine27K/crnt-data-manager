@@ -28,6 +28,15 @@ func main() {
 	createHttpServer()
 }
 
+func loadEnv() {
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Error("No .env file found",
+			zap.Error(err),
+		)
+	}
+}
+
 func setLogger() {
 	logLevel, _ := strconv.ParseInt(os.Getenv("LOG_LEVEL"), 10, 32)
 	log.SetFormatter(&log.TextFormatter{
@@ -36,15 +45,6 @@ func setLogger() {
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
 	log.SetLevel(log.Level(logLevel))
-}
-
-func loadEnv() {
-	// loads values from .env into the system
-	if err := godotenv.Load(); err != nil {
-		log.Error("No .env file found",
-			zap.Error(err),
-		)
-	}
 }
 
 func createHttpServer() {
