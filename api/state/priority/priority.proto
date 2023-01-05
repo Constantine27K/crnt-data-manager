@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.state.priority;
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/state/priority;priority";
+
+enum Priority  {
+	PRIORITY_UNKNOWN = 0;
+	PRIORITY_CRITICAL = 1;
+	PRIORITY_HIGH = 2;
+	PRIORITY_MEDIUM = 3;
+	PRIORITY_LOW = 4;
+}

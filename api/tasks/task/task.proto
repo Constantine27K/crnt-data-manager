@@ -1,14 +1,17 @@
 syntax = "proto3";
 
-package github.constantine27k.crnt_data_manager.api.task;
+package github.constantine27k.crnt_data_manager.api.tasks.task;
 
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-import "status/status.proto";
+import "state/status/status.proto";
+import "state/priority/priority.proto";
+import "state/template/template.proto";
+import "comments/comments.proto";
 
-option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/task;task";
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/tasks/task;task";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
@@ -24,29 +27,24 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service TaskRegistry {
 	rpc Create (TaskCreateRequest) returns (TaskCreateResponse) {
 		option (google.api.http) = {
-			post: "/v1/task/create"
+			post: "/v1/task"
 			body: "*"
 		};
 	};
 	rpc Update (TaskUpdateRequest) returns (TaskUpdateResponse) {
 		option (google.api.http) = {
-			put: "/v1/task/{id}/update"
+			put: "/v1/task/{id}"
 			body: "*"
 		};
 	};
 	rpc Get (TaskGetRequest) returns (TaskGetResponse) {
 		option (google.api.http) = {
-			get: "/v1/tasks/get"
+			get: "/v1/tasks"
 		};
 	};
 	rpc GetByID (TaskGetByIDRequest) returns (TaskGetByIDResponse) {
 		option (google.api.http) = {
-			get: "/v1/task/{id}/get"
-		};
-	};
-	rpc Delete (TaskDeleteRequest) returns (TaskDeleteResponse) {
-		option (google.api.http) = {
-			delete: "/v1/task/{id}/delete"
+			get: "/v1/task/{id}"
 		};
 	};
 }
@@ -54,19 +52,23 @@ service TaskRegistry {
 message Task {
 	int64 id = 1;
 	string name = 2;
-	string author = 3;
-	string assigned = 4;
-	string qa = 5;
-	string reviewer = 6;
-	Template template = 7;
-	google.protobuf.Timestamp created_at = 8;
-	google.protobuf.Timestamp deadline = 9;
-	google.protobuf.Timestamp updated_at = 10;
-	status.Status status = 11;
-	int64 sprint_id = 12;
-	int64 project_id = 13;
-	int64 component_id = 14;
-	int64 story_points = 15;
+	int64 story_id = 3;
+	string description = 4;
+	repeated comments.Comment comments = 5;
+	string author = 6;
+	string assigned = 7;
+	string qa = 8;
+	string reviewer = 9;
+	state.template.Template template = 10;
+	google.protobuf.Timestamp created_at = 11;
+	google.protobuf.Timestamp deadline = 12;
+	google.protobuf.Timestamp updated_at = 13;
+	state.status.TaskStatus status = 14;
+	state.priority.Priority priority = 15;
+	int64 sprint_id = 16;
+	int64 project_id = 17;
+	repeated int64 component_id = 18;
+	int64 story_points = 19;
 }
 
 message TaskCreateRequest {
@@ -90,7 +92,9 @@ message TaskGetRequest {
 	repeated int64 ids = 1;
 	string author = 2;
 	string assigned = 3;
-	int64 sprint = 4;
+	int64 sprint_id = 4;
+	int64 project_id = 5;
+	state.status.TaskStatus status = 6;
 }
 
 message TaskGetResponse {
@@ -102,19 +106,5 @@ message TaskGetByIDRequest {
 }
 
 message TaskGetByIDResponse {
-	Task tasks = 1;
-}
-
-message TaskDeleteRequest {
-	int64 id = 1;
-}
-
-message TaskDeleteResponse {
-	int64 id = 1;
-}
-
-enum Template {
-	TEMPLATE_UNKNOWN = 0;
-	TEMPLATE_COMMON = 1;
-	TEMPLATE_DEVELOPMENT = 2;
+	Task task = 1;
 }

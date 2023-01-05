@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Task",
+    "title": "Epic",
     "version": "0.1"
   },
   "tags": [
     {
-      "name": "TaskRegistry"
+      "name": "EpicRegistry"
     }
   ],
   "schemes": [
@@ -19,14 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/task": {
+    "/v1/epic": {
       "post": {
-        "operationId": "TaskRegistry_Create",
+        "operationId": "EpicRegistry_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskCreateResponse"
+              "$ref": "#/definitions/epicEpicCreateResponse"
             }
           },
           "default": {
@@ -42,23 +42,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/taskTaskCreateRequest"
+              "$ref": "#/definitions/epicEpicCreateRequest"
             }
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "EpicRegistry"
         ]
       }
     },
-    "/v1/task/{id}": {
+    "/v1/epic/{id}": {
       "get": {
-        "operationId": "TaskRegistry_GetByID",
+        "operationId": "EpicRegistry_GetByID",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetByIDResponse"
+              "$ref": "#/definitions/epicEpicGetByIDResponse"
             }
           },
           "default": {
@@ -78,16 +78,16 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "EpicRegistry"
         ]
       },
       "put": {
-        "operationId": "TaskRegistry_Update",
+        "operationId": "EpicRegistry_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskUpdateResponse"
+              "$ref": "#/definitions/epicEpicUpdateResponse"
             }
           },
           "default": {
@@ -112,26 +112,26 @@
             "schema": {
               "type": "object",
               "properties": {
-                "task": {
-                  "$ref": "#/definitions/taskTask"
+                "epic": {
+                  "$ref": "#/definitions/epicEpic"
                 }
               }
             }
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "EpicRegistry"
         ]
       }
     },
-    "/v1/tasks": {
+    "/v1/epics": {
       "get": {
-        "operationId": "TaskRegistry_Get",
+        "operationId": "EpicRegistry_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetResponse"
+              "$ref": "#/definitions/epicEpicGetResponse"
             }
           },
           "default": {
@@ -221,7 +221,7 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "EpicRegistry"
         ]
       }
     }
@@ -248,6 +248,127 @@
         },
         "text": {
           "type": "string"
+        }
+      }
+    },
+    "epicEpic": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "responsible": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commentsComment"
+          }
+        },
+        "author": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "qa": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "template": {
+          "$ref": "#/definitions/templateTemplate"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/statusTaskStatus"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "projectId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "componentId": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "epicEpicCreateRequest": {
+      "type": "object",
+      "properties": {
+        "epic": {
+          "$ref": "#/definitions/epicEpic"
+        }
+      }
+    },
+    "epicEpicCreateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "epicEpicGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "epic": {
+          "$ref": "#/definitions/epicEpic"
+        }
+      }
+    },
+    "epicEpicGetResponse": {
+      "type": "object",
+      "properties": {
+        "epics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/epicEpic"
+          }
+        }
+      }
+    },
+    "epicEpicUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -331,128 +452,6 @@
         },
         "development": {
           "$ref": "#/definitions/statusTaskDevelopment"
-        }
-      }
-    },
-    "taskTask": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        },
-        "storyId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "description": {
-          "type": "string"
-        },
-        "comments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/commentsComment"
-          }
-        },
-        "author": {
-          "type": "string"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "qa": {
-          "type": "string"
-        },
-        "reviewer": {
-          "type": "string"
-        },
-        "template": {
-          "$ref": "#/definitions/templateTemplate"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "deadline": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "status": {
-          "$ref": "#/definitions/statusTaskStatus"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "projectId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "componentId": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "taskTaskCreateRequest": {
-      "type": "object",
-      "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
-        }
-      }
-    },
-    "taskTaskCreateResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "taskTaskGetByIDResponse": {
-      "type": "object",
-      "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
-        }
-      }
-    },
-    "taskTaskGetResponse": {
-      "type": "object",
-      "properties": {
-        "tasks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/taskTask"
-          }
-        }
-      }
-    },
-    "taskTaskUpdateResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },

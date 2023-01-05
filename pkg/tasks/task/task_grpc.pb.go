@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.12
-// source: task/task.proto
+// source: tasks/task/task.proto
 
 package task
 
@@ -26,7 +26,6 @@ type TaskRegistryClient interface {
 	Update(ctx context.Context, in *TaskUpdateRequest, opts ...grpc.CallOption) (*TaskUpdateResponse, error)
 	Get(ctx context.Context, in *TaskGetRequest, opts ...grpc.CallOption) (*TaskGetResponse, error)
 	GetByID(ctx context.Context, in *TaskGetByIDRequest, opts ...grpc.CallOption) (*TaskGetByIDResponse, error)
-	Delete(ctx context.Context, in *TaskDeleteRequest, opts ...grpc.CallOption) (*TaskDeleteResponse, error)
 }
 
 type taskRegistryClient struct {
@@ -39,7 +38,7 @@ func NewTaskRegistryClient(cc grpc.ClientConnInterface) TaskRegistryClient {
 
 func (c *taskRegistryClient) Create(ctx context.Context, in *TaskCreateRequest, opts ...grpc.CallOption) (*TaskCreateResponse, error) {
 	out := new(TaskCreateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +47,7 @@ func (c *taskRegistryClient) Create(ctx context.Context, in *TaskCreateRequest, 
 
 func (c *taskRegistryClient) Update(ctx context.Context, in *TaskUpdateRequest, opts ...grpc.CallOption) (*TaskUpdateResponse, error) {
 	out := new(TaskUpdateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +56,7 @@ func (c *taskRegistryClient) Update(ctx context.Context, in *TaskUpdateRequest, 
 
 func (c *taskRegistryClient) Get(ctx context.Context, in *TaskGetRequest, opts ...grpc.CallOption) (*TaskGetResponse, error) {
 	out := new(TaskGetResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,16 +65,7 @@ func (c *taskRegistryClient) Get(ctx context.Context, in *TaskGetRequest, opts .
 
 func (c *taskRegistryClient) GetByID(ctx context.Context, in *TaskGetByIDRequest, opts ...grpc.CallOption) (*TaskGetByIDResponse, error) {
 	out := new(TaskGetByIDResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/GetByID", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *taskRegistryClient) Delete(ctx context.Context, in *TaskDeleteRequest, opts ...grpc.CallOption) (*TaskDeleteResponse, error) {
-	out := new(TaskDeleteResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +80,6 @@ type TaskRegistryServer interface {
 	Update(context.Context, *TaskUpdateRequest) (*TaskUpdateResponse, error)
 	Get(context.Context, *TaskGetRequest) (*TaskGetResponse, error)
 	GetByID(context.Context, *TaskGetByIDRequest) (*TaskGetByIDResponse, error)
-	Delete(context.Context, *TaskDeleteRequest) (*TaskDeleteResponse, error)
 }
 
 // UnimplementedTaskRegistryServer should be embedded to have forward compatible implementations.
@@ -108,9 +97,6 @@ func (UnimplementedTaskRegistryServer) Get(context.Context, *TaskGetRequest) (*T
 }
 func (UnimplementedTaskRegistryServer) GetByID(context.Context, *TaskGetByIDRequest) (*TaskGetByIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
-}
-func (UnimplementedTaskRegistryServer) Delete(context.Context, *TaskDeleteRequest) (*TaskDeleteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 
 // UnsafeTaskRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -134,7 +120,7 @@ func _TaskRegistry_Create_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Create",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskRegistryServer).Create(ctx, req.(*TaskCreateRequest))
@@ -152,7 +138,7 @@ func _TaskRegistry_Update_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Update",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskRegistryServer).Update(ctx, req.(*TaskUpdateRequest))
@@ -170,7 +156,7 @@ func _TaskRegistry_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Get",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskRegistryServer).Get(ctx, req.(*TaskGetRequest))
@@ -188,28 +174,10 @@ func _TaskRegistry_GetByID_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/GetByID",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TaskRegistryServer).GetByID(ctx, req.(*TaskGetByIDRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TaskRegistry_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TaskDeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TaskRegistryServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.task.TaskRegistry/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskRegistryServer).Delete(ctx, req.(*TaskDeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -218,7 +186,7 @@ func _TaskRegistry_Delete_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TaskRegistry_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "github.constantine27k.crnt_data_manager.api.task.TaskRegistry",
+	ServiceName: "github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry",
 	HandlerType: (*TaskRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -237,11 +205,7 @@ var TaskRegistry_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetByID",
 			Handler:    _TaskRegistry_GetByID_Handler,
 		},
-		{
-			MethodName: "Delete",
-			Handler:    _TaskRegistry_Delete_Handler,
-		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "task/task.proto",
+	Metadata: "tasks/task/task.proto",
 }

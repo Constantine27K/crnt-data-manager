@@ -1,11 +1,11 @@
 package task
 
 import (
-	"github.com/Constantine27K/crnt-data-manager/pkg/task"
+	desc "github.com/Constantine27K/crnt-data-manager/pkg/tasks/task"
 )
 
 type Implementation struct {
-	task.UnimplementedTaskRegistryServer
+	desc.UnimplementedTaskRegistryServer
 }
 
 func NewService() *Implementation {

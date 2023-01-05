@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	desc "github.com/Constantine27K/crnt-data-manager/pkg/task"
+	desc "github.com/Constantine27K/crnt-data-manager/pkg/tasks/task"
 )
 
 func (i *Implementation) Create(ctx context.Context, req *desc.TaskCreateRequest) (*desc.TaskCreateResponse, error) {

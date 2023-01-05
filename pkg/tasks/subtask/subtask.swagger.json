@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Task",
+    "title": "Subtask",
     "version": "0.1"
   },
   "tags": [
     {
-      "name": "TaskRegistry"
+      "name": "SubtaskRegistry"
     }
   ],
   "schemes": [
@@ -19,14 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/task": {
+    "/v1/subtask": {
       "post": {
-        "operationId": "TaskRegistry_Create",
+        "operationId": "SubtaskRegistry_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskCreateResponse"
+              "$ref": "#/definitions/subtaskSubtaskCreateResponse"
             }
           },
           "default": {
@@ -42,23 +42,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/taskTaskCreateRequest"
+              "$ref": "#/definitions/subtaskSubtaskCreateRequest"
             }
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "SubtaskRegistry"
         ]
       }
     },
-    "/v1/task/{id}": {
+    "/v1/subtask/{id}": {
       "get": {
-        "operationId": "TaskRegistry_GetByID",
+        "operationId": "SubtaskRegistry_GetByID",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetByIDResponse"
+              "$ref": "#/definitions/subtaskSubtaskGetByIDResponse"
             }
           },
           "default": {
@@ -78,16 +78,16 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "SubtaskRegistry"
         ]
       },
       "put": {
-        "operationId": "TaskRegistry_Update",
+        "operationId": "SubtaskRegistry_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskUpdateResponse"
+              "$ref": "#/definitions/subtaskSubtaskUpdateResponse"
             }
           },
           "default": {
@@ -112,26 +112,26 @@
             "schema": {
               "type": "object",
               "properties": {
-                "task": {
-                  "$ref": "#/definitions/taskTask"
+                "subtask": {
+                  "$ref": "#/definitions/subtaskSubtask"
                 }
               }
             }
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "SubtaskRegistry"
         ]
       }
     },
-    "/v1/tasks": {
+    "/v1/subtasks": {
       "get": {
-        "operationId": "TaskRegistry_Get",
+        "operationId": "SubtaskRegistry_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetResponse"
+              "$ref": "#/definitions/subtaskSubtaskGetResponse"
             }
           },
           "default": {
@@ -221,7 +221,7 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "SubtaskRegistry"
         ]
       }
     }
@@ -334,7 +334,7 @@
         }
       }
     },
-    "taskTask": {
+    "subtaskSubtask": {
       "type": "object",
       "properties": {
         "id": {
@@ -344,7 +344,7 @@
         "name": {
           "type": "string"
         },
-        "storyId": {
+        "taskId": {
           "type": "string",
           "format": "int64"
         },
@@ -390,10 +390,6 @@
         "priority": {
           "$ref": "#/definitions/priorityPriority"
         },
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        },
         "projectId": {
           "type": "string",
           "format": "int64"
@@ -411,15 +407,15 @@
         }
       }
     },
-    "taskTaskCreateRequest": {
+    "subtaskSubtaskCreateRequest": {
       "type": "object",
       "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
+        "subtask": {
+          "$ref": "#/definitions/subtaskSubtask"
         }
       }
     },
-    "taskTaskCreateResponse": {
+    "subtaskSubtaskCreateResponse": {
       "type": "object",
       "properties": {
         "id": {
@@ -428,26 +424,26 @@
         }
       }
     },
-    "taskTaskGetByIDResponse": {
+    "subtaskSubtaskGetByIDResponse": {
       "type": "object",
       "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
+        "subtask": {
+          "$ref": "#/definitions/subtaskSubtask"
         }
       }
     },
-    "taskTaskGetResponse": {
+    "subtaskSubtaskGetResponse": {
       "type": "object",
       "properties": {
-        "tasks": {
+        "subtasks": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/taskTask"
+            "$ref": "#/definitions/subtaskSubtask"
           }
         }
       }
     },
-    "taskTaskUpdateResponse": {
+    "subtaskSubtaskUpdateResponse": {
       "type": "object",
       "properties": {
         "id": {

@@ -1,10 +1,13 @@
 SRC_DIR_RELATIVE=./api
 DST_DIR_RELATIVE=./pkg
 
-TASK_PROTO=./api/task/task.proto
-STATUS_PROTO=./api/status/status.proto
+STATUS_PROTO=./api/state/status/status.proto
 SPRINT_PROTO=./api/sprint/sprint.proto
-PROTO_FILES=$(STATUS_PROTO) $(SPRINT_PROTO) $(TASK_PROTO)
+TASK_PROTO=./api/tasks/task/task.proto
+PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
+	-not \( -path ./api/google -prune \) \
+	-not \( -path ./api/protoc* -prune \) \
+	-name '*.proto')
 
 .PHONY: .generate
 .generate: .gen-go-pb .gen-go-grpc .gen-gateway .gen-openapi
@@ -43,7 +46,10 @@ PROTO_FILES=$(STATUS_PROTO) $(SPRINT_PROTO) $(TASK_PROTO)
 
 .PHONY: .copy-swagger
 .copy-swagger:
-	cp ./pkg/task/task.swagger.json ./swagger
+	cp ./pkg/tasks/task/task.swagger.json ./swagger
+	cp ./pkg/tasks/subtask/subtask.swagger.json ./swagger
+	cp ./pkg/tasks/story/story.swagger.json ./swagger
+	cp ./pkg/tasks/epic/epic.swagger.json ./swagger
 	cp ./pkg/sprint/sprint.swagger.json ./swagger
 
 .PHONY: .bin-deps

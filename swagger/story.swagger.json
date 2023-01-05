@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Task",
+    "title": "Story",
     "version": "0.1"
   },
   "tags": [
     {
-      "name": "TaskRegistry"
+      "name": "StoryRegistry"
     }
   ],
   "schemes": [
@@ -19,119 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/task": {
-      "post": {
-        "operationId": "TaskRegistry_Create",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/taskTaskCreateResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/taskTaskCreateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "TaskRegistry"
-        ]
-      }
-    },
-    "/v1/task/{id}": {
+    "/v1/stories": {
       "get": {
-        "operationId": "TaskRegistry_GetByID",
+        "operationId": "StoryRegistry_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetByIDResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "TaskRegistry"
-        ]
-      },
-      "put": {
-        "operationId": "TaskRegistry_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/taskTaskUpdateResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "task": {
-                  "$ref": "#/definitions/taskTask"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "TaskRegistry"
-        ]
-      }
-    },
-    "/v1/tasks": {
-      "get": {
-        "operationId": "TaskRegistry_Get",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/taskTaskGetResponse"
+              "$ref": "#/definitions/storyStoryGetResponse"
             }
           },
           "default": {
@@ -221,7 +116,112 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "StoryRegistry"
+        ]
+      }
+    },
+    "/v1/story": {
+      "post": {
+        "operationId": "StoryRegistry_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storyStoryCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/storyStoryCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StoryRegistry"
+        ]
+      }
+    },
+    "/v1/story/{id}": {
+      "get": {
+        "operationId": "StoryRegistry_GetByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storyStoryGetByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "StoryRegistry"
+        ]
+      },
+      "put": {
+        "operationId": "StoryRegistry_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storyStoryUpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "story": {
+                  "$ref": "#/definitions/storyStory"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "StoryRegistry"
         ]
       }
     }
@@ -334,7 +334,7 @@
         }
       }
     },
-    "taskTask": {
+    "storyStory": {
       "type": "object",
       "properties": {
         "id": {
@@ -344,7 +344,7 @@
         "name": {
           "type": "string"
         },
-        "storyId": {
+        "epicId": {
           "type": "string",
           "format": "int64"
         },
@@ -411,15 +411,15 @@
         }
       }
     },
-    "taskTaskCreateRequest": {
+    "storyStoryCreateRequest": {
       "type": "object",
       "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
+        "stories": {
+          "$ref": "#/definitions/storyStory"
         }
       }
     },
-    "taskTaskCreateResponse": {
+    "storyStoryCreateResponse": {
       "type": "object",
       "properties": {
         "id": {
@@ -428,26 +428,26 @@
         }
       }
     },
-    "taskTaskGetByIDResponse": {
+    "storyStoryGetByIDResponse": {
       "type": "object",
       "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
+        "story": {
+          "$ref": "#/definitions/storyStory"
         }
       }
     },
-    "taskTaskGetResponse": {
+    "storyStoryGetResponse": {
       "type": "object",
       "properties": {
-        "tasks": {
+        "stories": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/taskTask"
+            "$ref": "#/definitions/storyStory"
           }
         }
       }
     },
-    "taskTaskUpdateResponse": {
+    "storyStoryUpdateResponse": {
       "type": "object",
       "properties": {
         "id": {
