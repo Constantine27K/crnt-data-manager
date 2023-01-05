@@ -1,0 +1,61 @@
+run:
+  concurrency: 8
+  timeout: 10m
+  issues-exit-code: 1
+  tests: true
+  skip-dirs:
+    - pkg
+    - api
+    - .github
+    - bin
+    - tmp
+    - .cache
+    - var
+    - vendor
+  skip-files:
+    - \.pb\.go$
+    - \.pb\.gw\.go$
+    - \.pb\.goclay\.go$
+  modules-download-mode: readonly
+  allow-parallel-runners: false
+  go: '1.19'
+
+linters:
+  enable:
+    - gci
+    - goconst
+    - gocritic
+    - gofmt
+    - goimports
+    - gomnd
+    - loggercheck
+    - prealloc
+    - usestdlibvars
+    - ineffassign
+    - typecheck
+    - unused
+    # may use revive and gosec
+
+linters-settings:
+  govet:
+    check-shadowing: true
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+issues:
+  exclude-use-default: false
+  exclude:
+    - G104
+    - exported func .* returns unexported type .*, which can be annoying to use
+    - should have a package comment
+    - don't use an underscore in package name
+    - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*print(f|ln)?|os\.(Un)?Setenv). is not checked
+    - should check returned error before deferring

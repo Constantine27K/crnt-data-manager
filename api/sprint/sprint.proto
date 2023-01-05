@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.sprint;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/sprint;sprint";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Sprint";
+		version: "0.1";
+	};
+
+	schemes: HTTP;
+	consumes: "application/json";
+	produces: "application/json";
+};
+
+message Sprint {
+	int64 id = 1;
+	string name = 2;
+	google.protobuf.Timestamp started_at = 3;
+	google.protobuf.Timestamp finished_at = 4;
+}
+
+service SprintRegistry {
+	rpc Create (SprintCreateRequest) returns (SprintCreateResponse) {
+		option (google.api.http) = {
+			post: "/v1/sprint/create"
+			body: "*"
+		};
+	};
+}
+
+message SprintCreateRequest {
+
+}
+
+message SprintCreateResponse {
+
+}
