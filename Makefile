@@ -8,6 +8,8 @@ PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
 	-not \( -path ./api/google -prune \) \
 	-not \( -path ./api/protoc* -prune \) \
 	-name '*.proto')
+SWAGGER_FILES=$(shell find $(DST_DIR_RELATIVE) \
+                     	-name '*.swagger.json*')
 
 .PHONY: .generate
 .generate: .gen-go-pb .gen-go-grpc .gen-gateway .gen-openapi
@@ -46,11 +48,7 @@ PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
 
 .PHONY: .copy-swagger
 .copy-swagger:
-	cp ./pkg/tasks/task/task.swagger.json ./swagger
-	cp ./pkg/tasks/subtask/subtask.swagger.json ./swagger
-	cp ./pkg/tasks/story/story.swagger.json ./swagger
-	cp ./pkg/tasks/epic/epic.swagger.json ./swagger
-	cp ./pkg/sprint/sprint.swagger.json ./swagger
+	cp $(SWAGGER_FILES) ./swagger
 
 .PHONY: .bin-deps
 .bin-deps:
@@ -63,6 +61,10 @@ PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
 	go install github.com/mitchellh/gox@v1.0.1
 	go install golang.org/x/tools/cmd/goimports@v0.1.9
 
+.PHONY: buf-install
+buf-install:
+	brew install bufbuild/buf/buf
+
 .PHONY: .install-lint
 .install-lint:
 	$(info Installing linter)
@@ -72,11 +74,14 @@ PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
 lint:
 	golangci-lint run
 
-.PHONY: generate
-generate: .bin-deps fast-generate
+.PHONY: generate-protoc
+generate-protoc: .bin-deps .generate .copy-swagger
 
-.PHONY: fast-generate
-fast-generate: .generate .copy-swagger
+.PHONY: generate
+generate:
+	buf mod update
+	buf generate
+	make .copy-swagger
 
 .PHONY: run
 run:

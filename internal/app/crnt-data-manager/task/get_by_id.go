@@ -3,7 +3,7 @@ package task
 import (
 	"context"
 
-	desc "github.com/Constantine27K/crnt-data-manager/pkg/tasks/task"
+	desc "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/task"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

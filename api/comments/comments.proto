@@ -4,7 +4,7 @@ package github.constantine27k.crnt_data_manager.api.comments;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/comments;comments";
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/comments;comments";
 
 message Comment {
 	int64 id = 1;

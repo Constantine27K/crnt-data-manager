@@ -6,12 +6,12 @@ import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-import "state/status/status.proto";
-import "state/priority/priority.proto";
-import "state/template/template.proto";
-import "comments/comments.proto";
+import "api/state/status/status.proto";
+import "api/state/priority/priority.proto";
+import "api/state/template/template.proto";
+import "api/comments/comments.proto";
 
-option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/tasks/task;task";
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/task;task";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {

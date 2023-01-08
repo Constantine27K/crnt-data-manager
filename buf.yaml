@@ -1,0 +1,27 @@
+version: v1beta1
+name: buf.build/Constantine27K/crnt-data-manager
+
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+
+lint:
+  use:
+    - PACKAGE_AFFINITY
+    - PACKAGE_SAME_DIRECTORY
+    - DIRECTORY_SAME_PACKAGE
+    - SENSIBLE
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+  rpc_allow_same_request_response: false
+  rpc_allow_google_protobuf_empty_requests: true
+  rpc_allow_google_protobuf_empty_responses: true
+  ignore:
+    - github.com
+
+breaking:
+  use:
+    - FILE
+  ignore:
+    - github.com
+  ignore_unstable_packages: true
