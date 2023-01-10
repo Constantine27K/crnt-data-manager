@@ -22,10 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StoryRegistryClient interface {
-	Create(ctx context.Context, in *StoryCreateRequest, opts ...grpc.CallOption) (*StoryCreateResponse, error)
-	Update(ctx context.Context, in *StoryUpdateRequest, opts ...grpc.CallOption) (*StoryUpdateResponse, error)
-	Get(ctx context.Context, in *StoryGetRequest, opts ...grpc.CallOption) (*StoryGetResponse, error)
-	GetByID(ctx context.Context, in *StoryGetByIDRequest, opts ...grpc.CallOption) (*StoryGetByIDResponse, error)
+	CreateStory(ctx context.Context, in *StoryCreateRequest, opts ...grpc.CallOption) (*StoryCreateResponse, error)
+	UpdateStory(ctx context.Context, in *StoryUpdateRequest, opts ...grpc.CallOption) (*StoryUpdateResponse, error)
+	GetStory(ctx context.Context, in *StoryGetRequest, opts ...grpc.CallOption) (*StoryGetResponse, error)
+	GetStoryByID(ctx context.Context, in *StoryGetByIDRequest, opts ...grpc.CallOption) (*StoryGetByIDResponse, error)
+	GetStoryInfo(ctx context.Context, in *StoryInfoGetRequest, opts ...grpc.CallOption) (*StoryInfoGetResponse, error)
+	GetStoryInfoByID(ctx context.Context, in *StoryInfoGetByIDRequest, opts ...grpc.CallOption) (*StoryInfoGetByIDResponse, error)
 }
 
 type storyRegistryClient struct {
@@ -36,36 +38,54 @@ func NewStoryRegistryClient(cc grpc.ClientConnInterface) StoryRegistryClient {
 	return &storyRegistryClient{cc}
 }
 
-func (c *storyRegistryClient) Create(ctx context.Context, in *StoryCreateRequest, opts ...grpc.CallOption) (*StoryCreateResponse, error) {
+func (c *storyRegistryClient) CreateStory(ctx context.Context, in *StoryCreateRequest, opts ...grpc.CallOption) (*StoryCreateResponse, error) {
 	out := new(StoryCreateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/CreateStory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *storyRegistryClient) Update(ctx context.Context, in *StoryUpdateRequest, opts ...grpc.CallOption) (*StoryUpdateResponse, error) {
+func (c *storyRegistryClient) UpdateStory(ctx context.Context, in *StoryUpdateRequest, opts ...grpc.CallOption) (*StoryUpdateResponse, error) {
 	out := new(StoryUpdateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/UpdateStory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *storyRegistryClient) Get(ctx context.Context, in *StoryGetRequest, opts ...grpc.CallOption) (*StoryGetResponse, error) {
+func (c *storyRegistryClient) GetStory(ctx context.Context, in *StoryGetRequest, opts ...grpc.CallOption) (*StoryGetResponse, error) {
 	out := new(StoryGetResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *storyRegistryClient) GetByID(ctx context.Context, in *StoryGetByIDRequest, opts ...grpc.CallOption) (*StoryGetByIDResponse, error) {
+func (c *storyRegistryClient) GetStoryByID(ctx context.Context, in *StoryGetByIDRequest, opts ...grpc.CallOption) (*StoryGetByIDResponse, error) {
 	out := new(StoryGetByIDResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStoryByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storyRegistryClient) GetStoryInfo(ctx context.Context, in *StoryInfoGetRequest, opts ...grpc.CallOption) (*StoryInfoGetResponse, error) {
+	out := new(StoryInfoGetResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStoryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storyRegistryClient) GetStoryInfoByID(ctx context.Context, in *StoryInfoGetByIDRequest, opts ...grpc.CallOption) (*StoryInfoGetByIDResponse, error) {
+	out := new(StoryInfoGetByIDResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStoryInfoByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,27 +96,35 @@ func (c *storyRegistryClient) GetByID(ctx context.Context, in *StoryGetByIDReque
 // All implementations should embed UnimplementedStoryRegistryServer
 // for forward compatibility
 type StoryRegistryServer interface {
-	Create(context.Context, *StoryCreateRequest) (*StoryCreateResponse, error)
-	Update(context.Context, *StoryUpdateRequest) (*StoryUpdateResponse, error)
-	Get(context.Context, *StoryGetRequest) (*StoryGetResponse, error)
-	GetByID(context.Context, *StoryGetByIDRequest) (*StoryGetByIDResponse, error)
+	CreateStory(context.Context, *StoryCreateRequest) (*StoryCreateResponse, error)
+	UpdateStory(context.Context, *StoryUpdateRequest) (*StoryUpdateResponse, error)
+	GetStory(context.Context, *StoryGetRequest) (*StoryGetResponse, error)
+	GetStoryByID(context.Context, *StoryGetByIDRequest) (*StoryGetByIDResponse, error)
+	GetStoryInfo(context.Context, *StoryInfoGetRequest) (*StoryInfoGetResponse, error)
+	GetStoryInfoByID(context.Context, *StoryInfoGetByIDRequest) (*StoryInfoGetByIDResponse, error)
 }
 
 // UnimplementedStoryRegistryServer should be embedded to have forward compatible implementations.
 type UnimplementedStoryRegistryServer struct {
 }
 
-func (UnimplementedStoryRegistryServer) Create(context.Context, *StoryCreateRequest) (*StoryCreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedStoryRegistryServer) CreateStory(context.Context, *StoryCreateRequest) (*StoryCreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateStory not implemented")
 }
-func (UnimplementedStoryRegistryServer) Update(context.Context, *StoryUpdateRequest) (*StoryUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedStoryRegistryServer) UpdateStory(context.Context, *StoryUpdateRequest) (*StoryUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStory not implemented")
 }
-func (UnimplementedStoryRegistryServer) Get(context.Context, *StoryGetRequest) (*StoryGetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedStoryRegistryServer) GetStory(context.Context, *StoryGetRequest) (*StoryGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStory not implemented")
 }
-func (UnimplementedStoryRegistryServer) GetByID(context.Context, *StoryGetByIDRequest) (*StoryGetByIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
+func (UnimplementedStoryRegistryServer) GetStoryByID(context.Context, *StoryGetByIDRequest) (*StoryGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStoryByID not implemented")
+}
+func (UnimplementedStoryRegistryServer) GetStoryInfo(context.Context, *StoryInfoGetRequest) (*StoryInfoGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStoryInfo not implemented")
+}
+func (UnimplementedStoryRegistryServer) GetStoryInfoByID(context.Context, *StoryInfoGetByIDRequest) (*StoryInfoGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStoryInfoByID not implemented")
 }
 
 // UnsafeStoryRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -110,74 +138,110 @@ func RegisterStoryRegistryServer(s grpc.ServiceRegistrar, srv StoryRegistryServe
 	s.RegisterService(&StoryRegistry_ServiceDesc, srv)
 }
 
-func _StoryRegistry_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StoryRegistry_CreateStory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoryCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoryRegistryServer).Create(ctx, in)
+		return srv.(StoryRegistryServer).CreateStory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/Create",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/CreateStory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoryRegistryServer).Create(ctx, req.(*StoryCreateRequest))
+		return srv.(StoryRegistryServer).CreateStory(ctx, req.(*StoryCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StoryRegistry_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StoryRegistry_UpdateStory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoryUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoryRegistryServer).Update(ctx, in)
+		return srv.(StoryRegistryServer).UpdateStory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/Update",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/UpdateStory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoryRegistryServer).Update(ctx, req.(*StoryUpdateRequest))
+		return srv.(StoryRegistryServer).UpdateStory(ctx, req.(*StoryUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StoryRegistry_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StoryRegistry_GetStory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoryGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoryRegistryServer).Get(ctx, in)
+		return srv.(StoryRegistryServer).GetStory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/Get",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoryRegistryServer).Get(ctx, req.(*StoryGetRequest))
+		return srv.(StoryRegistryServer).GetStory(ctx, req.(*StoryGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StoryRegistry_GetByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StoryRegistry_GetStoryByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoryGetByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StoryRegistryServer).GetByID(ctx, in)
+		return srv.(StoryRegistryServer).GetStoryByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetByID",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStoryByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StoryRegistryServer).GetByID(ctx, req.(*StoryGetByIDRequest))
+		return srv.(StoryRegistryServer).GetStoryByID(ctx, req.(*StoryGetByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StoryRegistry_GetStoryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoryInfoGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StoryRegistryServer).GetStoryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStoryInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StoryRegistryServer).GetStoryInfo(ctx, req.(*StoryInfoGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StoryRegistry_GetStoryInfoByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoryInfoGetByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StoryRegistryServer).GetStoryInfoByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.story.StoryRegistry/GetStoryInfoByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StoryRegistryServer).GetStoryInfoByID(ctx, req.(*StoryInfoGetByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,20 +254,28 @@ var StoryRegistry_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*StoryRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _StoryRegistry_Create_Handler,
+			MethodName: "CreateStory",
+			Handler:    _StoryRegistry_CreateStory_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _StoryRegistry_Update_Handler,
+			MethodName: "UpdateStory",
+			Handler:    _StoryRegistry_UpdateStory_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _StoryRegistry_Get_Handler,
+			MethodName: "GetStory",
+			Handler:    _StoryRegistry_GetStory_Handler,
 		},
 		{
-			MethodName: "GetByID",
-			Handler:    _StoryRegistry_GetByID_Handler,
+			MethodName: "GetStoryByID",
+			Handler:    _StoryRegistry_GetStoryByID_Handler,
+		},
+		{
+			MethodName: "GetStoryInfo",
+			Handler:    _StoryRegistry_GetStoryInfo_Handler,
+		},
+		{
+			MethodName: "GetStoryInfoByID",
+			Handler:    _StoryRegistry_GetStoryInfoByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

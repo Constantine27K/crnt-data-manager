@@ -7,6 +7,8 @@ import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 import "api/state/status/status.proto";
+import "api/tasks/task/task.proto";
+import "api/tasks/story/story.proto";
 
 option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/sprint;sprint";
 
@@ -22,24 +24,24 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service SprintRegistry {
-	rpc Create (SprintCreateRequest) returns (SprintCreateResponse) {
+	rpc CreateSprint (SprintCreateRequest) returns (SprintCreateResponse) {
 		option (google.api.http) = {
 			post: "/v1/sprint"
 			body: "*"
 		};
 	};
-	rpc Update (SprintUpdateRequest) returns (SprintUpdateResponse) {
+	rpc UpdateSprint (SprintUpdateRequest) returns (SprintUpdateResponse) {
 		option (google.api.http) = {
 			put: "/v1/sprint/{id}"
 			body: "*"
 		};
 	};
-	rpc Get (SprintGetRequest) returns (SprintGetResponse) {
+	rpc GetSprint (SprintGetRequest) returns (SprintGetResponse) {
 		option (google.api.http) = {
 			get: "/v1/sprints"
 		};
 	};
-	rpc GetByID (SprintGetByIDRequest) returns (SprintGetByIDResponse) {
+	rpc GetSprintByID (SprintGetByIDRequest) returns (SprintGetByIDResponse) {
 		option (google.api.http) = {
 			get: "/v1/sprint/{id}"
 		};
@@ -56,6 +58,8 @@ message Sprint {
 	int64 stories_backlog = 7;
 	int64 stories_in_progress = 8;
 	int64 stories_done = 9;
+	repeated tasks.task.TaskInfo tasks = 10;
+	repeated tasks.story.StoryInfo stories = 11;
 }
 
 message SprintCreateRequest {

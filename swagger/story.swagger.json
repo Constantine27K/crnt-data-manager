@@ -21,7 +21,7 @@
   "paths": {
     "/v1/stories": {
       "get": {
-        "operationId": "StoryRegistry_Get",
+        "operationId": "StoryRegistry_GetStory",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -39,6 +39,17 @@
         "parameters": [
           {
             "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "epicIds",
             "in": "query",
             "required": false,
             "type": "array",
@@ -122,7 +133,7 @@
     },
     "/v1/story": {
       "post": {
-        "operationId": "StoryRegistry_Create",
+        "operationId": "StoryRegistry_CreateStory",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -154,7 +165,7 @@
     },
     "/v1/story/{id}": {
       "get": {
-        "operationId": "StoryRegistry_GetByID",
+        "operationId": "StoryRegistry_GetStoryByID",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -183,7 +194,7 @@
         ]
       },
       "put": {
-        "operationId": "StoryRegistry_Update",
+        "operationId": "StoryRegistry_UpdateStory",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -218,6 +229,136 @@
                 }
               }
             }
+          }
+        ],
+        "tags": [
+          "StoryRegistry"
+        ]
+      }
+    },
+    "/v1/story_info": {
+      "get": {
+        "operationId": "StoryRegistry_GetStoryInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storyStoryInfoGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "epicIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "assigned",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sprintId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "status.common",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_COMMON_UNKNOWN",
+              "STATUS_COMMON_BACKLOG",
+              "STATUS_COMMON_IN_PROGRESS",
+              "STATUS_COMMON_DONE",
+              "STATUS_COMMON_READY_FOR_REVIEW",
+              "STATUS_COMMON_IN_REVIEW",
+              "STATUS_COMMON_REVIEW_FAILED",
+              "STATUS_COMMON_REVIEW_PASSED",
+              "STATUS_COMMON_GIVEN_TO_CUSTOMER",
+              "STATUS_COMMON_CLOSED",
+              "STATUS_COMMON_ON_HOLD"
+            ],
+            "default": "STATUS_COMMON_UNKNOWN"
+          },
+          {
+            "name": "status.development",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_DEVELOPMENT_UNKNOWN",
+              "STATUS_DEVELOPMENT_BACKLOG",
+              "STATUS_DEVELOPMENT_IN_PROGRESS",
+              "STATUS_DEVELOPMENT_IN_REVIEW",
+              "STATUS_DEVELOPMENT_READY_FOR_TESTING",
+              "STATUS_DEVELOPMENT_TESTING",
+              "STATUS_DEVELOPMENT_TESTING_PASSED",
+              "STATUS_DEVELOPMENT_DONE",
+              "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
+              "STATUS_DEVELOPMENT_CLOSED",
+              "STATUS_DEVELOPMENT_ON_HOLD"
+            ],
+            "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          }
+        ],
+        "tags": [
+          "StoryRegistry"
+        ]
+      }
+    },
+    "/v1/story_info/{id}": {
+      "get": {
+        "operationId": "StoryRegistry_GetStoryInfoByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storyStoryInfoGetByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -341,6 +482,9 @@
           "type": "string",
           "format": "int64"
         },
+        "compositeName": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -443,6 +587,50 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/storyStory"
+          }
+        }
+      }
+    },
+    "storyStoryInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "storyStoryInfoGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "storyInfo": {
+          "$ref": "#/definitions/storyStoryInfo"
+        }
+      }
+    },
+    "storyStoryInfoGetResponse": {
+      "type": "object",
+      "properties": {
+        "storyInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/storyStoryInfo"
           }
         }
       }

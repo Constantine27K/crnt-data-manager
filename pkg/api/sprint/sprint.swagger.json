@@ -21,7 +21,7 @@
   "paths": {
     "/v1/sprint": {
       "post": {
-        "operationId": "SprintRegistry_Create",
+        "operationId": "SprintRegistry_CreateSprint",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -53,7 +53,7 @@
     },
     "/v1/sprint/{id}": {
       "get": {
-        "operationId": "SprintRegistry_GetByID",
+        "operationId": "SprintRegistry_GetSprintByID",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -82,7 +82,7 @@
         ]
       },
       "put": {
-        "operationId": "SprintRegistry_Update",
+        "operationId": "SprintRegistry_UpdateSprint",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -126,7 +126,7 @@
     },
     "/v1/sprints": {
       "get": {
-        "operationId": "SprintRegistry_Get",
+        "operationId": "SprintRegistry_GetSprint",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -222,8 +222,31 @@
         "storiesDone": {
           "type": "string",
           "format": "int64"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/taskTaskInfo"
+          }
+        },
+        "stories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/storyStoryInfo"
+          }
         }
       }
+    },
+    "priorityPriority": {
+      "type": "string",
+      "enum": [
+        "PRIORITY_UNKNOWN",
+        "PRIORITY_CRITICAL",
+        "PRIORITY_HIGH",
+        "PRIORITY_MEDIUM",
+        "PRIORITY_LOW"
+      ],
+      "default": "PRIORITY_UNKNOWN"
     },
     "protobufAny": {
       "type": "object",
@@ -305,6 +328,56 @@
         "STATUS_SPRINT_FINISHED"
       ],
       "default": "STATUS_SPRINT_UNKNOWN"
+    },
+    "storyStoryInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "taskTaskInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
     }
   }
 }

@@ -22,10 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SprintRegistryClient interface {
-	Create(ctx context.Context, in *SprintCreateRequest, opts ...grpc.CallOption) (*SprintCreateResponse, error)
-	Update(ctx context.Context, in *SprintUpdateRequest, opts ...grpc.CallOption) (*SprintUpdateResponse, error)
-	Get(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error)
-	GetByID(ctx context.Context, in *SprintGetByIDRequest, opts ...grpc.CallOption) (*SprintGetByIDResponse, error)
+	CreateSprint(ctx context.Context, in *SprintCreateRequest, opts ...grpc.CallOption) (*SprintCreateResponse, error)
+	UpdateSprint(ctx context.Context, in *SprintUpdateRequest, opts ...grpc.CallOption) (*SprintUpdateResponse, error)
+	GetSprint(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error)
+	GetSprintByID(ctx context.Context, in *SprintGetByIDRequest, opts ...grpc.CallOption) (*SprintGetByIDResponse, error)
 }
 
 type sprintRegistryClient struct {
@@ -36,36 +36,36 @@ func NewSprintRegistryClient(cc grpc.ClientConnInterface) SprintRegistryClient {
 	return &sprintRegistryClient{cc}
 }
 
-func (c *sprintRegistryClient) Create(ctx context.Context, in *SprintCreateRequest, opts ...grpc.CallOption) (*SprintCreateResponse, error) {
+func (c *sprintRegistryClient) CreateSprint(ctx context.Context, in *SprintCreateRequest, opts ...grpc.CallOption) (*SprintCreateResponse, error) {
 	out := new(SprintCreateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/CreateSprint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *sprintRegistryClient) Update(ctx context.Context, in *SprintUpdateRequest, opts ...grpc.CallOption) (*SprintUpdateResponse, error) {
+func (c *sprintRegistryClient) UpdateSprint(ctx context.Context, in *SprintUpdateRequest, opts ...grpc.CallOption) (*SprintUpdateResponse, error) {
 	out := new(SprintUpdateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/UpdateSprint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *sprintRegistryClient) Get(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error) {
+func (c *sprintRegistryClient) GetSprint(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error) {
 	out := new(SprintGetResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetSprint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *sprintRegistryClient) GetByID(ctx context.Context, in *SprintGetByIDRequest, opts ...grpc.CallOption) (*SprintGetByIDResponse, error) {
+func (c *sprintRegistryClient) GetSprintByID(ctx context.Context, in *SprintGetByIDRequest, opts ...grpc.CallOption) (*SprintGetByIDResponse, error) {
 	out := new(SprintGetByIDResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetSprintByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,27 +76,27 @@ func (c *sprintRegistryClient) GetByID(ctx context.Context, in *SprintGetByIDReq
 // All implementations should embed UnimplementedSprintRegistryServer
 // for forward compatibility
 type SprintRegistryServer interface {
-	Create(context.Context, *SprintCreateRequest) (*SprintCreateResponse, error)
-	Update(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error)
-	Get(context.Context, *SprintGetRequest) (*SprintGetResponse, error)
-	GetByID(context.Context, *SprintGetByIDRequest) (*SprintGetByIDResponse, error)
+	CreateSprint(context.Context, *SprintCreateRequest) (*SprintCreateResponse, error)
+	UpdateSprint(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error)
+	GetSprint(context.Context, *SprintGetRequest) (*SprintGetResponse, error)
+	GetSprintByID(context.Context, *SprintGetByIDRequest) (*SprintGetByIDResponse, error)
 }
 
 // UnimplementedSprintRegistryServer should be embedded to have forward compatible implementations.
 type UnimplementedSprintRegistryServer struct {
 }
 
-func (UnimplementedSprintRegistryServer) Create(context.Context, *SprintCreateRequest) (*SprintCreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedSprintRegistryServer) CreateSprint(context.Context, *SprintCreateRequest) (*SprintCreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSprint not implemented")
 }
-func (UnimplementedSprintRegistryServer) Update(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedSprintRegistryServer) UpdateSprint(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSprint not implemented")
 }
-func (UnimplementedSprintRegistryServer) Get(context.Context, *SprintGetRequest) (*SprintGetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedSprintRegistryServer) GetSprint(context.Context, *SprintGetRequest) (*SprintGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSprint not implemented")
 }
-func (UnimplementedSprintRegistryServer) GetByID(context.Context, *SprintGetByIDRequest) (*SprintGetByIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
+func (UnimplementedSprintRegistryServer) GetSprintByID(context.Context, *SprintGetByIDRequest) (*SprintGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSprintByID not implemented")
 }
 
 // UnsafeSprintRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -110,74 +110,74 @@ func RegisterSprintRegistryServer(s grpc.ServiceRegistrar, srv SprintRegistrySer
 	s.RegisterService(&SprintRegistry_ServiceDesc, srv)
 }
 
-func _SprintRegistry_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SprintRegistry_CreateSprint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SprintCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SprintRegistryServer).Create(ctx, in)
+		return srv.(SprintRegistryServer).CreateSprint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/Create",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/CreateSprint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SprintRegistryServer).Create(ctx, req.(*SprintCreateRequest))
+		return srv.(SprintRegistryServer).CreateSprint(ctx, req.(*SprintCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SprintRegistry_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SprintRegistry_UpdateSprint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SprintUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SprintRegistryServer).Update(ctx, in)
+		return srv.(SprintRegistryServer).UpdateSprint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/Update",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/UpdateSprint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SprintRegistryServer).Update(ctx, req.(*SprintUpdateRequest))
+		return srv.(SprintRegistryServer).UpdateSprint(ctx, req.(*SprintUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SprintRegistry_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SprintRegistry_GetSprint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SprintGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SprintRegistryServer).Get(ctx, in)
+		return srv.(SprintRegistryServer).GetSprint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/Get",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetSprint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SprintRegistryServer).Get(ctx, req.(*SprintGetRequest))
+		return srv.(SprintRegistryServer).GetSprint(ctx, req.(*SprintGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SprintRegistry_GetByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SprintRegistry_GetSprintByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SprintGetByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SprintRegistryServer).GetByID(ctx, in)
+		return srv.(SprintRegistryServer).GetSprintByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetByID",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetSprintByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SprintRegistryServer).GetByID(ctx, req.(*SprintGetByIDRequest))
+		return srv.(SprintRegistryServer).GetSprintByID(ctx, req.(*SprintGetByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,20 +190,20 @@ var SprintRegistry_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SprintRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _SprintRegistry_Create_Handler,
+			MethodName: "CreateSprint",
+			Handler:    _SprintRegistry_CreateSprint_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _SprintRegistry_Update_Handler,
+			MethodName: "UpdateSprint",
+			Handler:    _SprintRegistry_UpdateSprint_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _SprintRegistry_Get_Handler,
+			MethodName: "GetSprint",
+			Handler:    _SprintRegistry_GetSprint_Handler,
 		},
 		{
-			MethodName: "GetByID",
-			Handler:    _SprintRegistry_GetByID_Handler,
+			MethodName: "GetSprintByID",
+			Handler:    _SprintRegistry_GetSprintByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

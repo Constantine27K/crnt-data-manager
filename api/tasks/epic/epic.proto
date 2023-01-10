@@ -25,50 +25,65 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service EpicRegistry {
-	rpc Create (EpicCreateRequest) returns (EpicCreateResponse) {
+	rpc CreateEpic (EpicCreateRequest) returns (EpicCreateResponse) {
 		option (google.api.http) = {
 			post: "/v1/epic"
 			body: "*"
 		};
 	};
-	rpc Update (EpicUpdateRequest) returns (EpicUpdateResponse) {
+	rpc UpdateEpic (EpicUpdateRequest) returns (EpicUpdateResponse) {
 		option (google.api.http) = {
 			put: "/v1/epic/{id}"
 			body: "*"
 		};
 	};
-	rpc Get (EpicGetRequest) returns (EpicGetResponse) {
+	rpc GetEpic (EpicGetRequest) returns (EpicGetResponse) {
 		option (google.api.http) = {
 			get: "/v1/epics"
 		};
 	};
-	rpc GetByID (EpicGetByIDRequest) returns (EpicGetByIDResponse) {
+	rpc GetEpicByID (EpicGetByIDRequest) returns (EpicGetByIDResponse) {
 		option (google.api.http) = {
 			get: "/v1/epic/{id}"
+		};
+	};
+	rpc GetEpicInfo (EpicInfoGetRequest) returns (EpicInfoGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/epic_info"
+		};
+	};
+	rpc GetEpicInfoByID (EpicInfoGetByIDRequest) returns (EpicInfoGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/epic_info/{id}"
 		};
 	};
 }
 
 message Epic {
 	int64 id = 1;
-	string name = 2;
-	string responsible = 3;
+	string composite_name = 2;
+	string name = 3;
 	string description = 4;
 	repeated comments.Comment comments = 5;
 	string author = 6;
 	string assigned = 7;
-	string qa = 8;
-	string reviewer = 9;
-	state.template.Template template = 10;
-	google.protobuf.Timestamp created_at = 11;
-	google.protobuf.Timestamp deadline = 12;
-	google.protobuf.Timestamp updated_at = 13;
-	state.status.TaskStatus status = 14;
-	state.priority.Priority priority = 15;
-	int64 sprint_id = 16;
-	int64 project_id = 17;
-	repeated int64 component_id = 18;
-	int64 story_points = 19;
+	state.template.Template template = 8;
+	google.protobuf.Timestamp created_at = 9;
+	google.protobuf.Timestamp deadline = 10;
+	google.protobuf.Timestamp updated_at = 11;
+	state.status.TaskStatus status = 12;
+	state.priority.Priority priority = 13;
+	int64 project_id = 14;
+	repeated int64 component_id = 15;
+}
+
+message EpicInfo {
+	int64 id = 1;
+	string composite_name = 2;
+	string name = 3;
+	string assigned = 4;
+	state.priority.Priority priority = 5;
+	google.protobuf.Timestamp deadline = 6;
 }
 
 message EpicCreateRequest {
@@ -92,13 +107,24 @@ message EpicGetRequest {
 	repeated int64 ids = 1;
 	string author = 2;
 	string assigned = 3;
-	int64 sprint_id = 4;
-	int64 project_id = 5;
-	state.status.TaskStatus status = 6;
+	int64 project_id = 4;
+	state.status.TaskStatus status = 5;
 }
 
 message EpicGetResponse {
 	repeated Epic epics = 1;
+}
+
+message EpicInfoGetRequest {
+	repeated int64 ids = 1;
+	string author = 2;
+	string assigned = 3;
+	int64 project_id = 4;
+	state.status.TaskStatus status = 5;
+}
+
+message EpicInfoGetResponse {
+	repeated EpicInfo epic_info = 1;
 }
 
 message EpicGetByIDRequest {
@@ -107,4 +133,12 @@ message EpicGetByIDRequest {
 
 message EpicGetByIDResponse {
 	Epic epic = 1;
+}
+
+message EpicInfoGetByIDRequest {
+	int64 id = 1;
+}
+
+message EpicInfoGetByIDResponse {
+	EpicInfo epic_info = 1;
 }

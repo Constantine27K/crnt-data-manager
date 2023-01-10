@@ -21,7 +21,7 @@
   "paths": {
     "/v1/task": {
       "post": {
-        "operationId": "TaskRegistry_Create",
+        "operationId": "TaskRegistry_CreateTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -53,7 +53,7 @@
     },
     "/v1/task/{id}": {
       "get": {
-        "operationId": "TaskRegistry_GetByID",
+        "operationId": "TaskRegistry_GetTaskByID",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -82,7 +82,7 @@
         ]
       },
       "put": {
-        "operationId": "TaskRegistry_Update",
+        "operationId": "TaskRegistry_UpdateTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -124,9 +124,139 @@
         ]
       }
     },
+    "/v1/task_info": {
+      "get": {
+        "operationId": "TaskRegistry_GetTaskInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/taskTaskInfoGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "storyIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "assigned",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sprintId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "status.common",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_COMMON_UNKNOWN",
+              "STATUS_COMMON_BACKLOG",
+              "STATUS_COMMON_IN_PROGRESS",
+              "STATUS_COMMON_DONE",
+              "STATUS_COMMON_READY_FOR_REVIEW",
+              "STATUS_COMMON_IN_REVIEW",
+              "STATUS_COMMON_REVIEW_FAILED",
+              "STATUS_COMMON_REVIEW_PASSED",
+              "STATUS_COMMON_GIVEN_TO_CUSTOMER",
+              "STATUS_COMMON_CLOSED",
+              "STATUS_COMMON_ON_HOLD"
+            ],
+            "default": "STATUS_COMMON_UNKNOWN"
+          },
+          {
+            "name": "status.development",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_DEVELOPMENT_UNKNOWN",
+              "STATUS_DEVELOPMENT_BACKLOG",
+              "STATUS_DEVELOPMENT_IN_PROGRESS",
+              "STATUS_DEVELOPMENT_IN_REVIEW",
+              "STATUS_DEVELOPMENT_READY_FOR_TESTING",
+              "STATUS_DEVELOPMENT_TESTING",
+              "STATUS_DEVELOPMENT_TESTING_PASSED",
+              "STATUS_DEVELOPMENT_DONE",
+              "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
+              "STATUS_DEVELOPMENT_CLOSED",
+              "STATUS_DEVELOPMENT_ON_HOLD"
+            ],
+            "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          }
+        ],
+        "tags": [
+          "TaskRegistry"
+        ]
+      }
+    },
+    "/v1/task_info/{id}": {
+      "get": {
+        "operationId": "TaskRegistry_GetTaskInfoByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/taskTaskInfoGetByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "TaskRegistry"
+        ]
+      }
+    },
     "/v1/tasks": {
       "get": {
-        "operationId": "TaskRegistry_Get",
+        "operationId": "TaskRegistry_GetTasks",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -144,6 +274,17 @@
         "parameters": [
           {
             "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "storyIds",
             "in": "query",
             "required": false,
             "type": "array",
@@ -341,6 +482,9 @@
           "type": "string",
           "format": "int64"
         },
+        "compositeName": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -443,6 +587,50 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/taskTask"
+          }
+        }
+      }
+    },
+    "taskTaskInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "taskTaskInfoGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "taskInfo": {
+          "$ref": "#/definitions/taskTaskInfo"
+        }
+      }
+    },
+    "taskTaskInfoGetResponse": {
+      "type": "object",
+      "properties": {
+        "taskInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/taskTaskInfo"
           }
         }
       }

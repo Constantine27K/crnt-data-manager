@@ -25,50 +25,70 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service StoryRegistry {
-	rpc Create (StoryCreateRequest) returns (StoryCreateResponse) {
+	rpc CreateStory (StoryCreateRequest) returns (StoryCreateResponse) {
 		option (google.api.http) = {
 			post: "/v1/story"
 			body: "*"
 		};
 	};
-	rpc Update (StoryUpdateRequest) returns (StoryUpdateResponse) {
+	rpc UpdateStory (StoryUpdateRequest) returns (StoryUpdateResponse) {
 		option (google.api.http) = {
 			put: "/v1/story/{id}"
 			body: "*"
 		};
 	};
-	rpc Get (StoryGetRequest) returns (StoryGetResponse) {
+	rpc GetStory (StoryGetRequest) returns (StoryGetResponse) {
 		option (google.api.http) = {
 			get: "/v1/stories"
 		};
 	};
-	rpc GetByID (StoryGetByIDRequest) returns (StoryGetByIDResponse) {
+	rpc GetStoryByID (StoryGetByIDRequest) returns (StoryGetByIDResponse) {
 		option (google.api.http) = {
 			get: "/v1/story/{id}"
+		};
+	};
+	rpc GetStoryInfo (StoryInfoGetRequest) returns (StoryInfoGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/story_info"
+		};
+	};
+	rpc GetStoryInfoByID (StoryInfoGetByIDRequest) returns (StoryInfoGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/story_info/{id}"
 		};
 	};
 }
 
 message Story {
 	int64 id = 1;
-	string name = 2;
-	int64 epic_id = 3;
-	string description = 4;
-	repeated comments.Comment comments = 5;
-	string author = 6;
-	string assigned = 7;
-	string qa = 8;
-	string reviewer = 9;
-	state.template.Template template = 10;
-	google.protobuf.Timestamp created_at = 11;
-	google.protobuf.Timestamp deadline = 12;
-	google.protobuf.Timestamp updated_at = 13;
-	state.status.TaskStatus status = 14;
-	state.priority.Priority priority = 15;
-	int64 sprint_id = 16;
-	int64 project_id = 17;
-	repeated int64 component_id = 18;
-	int64 story_points = 19;
+	string composite_name = 2;
+	string name = 3;
+	int64 epic_id = 4;
+	string description = 5;
+	repeated comments.Comment comments = 6;
+	string author = 7;
+	string assigned = 8;
+	string qa = 9;
+	string reviewer = 10;
+	state.template.Template template = 11;
+	google.protobuf.Timestamp created_at = 12;
+	google.protobuf.Timestamp deadline = 13;
+	google.protobuf.Timestamp updated_at = 14;
+	state.status.TaskStatus status = 15;
+	state.priority.Priority priority = 16;
+	int64 sprint_id = 17;
+	int64 project_id = 18;
+	repeated int64 component_id = 19;
+	int64 story_points = 20;
+}
+
+message StoryInfo {
+	int64 id = 1;
+	string composite_name = 2;
+	string name = 3;
+	string assigned = 4;
+	state.priority.Priority priority = 5;
+	int64 story_points = 6;
 }
 
 message StoryCreateRequest {
@@ -90,15 +110,28 @@ message StoryUpdateResponse {
 
 message StoryGetRequest {
 	repeated int64 ids = 1;
-	string author = 2;
-	string assigned = 3;
-	int64 sprint_id = 4;
-	int64 project_id = 5;
-	state.status.TaskStatus status = 6;
+	repeated int64 epic_ids = 2;
+	string author = 3;
+	string assigned = 4;
+	int64 sprint_id = 5;
+	int64 project_id = 6;
+	state.status.TaskStatus status = 7;
 }
 
 message StoryGetResponse {
 	repeated Story stories = 1;
+}
+
+message StoryInfoGetRequest {
+	repeated int64 ids = 1;
+	repeated int64 epic_ids = 2;
+	string assigned = 3;
+	int64 sprint_id = 4;
+	state.status.TaskStatus status = 5;
+}
+
+message StoryInfoGetResponse {
+	repeated StoryInfo story_info = 1;
 }
 
 message StoryGetByIDRequest {
@@ -107,4 +140,12 @@ message StoryGetByIDRequest {
 
 message StoryGetByIDResponse {
 	Story story = 1;
+}
+
+message StoryInfoGetByIDRequest {
+	int64 id = 1;
+}
+
+message StoryInfoGetByIDResponse {
+	StoryInfo story_info = 1;
 }

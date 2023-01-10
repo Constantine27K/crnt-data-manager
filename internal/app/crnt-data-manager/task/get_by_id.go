@@ -8,6 +8,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (i *Implementation) GetByID(ctx context.Context, req *desc.TaskGetByIDRequest) (*desc.TaskGetByIDResponse, error) {
+func (i *Implementation) GetTaskByID(ctx context.Context, req *desc.TaskGetByIDRequest) (*desc.TaskGetByIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "Kostya has not implemented this yet")
 }

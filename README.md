@@ -15,6 +15,10 @@ In the root directory there is a Makefile. All the commands you need are stored 
     2) make generate - generates proto and swagger files
     3) make run - running application
 
+:thinking: Actually, only 'make run' is necessary. The shortest way to run the app:
+1) Install Go
+2) Type in the root directory command which is hidden under 'make run' in Makefile
+
 :atom_symbol: By default, app starts at port 9090 for GRPC and 8080 for HTTP.
 If you have any troubles with these ports, you may change them in the .env file
 in the root directory.

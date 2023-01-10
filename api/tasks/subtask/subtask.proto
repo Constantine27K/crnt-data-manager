@@ -25,50 +25,69 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service SubtaskRegistry {
-	rpc Create (SubtaskCreateRequest) returns (SubtaskCreateResponse) {
+	rpc CreateSubtask (SubtaskCreateRequest) returns (SubtaskCreateResponse) {
 		option (google.api.http) = {
 			post: "/v1/subtask"
 			body: "*"
 		};
 	};
-	rpc Update (SubtaskUpdateRequest) returns (SubtaskUpdateResponse) {
+	rpc UpdateSubtask (SubtaskUpdateRequest) returns (SubtaskUpdateResponse) {
 		option (google.api.http) = {
 			put: "/v1/subtask/{id}"
 			body: "*"
 		};
 	};
-	rpc Get (SubtaskGetRequest) returns (SubtaskGetResponse) {
+	rpc GetSubtask (SubtaskGetRequest) returns (SubtaskGetResponse) {
 		option (google.api.http) = {
 			get: "/v1/subtasks"
 		};
 	};
-	rpc GetByID (SubtaskGetByIDRequest) returns (SubtaskGetByIDResponse) {
+	rpc GetSubtaskByID (SubtaskGetByIDRequest) returns (SubtaskGetByIDResponse) {
 		option (google.api.http) = {
 			get: "/v1/subtask/{id}"
 		};
 	};
+	rpc GetSubtaskInfo (SubtaskInfoGetRequest) returns (SubtaskInfoGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/subtasks_info"
+		};
+	};
+	rpc GetSubtaskInfoByID (SubtaskInfoGetByIDRequest) returns (SubtaskInfoGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/subtask_info/{id}"
+		};
+	};
 }
-
 
 message Subtask {
 	int64 id = 1;
-	string name = 2;
-	int64 task_id = 3;
-	string description = 4;
-	repeated comments.Comment comments = 5;
-	string author = 6;
-	string assigned = 7;
-	string qa = 8;
-	string reviewer = 9;
-	state.template.Template template = 10;
-	google.protobuf.Timestamp created_at = 11;
-	google.protobuf.Timestamp deadline = 12;
-	google.protobuf.Timestamp updated_at = 13;
-	state.status.TaskStatus status = 14;
-	state.priority.Priority priority = 15;
-	int64 project_id = 16;
-	repeated int64 component_id = 17;
-	int64 story_points = 18;
+	string composite_name = 2;
+	string name = 3;
+	int64 task_id = 4;
+	string description = 5;
+	repeated comments.Comment comments = 6;
+	string author = 7;
+	string assigned = 8;
+	string qa = 9;
+	string reviewer = 10;
+	state.template.Template template = 11;
+	google.protobuf.Timestamp created_at = 12;
+	google.protobuf.Timestamp deadline = 13;
+	google.protobuf.Timestamp updated_at = 14;
+	state.status.TaskStatus status = 15;
+	state.priority.Priority priority = 16;
+	int64 project_id = 17;
+	repeated int64 component_id = 18;
+	int64 story_points = 19;
+}
+
+message SubtaskInfo {
+	int64 id = 1;
+	string composite_name = 2;
+	string name = 3;
+	string assigned = 4;
+	state.priority.Priority priority = 5;
+	int64 story_points = 6;
 }
 
 message SubtaskCreateRequest {
@@ -90,9 +109,9 @@ message SubtaskUpdateResponse {
 
 message SubtaskGetRequest {
 	repeated int64 ids = 1;
-	string author = 2;
-	string assigned = 3;
-	int64 sprint_id = 4;
+	repeated int64 task_ids = 2;
+	string author = 3;
+	string assigned = 4;
 	int64 project_id = 5;
 	state.status.TaskStatus status = 6;
 }
@@ -101,10 +120,30 @@ message SubtaskGetResponse {
 	repeated Subtask subtasks = 1;
 }
 
+message SubtaskInfoGetRequest {
+	repeated int64 ids = 1;
+	repeated int64 task_ids = 2;
+	string assigned = 3;
+	int64 project_id = 5;
+	state.status.TaskStatus status = 6;
+}
+
+message SubtaskInfoGetResponse {
+	repeated SubtaskInfo subtasks = 1;
+}
+
 message SubtaskGetByIDRequest {
 	int64 id = 1;
 }
 
 message SubtaskGetByIDResponse {
 	Subtask subtask = 1;
+}
+
+message SubtaskInfoGetByIDRequest {
+	int64 id = 1;
+}
+
+message SubtaskInfoGetByIDResponse {
+	SubtaskInfo subtask_info = 1;
 }

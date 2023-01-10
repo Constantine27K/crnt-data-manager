@@ -22,10 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskRegistryClient interface {
-	Create(ctx context.Context, in *TaskCreateRequest, opts ...grpc.CallOption) (*TaskCreateResponse, error)
-	Update(ctx context.Context, in *TaskUpdateRequest, opts ...grpc.CallOption) (*TaskUpdateResponse, error)
-	Get(ctx context.Context, in *TaskGetRequest, opts ...grpc.CallOption) (*TaskGetResponse, error)
-	GetByID(ctx context.Context, in *TaskGetByIDRequest, opts ...grpc.CallOption) (*TaskGetByIDResponse, error)
+	CreateTask(ctx context.Context, in *TaskCreateRequest, opts ...grpc.CallOption) (*TaskCreateResponse, error)
+	UpdateTask(ctx context.Context, in *TaskUpdateRequest, opts ...grpc.CallOption) (*TaskUpdateResponse, error)
+	GetTasks(ctx context.Context, in *TaskGetRequest, opts ...grpc.CallOption) (*TaskGetResponse, error)
+	GetTaskByID(ctx context.Context, in *TaskGetByIDRequest, opts ...grpc.CallOption) (*TaskGetByIDResponse, error)
+	GetTaskInfo(ctx context.Context, in *TaskInfoGetRequest, opts ...grpc.CallOption) (*TaskInfoGetResponse, error)
+	GetTaskInfoByID(ctx context.Context, in *TaskInfoGetByIDRequest, opts ...grpc.CallOption) (*TaskInfoGetByIDResponse, error)
 }
 
 type taskRegistryClient struct {
@@ -36,36 +38,54 @@ func NewTaskRegistryClient(cc grpc.ClientConnInterface) TaskRegistryClient {
 	return &taskRegistryClient{cc}
 }
 
-func (c *taskRegistryClient) Create(ctx context.Context, in *TaskCreateRequest, opts ...grpc.CallOption) (*TaskCreateResponse, error) {
+func (c *taskRegistryClient) CreateTask(ctx context.Context, in *TaskCreateRequest, opts ...grpc.CallOption) (*TaskCreateResponse, error) {
 	out := new(TaskCreateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/CreateTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *taskRegistryClient) Update(ctx context.Context, in *TaskUpdateRequest, opts ...grpc.CallOption) (*TaskUpdateResponse, error) {
+func (c *taskRegistryClient) UpdateTask(ctx context.Context, in *TaskUpdateRequest, opts ...grpc.CallOption) (*TaskUpdateResponse, error) {
 	out := new(TaskUpdateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/UpdateTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *taskRegistryClient) Get(ctx context.Context, in *TaskGetRequest, opts ...grpc.CallOption) (*TaskGetResponse, error) {
+func (c *taskRegistryClient) GetTasks(ctx context.Context, in *TaskGetRequest, opts ...grpc.CallOption) (*TaskGetResponse, error) {
 	out := new(TaskGetResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTasks", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *taskRegistryClient) GetByID(ctx context.Context, in *TaskGetByIDRequest, opts ...grpc.CallOption) (*TaskGetByIDResponse, error) {
+func (c *taskRegistryClient) GetTaskByID(ctx context.Context, in *TaskGetByIDRequest, opts ...grpc.CallOption) (*TaskGetByIDResponse, error) {
 	out := new(TaskGetByIDResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTaskByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskRegistryClient) GetTaskInfo(ctx context.Context, in *TaskInfoGetRequest, opts ...grpc.CallOption) (*TaskInfoGetResponse, error) {
+	out := new(TaskInfoGetResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTaskInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskRegistryClient) GetTaskInfoByID(ctx context.Context, in *TaskInfoGetByIDRequest, opts ...grpc.CallOption) (*TaskInfoGetByIDResponse, error) {
+	out := new(TaskInfoGetByIDResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTaskInfoByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,27 +96,35 @@ func (c *taskRegistryClient) GetByID(ctx context.Context, in *TaskGetByIDRequest
 // All implementations should embed UnimplementedTaskRegistryServer
 // for forward compatibility
 type TaskRegistryServer interface {
-	Create(context.Context, *TaskCreateRequest) (*TaskCreateResponse, error)
-	Update(context.Context, *TaskUpdateRequest) (*TaskUpdateResponse, error)
-	Get(context.Context, *TaskGetRequest) (*TaskGetResponse, error)
-	GetByID(context.Context, *TaskGetByIDRequest) (*TaskGetByIDResponse, error)
+	CreateTask(context.Context, *TaskCreateRequest) (*TaskCreateResponse, error)
+	UpdateTask(context.Context, *TaskUpdateRequest) (*TaskUpdateResponse, error)
+	GetTasks(context.Context, *TaskGetRequest) (*TaskGetResponse, error)
+	GetTaskByID(context.Context, *TaskGetByIDRequest) (*TaskGetByIDResponse, error)
+	GetTaskInfo(context.Context, *TaskInfoGetRequest) (*TaskInfoGetResponse, error)
+	GetTaskInfoByID(context.Context, *TaskInfoGetByIDRequest) (*TaskInfoGetByIDResponse, error)
 }
 
 // UnimplementedTaskRegistryServer should be embedded to have forward compatible implementations.
 type UnimplementedTaskRegistryServer struct {
 }
 
-func (UnimplementedTaskRegistryServer) Create(context.Context, *TaskCreateRequest) (*TaskCreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedTaskRegistryServer) CreateTask(context.Context, *TaskCreateRequest) (*TaskCreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
 }
-func (UnimplementedTaskRegistryServer) Update(context.Context, *TaskUpdateRequest) (*TaskUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedTaskRegistryServer) UpdateTask(context.Context, *TaskUpdateRequest) (*TaskUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
 }
-func (UnimplementedTaskRegistryServer) Get(context.Context, *TaskGetRequest) (*TaskGetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedTaskRegistryServer) GetTasks(context.Context, *TaskGetRequest) (*TaskGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
 }
-func (UnimplementedTaskRegistryServer) GetByID(context.Context, *TaskGetByIDRequest) (*TaskGetByIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
+func (UnimplementedTaskRegistryServer) GetTaskByID(context.Context, *TaskGetByIDRequest) (*TaskGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskByID not implemented")
+}
+func (UnimplementedTaskRegistryServer) GetTaskInfo(context.Context, *TaskInfoGetRequest) (*TaskInfoGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskInfo not implemented")
+}
+func (UnimplementedTaskRegistryServer) GetTaskInfoByID(context.Context, *TaskInfoGetByIDRequest) (*TaskInfoGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskInfoByID not implemented")
 }
 
 // UnsafeTaskRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -110,74 +138,110 @@ func RegisterTaskRegistryServer(s grpc.ServiceRegistrar, srv TaskRegistryServer)
 	s.RegisterService(&TaskRegistry_ServiceDesc, srv)
 }
 
-func _TaskRegistry_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TaskRegistry_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TaskCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskRegistryServer).Create(ctx, in)
+		return srv.(TaskRegistryServer).CreateTask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Create",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/CreateTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskRegistryServer).Create(ctx, req.(*TaskCreateRequest))
+		return srv.(TaskRegistryServer).CreateTask(ctx, req.(*TaskCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskRegistry_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TaskRegistry_UpdateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TaskUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskRegistryServer).Update(ctx, in)
+		return srv.(TaskRegistryServer).UpdateTask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Update",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/UpdateTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskRegistryServer).Update(ctx, req.(*TaskUpdateRequest))
+		return srv.(TaskRegistryServer).UpdateTask(ctx, req.(*TaskUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskRegistry_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TaskRegistry_GetTasks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TaskGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskRegistryServer).Get(ctx, in)
+		return srv.(TaskRegistryServer).GetTasks(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/Get",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTasks",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskRegistryServer).Get(ctx, req.(*TaskGetRequest))
+		return srv.(TaskRegistryServer).GetTasks(ctx, req.(*TaskGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskRegistry_GetByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TaskRegistry_GetTaskByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TaskGetByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskRegistryServer).GetByID(ctx, in)
+		return srv.(TaskRegistryServer).GetTaskByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetByID",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTaskByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskRegistryServer).GetByID(ctx, req.(*TaskGetByIDRequest))
+		return srv.(TaskRegistryServer).GetTaskByID(ctx, req.(*TaskGetByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskRegistry_GetTaskInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskInfoGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskRegistryServer).GetTaskInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTaskInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskRegistryServer).GetTaskInfo(ctx, req.(*TaskInfoGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskRegistry_GetTaskInfoByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskInfoGetByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskRegistryServer).GetTaskInfoByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.task.TaskRegistry/GetTaskInfoByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskRegistryServer).GetTaskInfoByID(ctx, req.(*TaskInfoGetByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,20 +254,28 @@ var TaskRegistry_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TaskRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _TaskRegistry_Create_Handler,
+			MethodName: "CreateTask",
+			Handler:    _TaskRegistry_CreateTask_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _TaskRegistry_Update_Handler,
+			MethodName: "UpdateTask",
+			Handler:    _TaskRegistry_UpdateTask_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _TaskRegistry_Get_Handler,
+			MethodName: "GetTasks",
+			Handler:    _TaskRegistry_GetTasks_Handler,
 		},
 		{
-			MethodName: "GetByID",
-			Handler:    _TaskRegistry_GetByID_Handler,
+			MethodName: "GetTaskByID",
+			Handler:    _TaskRegistry_GetTaskByID_Handler,
+		},
+		{
+			MethodName: "GetTaskInfo",
+			Handler:    _TaskRegistry_GetTaskInfo_Handler,
+		},
+		{
+			MethodName: "GetTaskInfoByID",
+			Handler:    _TaskRegistry_GetTaskInfoByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

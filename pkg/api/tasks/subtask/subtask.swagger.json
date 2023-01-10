@@ -21,7 +21,7 @@
   "paths": {
     "/v1/subtask": {
       "post": {
-        "operationId": "SubtaskRegistry_Create",
+        "operationId": "SubtaskRegistry_CreateSubtask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -53,7 +53,7 @@
     },
     "/v1/subtask/{id}": {
       "get": {
-        "operationId": "SubtaskRegistry_GetByID",
+        "operationId": "SubtaskRegistry_GetSubtaskByID",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -82,7 +82,7 @@
         ]
       },
       "put": {
-        "operationId": "SubtaskRegistry_Update",
+        "operationId": "SubtaskRegistry_UpdateSubtask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -124,9 +124,40 @@
         ]
       }
     },
+    "/v1/subtask_info/{id}": {
+      "get": {
+        "operationId": "SubtaskRegistry_GetSubtaskInfoByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/subtaskSubtaskInfoGetByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "SubtaskRegistry"
+        ]
+      }
+    },
     "/v1/subtasks": {
       "get": {
-        "operationId": "SubtaskRegistry_Get",
+        "operationId": "SubtaskRegistry_GetSubtask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -154,6 +185,17 @@
             "collectionFormat": "multi"
           },
           {
+            "name": "taskIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
             "name": "author",
             "in": "query",
             "required": false,
@@ -166,11 +208,103 @@
             "type": "string"
           },
           {
-            "name": "sprintId",
+            "name": "projectId",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
+          },
+          {
+            "name": "status.common",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_COMMON_UNKNOWN",
+              "STATUS_COMMON_BACKLOG",
+              "STATUS_COMMON_IN_PROGRESS",
+              "STATUS_COMMON_DONE",
+              "STATUS_COMMON_READY_FOR_REVIEW",
+              "STATUS_COMMON_IN_REVIEW",
+              "STATUS_COMMON_REVIEW_FAILED",
+              "STATUS_COMMON_REVIEW_PASSED",
+              "STATUS_COMMON_GIVEN_TO_CUSTOMER",
+              "STATUS_COMMON_CLOSED",
+              "STATUS_COMMON_ON_HOLD"
+            ],
+            "default": "STATUS_COMMON_UNKNOWN"
+          },
+          {
+            "name": "status.development",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_DEVELOPMENT_UNKNOWN",
+              "STATUS_DEVELOPMENT_BACKLOG",
+              "STATUS_DEVELOPMENT_IN_PROGRESS",
+              "STATUS_DEVELOPMENT_IN_REVIEW",
+              "STATUS_DEVELOPMENT_READY_FOR_TESTING",
+              "STATUS_DEVELOPMENT_TESTING",
+              "STATUS_DEVELOPMENT_TESTING_PASSED",
+              "STATUS_DEVELOPMENT_DONE",
+              "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
+              "STATUS_DEVELOPMENT_CLOSED",
+              "STATUS_DEVELOPMENT_ON_HOLD"
+            ],
+            "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          }
+        ],
+        "tags": [
+          "SubtaskRegistry"
+        ]
+      }
+    },
+    "/v1/subtasks_info": {
+      "get": {
+        "operationId": "SubtaskRegistry_GetSubtaskInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/subtaskSubtaskInfoGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "taskIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "assigned",
+            "in": "query",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "projectId",
@@ -341,6 +475,9 @@
           "type": "string",
           "format": "int64"
         },
+        "compositeName": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -439,6 +576,50 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/subtaskSubtask"
+          }
+        }
+      }
+    },
+    "subtaskSubtaskInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "subtaskSubtaskInfoGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "subtaskInfo": {
+          "$ref": "#/definitions/subtaskSubtaskInfo"
+        }
+      }
+    },
+    "subtaskSubtaskInfoGetResponse": {
+      "type": "object",
+      "properties": {
+        "subtasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subtaskSubtaskInfo"
           }
         }
       }

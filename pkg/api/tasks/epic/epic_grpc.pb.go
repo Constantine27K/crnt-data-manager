@@ -22,10 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EpicRegistryClient interface {
-	Create(ctx context.Context, in *EpicCreateRequest, opts ...grpc.CallOption) (*EpicCreateResponse, error)
-	Update(ctx context.Context, in *EpicUpdateRequest, opts ...grpc.CallOption) (*EpicUpdateResponse, error)
-	Get(ctx context.Context, in *EpicGetRequest, opts ...grpc.CallOption) (*EpicGetResponse, error)
-	GetByID(ctx context.Context, in *EpicGetByIDRequest, opts ...grpc.CallOption) (*EpicGetByIDResponse, error)
+	CreateEpic(ctx context.Context, in *EpicCreateRequest, opts ...grpc.CallOption) (*EpicCreateResponse, error)
+	UpdateEpic(ctx context.Context, in *EpicUpdateRequest, opts ...grpc.CallOption) (*EpicUpdateResponse, error)
+	GetEpic(ctx context.Context, in *EpicGetRequest, opts ...grpc.CallOption) (*EpicGetResponse, error)
+	GetEpicByID(ctx context.Context, in *EpicGetByIDRequest, opts ...grpc.CallOption) (*EpicGetByIDResponse, error)
+	GetEpicInfo(ctx context.Context, in *EpicInfoGetRequest, opts ...grpc.CallOption) (*EpicInfoGetResponse, error)
+	GetEpicInfoByID(ctx context.Context, in *EpicInfoGetByIDRequest, opts ...grpc.CallOption) (*EpicInfoGetByIDResponse, error)
 }
 
 type epicRegistryClient struct {
@@ -36,36 +38,54 @@ func NewEpicRegistryClient(cc grpc.ClientConnInterface) EpicRegistryClient {
 	return &epicRegistryClient{cc}
 }
 
-func (c *epicRegistryClient) Create(ctx context.Context, in *EpicCreateRequest, opts ...grpc.CallOption) (*EpicCreateResponse, error) {
+func (c *epicRegistryClient) CreateEpic(ctx context.Context, in *EpicCreateRequest, opts ...grpc.CallOption) (*EpicCreateResponse, error) {
 	out := new(EpicCreateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/CreateEpic", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *epicRegistryClient) Update(ctx context.Context, in *EpicUpdateRequest, opts ...grpc.CallOption) (*EpicUpdateResponse, error) {
+func (c *epicRegistryClient) UpdateEpic(ctx context.Context, in *EpicUpdateRequest, opts ...grpc.CallOption) (*EpicUpdateResponse, error) {
 	out := new(EpicUpdateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/UpdateEpic", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *epicRegistryClient) Get(ctx context.Context, in *EpicGetRequest, opts ...grpc.CallOption) (*EpicGetResponse, error) {
+func (c *epicRegistryClient) GetEpic(ctx context.Context, in *EpicGetRequest, opts ...grpc.CallOption) (*EpicGetResponse, error) {
 	out := new(EpicGetResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpic", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *epicRegistryClient) GetByID(ctx context.Context, in *EpicGetByIDRequest, opts ...grpc.CallOption) (*EpicGetByIDResponse, error) {
+func (c *epicRegistryClient) GetEpicByID(ctx context.Context, in *EpicGetByIDRequest, opts ...grpc.CallOption) (*EpicGetByIDResponse, error) {
 	out := new(EpicGetByIDResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpicByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *epicRegistryClient) GetEpicInfo(ctx context.Context, in *EpicInfoGetRequest, opts ...grpc.CallOption) (*EpicInfoGetResponse, error) {
+	out := new(EpicInfoGetResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpicInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *epicRegistryClient) GetEpicInfoByID(ctx context.Context, in *EpicInfoGetByIDRequest, opts ...grpc.CallOption) (*EpicInfoGetByIDResponse, error) {
+	out := new(EpicInfoGetByIDResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpicInfoByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,27 +96,35 @@ func (c *epicRegistryClient) GetByID(ctx context.Context, in *EpicGetByIDRequest
 // All implementations should embed UnimplementedEpicRegistryServer
 // for forward compatibility
 type EpicRegistryServer interface {
-	Create(context.Context, *EpicCreateRequest) (*EpicCreateResponse, error)
-	Update(context.Context, *EpicUpdateRequest) (*EpicUpdateResponse, error)
-	Get(context.Context, *EpicGetRequest) (*EpicGetResponse, error)
-	GetByID(context.Context, *EpicGetByIDRequest) (*EpicGetByIDResponse, error)
+	CreateEpic(context.Context, *EpicCreateRequest) (*EpicCreateResponse, error)
+	UpdateEpic(context.Context, *EpicUpdateRequest) (*EpicUpdateResponse, error)
+	GetEpic(context.Context, *EpicGetRequest) (*EpicGetResponse, error)
+	GetEpicByID(context.Context, *EpicGetByIDRequest) (*EpicGetByIDResponse, error)
+	GetEpicInfo(context.Context, *EpicInfoGetRequest) (*EpicInfoGetResponse, error)
+	GetEpicInfoByID(context.Context, *EpicInfoGetByIDRequest) (*EpicInfoGetByIDResponse, error)
 }
 
 // UnimplementedEpicRegistryServer should be embedded to have forward compatible implementations.
 type UnimplementedEpicRegistryServer struct {
 }
 
-func (UnimplementedEpicRegistryServer) Create(context.Context, *EpicCreateRequest) (*EpicCreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedEpicRegistryServer) CreateEpic(context.Context, *EpicCreateRequest) (*EpicCreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateEpic not implemented")
 }
-func (UnimplementedEpicRegistryServer) Update(context.Context, *EpicUpdateRequest) (*EpicUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedEpicRegistryServer) UpdateEpic(context.Context, *EpicUpdateRequest) (*EpicUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateEpic not implemented")
 }
-func (UnimplementedEpicRegistryServer) Get(context.Context, *EpicGetRequest) (*EpicGetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedEpicRegistryServer) GetEpic(context.Context, *EpicGetRequest) (*EpicGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEpic not implemented")
 }
-func (UnimplementedEpicRegistryServer) GetByID(context.Context, *EpicGetByIDRequest) (*EpicGetByIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
+func (UnimplementedEpicRegistryServer) GetEpicByID(context.Context, *EpicGetByIDRequest) (*EpicGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEpicByID not implemented")
+}
+func (UnimplementedEpicRegistryServer) GetEpicInfo(context.Context, *EpicInfoGetRequest) (*EpicInfoGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEpicInfo not implemented")
+}
+func (UnimplementedEpicRegistryServer) GetEpicInfoByID(context.Context, *EpicInfoGetByIDRequest) (*EpicInfoGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEpicInfoByID not implemented")
 }
 
 // UnsafeEpicRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -110,74 +138,110 @@ func RegisterEpicRegistryServer(s grpc.ServiceRegistrar, srv EpicRegistryServer)
 	s.RegisterService(&EpicRegistry_ServiceDesc, srv)
 }
 
-func _EpicRegistry_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _EpicRegistry_CreateEpic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EpicCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EpicRegistryServer).Create(ctx, in)
+		return srv.(EpicRegistryServer).CreateEpic(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/Create",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/CreateEpic",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EpicRegistryServer).Create(ctx, req.(*EpicCreateRequest))
+		return srv.(EpicRegistryServer).CreateEpic(ctx, req.(*EpicCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EpicRegistry_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _EpicRegistry_UpdateEpic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EpicUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EpicRegistryServer).Update(ctx, in)
+		return srv.(EpicRegistryServer).UpdateEpic(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/Update",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/UpdateEpic",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EpicRegistryServer).Update(ctx, req.(*EpicUpdateRequest))
+		return srv.(EpicRegistryServer).UpdateEpic(ctx, req.(*EpicUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EpicRegistry_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _EpicRegistry_GetEpic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EpicGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EpicRegistryServer).Get(ctx, in)
+		return srv.(EpicRegistryServer).GetEpic(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/Get",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpic",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EpicRegistryServer).Get(ctx, req.(*EpicGetRequest))
+		return srv.(EpicRegistryServer).GetEpic(ctx, req.(*EpicGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EpicRegistry_GetByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _EpicRegistry_GetEpicByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EpicGetByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EpicRegistryServer).GetByID(ctx, in)
+		return srv.(EpicRegistryServer).GetEpicByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetByID",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpicByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EpicRegistryServer).GetByID(ctx, req.(*EpicGetByIDRequest))
+		return srv.(EpicRegistryServer).GetEpicByID(ctx, req.(*EpicGetByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EpicRegistry_GetEpicInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EpicInfoGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EpicRegistryServer).GetEpicInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpicInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EpicRegistryServer).GetEpicInfo(ctx, req.(*EpicInfoGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EpicRegistry_GetEpicInfoByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EpicInfoGetByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EpicRegistryServer).GetEpicInfoByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.epic.EpicRegistry/GetEpicInfoByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EpicRegistryServer).GetEpicInfoByID(ctx, req.(*EpicInfoGetByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,20 +254,28 @@ var EpicRegistry_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*EpicRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _EpicRegistry_Create_Handler,
+			MethodName: "CreateEpic",
+			Handler:    _EpicRegistry_CreateEpic_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _EpicRegistry_Update_Handler,
+			MethodName: "UpdateEpic",
+			Handler:    _EpicRegistry_UpdateEpic_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _EpicRegistry_Get_Handler,
+			MethodName: "GetEpic",
+			Handler:    _EpicRegistry_GetEpic_Handler,
 		},
 		{
-			MethodName: "GetByID",
-			Handler:    _EpicRegistry_GetByID_Handler,
+			MethodName: "GetEpicByID",
+			Handler:    _EpicRegistry_GetEpicByID_Handler,
+		},
+		{
+			MethodName: "GetEpicInfo",
+			Handler:    _EpicRegistry_GetEpicInfo_Handler,
+		},
+		{
+			MethodName: "GetEpicInfoByID",
+			Handler:    _EpicRegistry_GetEpicInfoByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

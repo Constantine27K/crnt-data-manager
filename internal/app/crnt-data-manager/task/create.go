@@ -7,7 +7,7 @@ import (
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/task"
 )
 
-func (i *Implementation) Create(ctx context.Context, req *desc.TaskCreateRequest) (*desc.TaskCreateResponse, error) {
+func (i *Implementation) CreateTask(ctx context.Context, req *desc.TaskCreateRequest) (*desc.TaskCreateResponse, error) {
 	if req.GetTask() == nil {
 		return nil, errors.New("task should not be nil")
 	}

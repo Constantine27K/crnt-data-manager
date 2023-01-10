@@ -1,13 +1,11 @@
 SRC_DIR_RELATIVE=./api
 DST_DIR_RELATIVE=./pkg
 
-STATUS_PROTO=./api/state/status/status.proto
-SPRINT_PROTO=./api/sprint/sprint.proto
-TASK_PROTO=./api/tasks/task/task.proto
 PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
 	-not \( -path ./api/google -prune \) \
 	-not \( -path ./api/protoc* -prune \) \
 	-name '*.proto')
+
 SWAGGER_FILES=$(shell find $(DST_DIR_RELATIVE) \
                      	-name '*.swagger.json*')
 
@@ -82,6 +80,10 @@ generate:
 	buf mod update
 	buf generate
 	make .copy-swagger
+
+.PHONY: build
+build:
+	go build -o ./bin/crnt-data-manager ./cmd/crnt-data-manager/main.go
 
 .PHONY: run
 run:

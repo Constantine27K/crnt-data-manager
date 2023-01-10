@@ -22,10 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SubtaskRegistryClient interface {
-	Create(ctx context.Context, in *SubtaskCreateRequest, opts ...grpc.CallOption) (*SubtaskCreateResponse, error)
-	Update(ctx context.Context, in *SubtaskUpdateRequest, opts ...grpc.CallOption) (*SubtaskUpdateResponse, error)
-	Get(ctx context.Context, in *SubtaskGetRequest, opts ...grpc.CallOption) (*SubtaskGetResponse, error)
-	GetByID(ctx context.Context, in *SubtaskGetByIDRequest, opts ...grpc.CallOption) (*SubtaskGetByIDResponse, error)
+	CreateSubtask(ctx context.Context, in *SubtaskCreateRequest, opts ...grpc.CallOption) (*SubtaskCreateResponse, error)
+	UpdateSubtask(ctx context.Context, in *SubtaskUpdateRequest, opts ...grpc.CallOption) (*SubtaskUpdateResponse, error)
+	GetSubtask(ctx context.Context, in *SubtaskGetRequest, opts ...grpc.CallOption) (*SubtaskGetResponse, error)
+	GetSubtaskByID(ctx context.Context, in *SubtaskGetByIDRequest, opts ...grpc.CallOption) (*SubtaskGetByIDResponse, error)
+	GetSubtaskInfo(ctx context.Context, in *SubtaskInfoGetRequest, opts ...grpc.CallOption) (*SubtaskInfoGetResponse, error)
+	GetSubtaskInfoByID(ctx context.Context, in *SubtaskInfoGetByIDRequest, opts ...grpc.CallOption) (*SubtaskInfoGetByIDResponse, error)
 }
 
 type subtaskRegistryClient struct {
@@ -36,36 +38,54 @@ func NewSubtaskRegistryClient(cc grpc.ClientConnInterface) SubtaskRegistryClient
 	return &subtaskRegistryClient{cc}
 }
 
-func (c *subtaskRegistryClient) Create(ctx context.Context, in *SubtaskCreateRequest, opts ...grpc.CallOption) (*SubtaskCreateResponse, error) {
+func (c *subtaskRegistryClient) CreateSubtask(ctx context.Context, in *SubtaskCreateRequest, opts ...grpc.CallOption) (*SubtaskCreateResponse, error) {
 	out := new(SubtaskCreateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/CreateSubtask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *subtaskRegistryClient) Update(ctx context.Context, in *SubtaskUpdateRequest, opts ...grpc.CallOption) (*SubtaskUpdateResponse, error) {
+func (c *subtaskRegistryClient) UpdateSubtask(ctx context.Context, in *SubtaskUpdateRequest, opts ...grpc.CallOption) (*SubtaskUpdateResponse, error) {
 	out := new(SubtaskUpdateResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/UpdateSubtask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *subtaskRegistryClient) Get(ctx context.Context, in *SubtaskGetRequest, opts ...grpc.CallOption) (*SubtaskGetResponse, error) {
+func (c *subtaskRegistryClient) GetSubtask(ctx context.Context, in *SubtaskGetRequest, opts ...grpc.CallOption) (*SubtaskGetResponse, error) {
 	out := new(SubtaskGetResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *subtaskRegistryClient) GetByID(ctx context.Context, in *SubtaskGetByIDRequest, opts ...grpc.CallOption) (*SubtaskGetByIDResponse, error) {
+func (c *subtaskRegistryClient) GetSubtaskByID(ctx context.Context, in *SubtaskGetByIDRequest, opts ...grpc.CallOption) (*SubtaskGetByIDResponse, error) {
 	out := new(SubtaskGetByIDResponse)
-	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetByID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtaskByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *subtaskRegistryClient) GetSubtaskInfo(ctx context.Context, in *SubtaskInfoGetRequest, opts ...grpc.CallOption) (*SubtaskInfoGetResponse, error) {
+	out := new(SubtaskInfoGetResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtaskInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *subtaskRegistryClient) GetSubtaskInfoByID(ctx context.Context, in *SubtaskInfoGetByIDRequest, opts ...grpc.CallOption) (*SubtaskInfoGetByIDResponse, error) {
+	out := new(SubtaskInfoGetByIDResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtaskInfoByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,27 +96,35 @@ func (c *subtaskRegistryClient) GetByID(ctx context.Context, in *SubtaskGetByIDR
 // All implementations should embed UnimplementedSubtaskRegistryServer
 // for forward compatibility
 type SubtaskRegistryServer interface {
-	Create(context.Context, *SubtaskCreateRequest) (*SubtaskCreateResponse, error)
-	Update(context.Context, *SubtaskUpdateRequest) (*SubtaskUpdateResponse, error)
-	Get(context.Context, *SubtaskGetRequest) (*SubtaskGetResponse, error)
-	GetByID(context.Context, *SubtaskGetByIDRequest) (*SubtaskGetByIDResponse, error)
+	CreateSubtask(context.Context, *SubtaskCreateRequest) (*SubtaskCreateResponse, error)
+	UpdateSubtask(context.Context, *SubtaskUpdateRequest) (*SubtaskUpdateResponse, error)
+	GetSubtask(context.Context, *SubtaskGetRequest) (*SubtaskGetResponse, error)
+	GetSubtaskByID(context.Context, *SubtaskGetByIDRequest) (*SubtaskGetByIDResponse, error)
+	GetSubtaskInfo(context.Context, *SubtaskInfoGetRequest) (*SubtaskInfoGetResponse, error)
+	GetSubtaskInfoByID(context.Context, *SubtaskInfoGetByIDRequest) (*SubtaskInfoGetByIDResponse, error)
 }
 
 // UnimplementedSubtaskRegistryServer should be embedded to have forward compatible implementations.
 type UnimplementedSubtaskRegistryServer struct {
 }
 
-func (UnimplementedSubtaskRegistryServer) Create(context.Context, *SubtaskCreateRequest) (*SubtaskCreateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedSubtaskRegistryServer) CreateSubtask(context.Context, *SubtaskCreateRequest) (*SubtaskCreateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSubtask not implemented")
 }
-func (UnimplementedSubtaskRegistryServer) Update(context.Context, *SubtaskUpdateRequest) (*SubtaskUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedSubtaskRegistryServer) UpdateSubtask(context.Context, *SubtaskUpdateRequest) (*SubtaskUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSubtask not implemented")
 }
-func (UnimplementedSubtaskRegistryServer) Get(context.Context, *SubtaskGetRequest) (*SubtaskGetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedSubtaskRegistryServer) GetSubtask(context.Context, *SubtaskGetRequest) (*SubtaskGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubtask not implemented")
 }
-func (UnimplementedSubtaskRegistryServer) GetByID(context.Context, *SubtaskGetByIDRequest) (*SubtaskGetByIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
+func (UnimplementedSubtaskRegistryServer) GetSubtaskByID(context.Context, *SubtaskGetByIDRequest) (*SubtaskGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubtaskByID not implemented")
+}
+func (UnimplementedSubtaskRegistryServer) GetSubtaskInfo(context.Context, *SubtaskInfoGetRequest) (*SubtaskInfoGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubtaskInfo not implemented")
+}
+func (UnimplementedSubtaskRegistryServer) GetSubtaskInfoByID(context.Context, *SubtaskInfoGetByIDRequest) (*SubtaskInfoGetByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubtaskInfoByID not implemented")
 }
 
 // UnsafeSubtaskRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -110,74 +138,110 @@ func RegisterSubtaskRegistryServer(s grpc.ServiceRegistrar, srv SubtaskRegistryS
 	s.RegisterService(&SubtaskRegistry_ServiceDesc, srv)
 }
 
-func _SubtaskRegistry_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SubtaskRegistry_CreateSubtask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubtaskCreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SubtaskRegistryServer).Create(ctx, in)
+		return srv.(SubtaskRegistryServer).CreateSubtask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/Create",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/CreateSubtask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubtaskRegistryServer).Create(ctx, req.(*SubtaskCreateRequest))
+		return srv.(SubtaskRegistryServer).CreateSubtask(ctx, req.(*SubtaskCreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SubtaskRegistry_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SubtaskRegistry_UpdateSubtask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubtaskUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SubtaskRegistryServer).Update(ctx, in)
+		return srv.(SubtaskRegistryServer).UpdateSubtask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/Update",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/UpdateSubtask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubtaskRegistryServer).Update(ctx, req.(*SubtaskUpdateRequest))
+		return srv.(SubtaskRegistryServer).UpdateSubtask(ctx, req.(*SubtaskUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SubtaskRegistry_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SubtaskRegistry_GetSubtask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubtaskGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SubtaskRegistryServer).Get(ctx, in)
+		return srv.(SubtaskRegistryServer).GetSubtask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/Get",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubtaskRegistryServer).Get(ctx, req.(*SubtaskGetRequest))
+		return srv.(SubtaskRegistryServer).GetSubtask(ctx, req.(*SubtaskGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SubtaskRegistry_GetByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SubtaskRegistry_GetSubtaskByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubtaskGetByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SubtaskRegistryServer).GetByID(ctx, in)
+		return srv.(SubtaskRegistryServer).GetSubtaskByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetByID",
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtaskByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubtaskRegistryServer).GetByID(ctx, req.(*SubtaskGetByIDRequest))
+		return srv.(SubtaskRegistryServer).GetSubtaskByID(ctx, req.(*SubtaskGetByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SubtaskRegistry_GetSubtaskInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubtaskInfoGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubtaskRegistryServer).GetSubtaskInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtaskInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubtaskRegistryServer).GetSubtaskInfo(ctx, req.(*SubtaskInfoGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SubtaskRegistry_GetSubtaskInfoByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubtaskInfoGetByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubtaskRegistryServer).GetSubtaskInfoByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.subtask.SubtaskRegistry/GetSubtaskInfoByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubtaskRegistryServer).GetSubtaskInfoByID(ctx, req.(*SubtaskInfoGetByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,20 +254,28 @@ var SubtaskRegistry_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SubtaskRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _SubtaskRegistry_Create_Handler,
+			MethodName: "CreateSubtask",
+			Handler:    _SubtaskRegistry_CreateSubtask_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _SubtaskRegistry_Update_Handler,
+			MethodName: "UpdateSubtask",
+			Handler:    _SubtaskRegistry_UpdateSubtask_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _SubtaskRegistry_Get_Handler,
+			MethodName: "GetSubtask",
+			Handler:    _SubtaskRegistry_GetSubtask_Handler,
 		},
 		{
-			MethodName: "GetByID",
-			Handler:    _SubtaskRegistry_GetByID_Handler,
+			MethodName: "GetSubtaskByID",
+			Handler:    _SubtaskRegistry_GetSubtaskByID_Handler,
+		},
+		{
+			MethodName: "GetSubtaskInfo",
+			Handler:    _SubtaskRegistry_GetSubtaskInfo_Handler,
+		},
+		{
+			MethodName: "GetSubtaskInfoByID",
+			Handler:    _SubtaskRegistry_GetSubtaskInfoByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

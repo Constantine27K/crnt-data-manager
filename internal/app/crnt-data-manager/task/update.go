@@ -8,6 +8,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (i *Implementation) Update(ctx context.Context, req *desc.TaskUpdateRequest) (*desc.TaskUpdateResponse, error) {
+func (i *Implementation) UpdateTask(ctx context.Context, req *desc.TaskUpdateRequest) (*desc.TaskUpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "Kostya has not implemented this yet")
 }
