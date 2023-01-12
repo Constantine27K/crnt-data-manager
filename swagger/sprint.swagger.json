@@ -223,19 +223,51 @@
           "type": "string",
           "format": "int64"
         },
-        "tasks": {
+        "issues": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/taskTaskInfo"
-          }
-        },
-        "stories": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/storyStoryInfo"
+            "$ref": "#/definitions/issueIssueInfo"
           }
         }
       }
+    },
+    "issueIssueInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/issueIssueType"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueType": {
+      "type": "string",
+      "enum": [
+        "ISSUE_TYPE_UNKNOWN",
+        "ISSUE_TYPE_STORY",
+        "ISSUE_TYPE_TASK",
+        "ISSUE_TYPE_SUBTASK"
+      ],
+      "default": "ISSUE_TYPE_UNKNOWN"
     },
     "priorityPriority": {
       "type": "string",
@@ -328,56 +360,6 @@
         "STATUS_SPRINT_FINISHED"
       ],
       "default": "STATUS_SPRINT_UNKNOWN"
-    },
-    "storyStoryInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "compositeName": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "taskTaskInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "compositeName": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
     }
   }
 }

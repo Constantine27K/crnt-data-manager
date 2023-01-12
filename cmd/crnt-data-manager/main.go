@@ -9,15 +9,11 @@ import (
 	"strconv"
 
 	epicService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/epic"
+	issueService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/issue"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
-	storyService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/story"
-	subtaskService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/subtask"
-	taskService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/task"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/epic"
-	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/story"
-	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/subtask"
-	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/task"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
@@ -63,9 +59,7 @@ func createGrpcServer() {
 	}
 
 	grpcServer := grpc.NewServer()
-	task.RegisterTaskRegistryServer(grpcServer, taskService.NewService())
-	subtask.RegisterSubtaskRegistryServer(grpcServer, subtaskService.NewService())
-	story.RegisterStoryRegistryServer(grpcServer, storyService.NewService())
+	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService())
 	epic.RegisterEpicRegistryServer(grpcServer, epicService.NewService())
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
 	log.Infof("grpc service started on port %s", port)
@@ -97,24 +91,10 @@ func createHttpServer() {
 	// create an HTTP router using the client connection above
 	// and register it with the service client
 	rmux := runtime.NewServeMux()
-	clientTask := task.NewTaskRegistryClient(conn)
-	err = task.RegisterTaskRegistryHandlerClient(ctx, rmux, clientTask)
+	clientIssue := issue.NewIssueRegistryClient(conn)
+	err = issue.RegisterIssueRegistryHandlerClient(ctx, rmux, clientIssue)
 	if err != nil {
 		log.Error("failed to register task handler client",
-			zap.Error(err),
-		)
-	}
-	clientSubtask := subtask.NewSubtaskRegistryClient(conn)
-	err = subtask.RegisterSubtaskRegistryHandlerClient(ctx, rmux, clientSubtask)
-	if err != nil {
-		log.Error("failed to register subtask handler client",
-			zap.Error(err),
-		)
-	}
-	clientStory := story.NewStoryRegistryClient(conn)
-	err = story.RegisterStoryRegistryHandlerClient(ctx, rmux, clientStory)
-	if err != nil {
-		log.Error("failed to register story handler client",
 			zap.Error(err),
 		)
 	}

@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.tasks.issue;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+import "api/state/status/status.proto";
+import "api/state/priority/priority.proto";
+import "api/state/template/template.proto";
+import "api/comments/comments.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue;issue";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Issue";
+		version: "0.1";
+	};
+
+	schemes: HTTP;
+	consumes: "application/json";
+	produces: "application/json";
+};
+
+service IssueRegistry {
+	rpc CreateIssue (IssueCreateRequest) returns (IssueCreateResponse) {
+		option (google.api.http) = {
+			post: "/v1/issue"
+			body: "*"
+		};
+	};
+	rpc CreateSubtask (IssueCreateSubtaskRequest) returns (IssueCreateSubtaskResponse) {
+		option (google.api.http) = {
+			post: "/v1/issue/{id}/subtask"
+			body: "*"
+		};
+	};
+	rpc UpdateIssue (IssueUpdateRequest) returns (IssueUpdateResponse) {
+		option (google.api.http) = {
+			put: "/v1/issue/{id}"
+			body: "*"
+		};
+	};
+	rpc GetIssues (IssueGetRequest) returns (IssueGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/issues"
+		};
+	};
+	rpc GetIssueByID (IssueGetByIDRequest) returns (IssueGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/issue/{id}"
+		};
+	};
+	rpc GetIssueInfo (IssueInfoGetRequest) returns (IssueInfoGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/issue_info"
+		};
+	};
+	rpc GetIssueInfoByID (IssueInfoGetByIDRequest) returns (IssueInfoGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/issue_info/{id}"
+		};
+	};
+}
+
+message Issue {
+	int64 id = 1;
+	string composite_name = 2;
+	string name = 3;
+	IssueType type = 4;
+	int64 parent_id = 5;
+	string description = 6;
+	repeated comments.Comment comments = 7;
+	string author = 8;
+	string assigned = 9;
+	string qa = 10;
+	string reviewer = 11;
+	state.template.Template template = 12;
+	google.protobuf.Timestamp created_at = 13;
+	google.protobuf.Timestamp deadline = 14;
+	google.protobuf.Timestamp updated_at = 15;
+	state.status.TaskStatus status = 16;
+	state.priority.Priority priority = 17;
+	int64 sprint_id = 18;
+	int64 project_id = 19;
+	repeated int64 component_id = 20;
+	int64 story_points = 21;
+	repeated Issue children = 22;
+}
+
+message IssueInfo {
+	int64 id = 1;
+	string composite_name = 2;
+	string name = 3;
+	IssueType type = 4;
+	string assigned = 5;
+	state.priority.Priority priority = 6;
+	int64 story_points = 7;
+}
+
+message IssueCreateRequest {
+	Issue issue = 1;
+}
+
+message IssueCreateResponse {
+	int64 id = 1;
+}
+
+message IssueCreateSubtaskRequest {
+	int64 id = 1;
+	Issue child = 2;
+}
+
+message IssueCreateSubtaskResponse {
+	int64 id = 1;
+}
+
+message IssueUpdateRequest {
+	int64 id = 1;
+	Issue issue = 2;
+}
+
+message IssueUpdateResponse {
+	int64 id = 1;
+}
+
+message IssueGetRequest {
+	repeated int64 ids = 1;
+	repeated int64 parent_ids = 2;
+	IssueType type = 3;
+	string author = 4;
+	string assigned = 5;
+	int64 sprint_id = 6;
+	int64 project_id = 7;
+	state.status.TaskStatus status = 8;
+}
+
+message IssueGetResponse {
+	repeated Issue issues = 1;
+}
+
+message IssueInfoGetRequest {
+	repeated int64 ids = 1;
+	repeated int64 parent_ids = 2;
+	IssueType type = 3;
+	string assigned = 4;
+	int64 sprint_id = 5;
+	state.status.TaskStatus status = 6;
+}
+
+message IssueInfoGetResponse {
+	repeated IssueInfo task_info = 1;
+}
+
+message IssueGetByIDRequest {
+	int64 id = 1;
+}
+
+message IssueGetByIDResponse {
+	Issue task = 1;
+}
+
+message IssueInfoGetByIDRequest {
+	int64 id = 1;
+}
+
+message IssueInfoGetByIDResponse {
+	IssueInfo task_info = 1;
+}
+
+enum IssueType {
+	ISSUE_TYPE_UNKNOWN = 0;
+	ISSUE_TYPE_STORY = 1;
+	ISSUE_TYPE_TASK = 2;
+	ISSUE_TYPE_SUBTASK = 3;
+}
+

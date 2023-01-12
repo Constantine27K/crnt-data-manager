@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Task",
+    "title": "Issue",
     "version": "0.1"
   },
   "tags": [
     {
-      "name": "TaskRegistry"
+      "name": "IssueRegistry"
     }
   ],
   "schemes": [
@@ -19,14 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/task": {
+    "/v1/issue": {
       "post": {
-        "operationId": "TaskRegistry_CreateTask",
+        "operationId": "IssueRegistry_CreateIssue",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskCreateResponse"
+              "$ref": "#/definitions/issueIssueCreateResponse"
             }
           },
           "default": {
@@ -42,23 +42,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/taskTaskCreateRequest"
+              "$ref": "#/definitions/issueIssueCreateRequest"
             }
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "IssueRegistry"
         ]
       }
     },
-    "/v1/task/{id}": {
+    "/v1/issue/{id}": {
       "get": {
-        "operationId": "TaskRegistry_GetTaskByID",
+        "operationId": "IssueRegistry_GetIssueByID",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetByIDResponse"
+              "$ref": "#/definitions/issueIssueGetByIDResponse"
             }
           },
           "default": {
@@ -78,16 +78,16 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "IssueRegistry"
         ]
       },
       "put": {
-        "operationId": "TaskRegistry_UpdateTask",
+        "operationId": "IssueRegistry_UpdateIssue",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskUpdateResponse"
+              "$ref": "#/definitions/issueIssueUpdateResponse"
             }
           },
           "default": {
@@ -112,26 +112,70 @@
             "schema": {
               "type": "object",
               "properties": {
-                "task": {
-                  "$ref": "#/definitions/taskTask"
+                "issue": {
+                  "$ref": "#/definitions/issueIssue"
                 }
               }
             }
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "IssueRegistry"
         ]
       }
     },
-    "/v1/task_info": {
-      "get": {
-        "operationId": "TaskRegistry_GetTaskInfo",
+    "/v1/issue/{id}/subtask": {
+      "post": {
+        "operationId": "IssueRegistry_CreateSubtask",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskInfoGetResponse"
+              "$ref": "#/definitions/issueIssueCreateSubtaskResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "child": {
+                  "$ref": "#/definitions/issueIssue"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
+    "/v1/issue_info": {
+      "get": {
+        "operationId": "IssueRegistry_GetIssueInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueInfoGetResponse"
             }
           },
           "default": {
@@ -154,7 +198,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "storyIds",
+            "name": "parentIds",
             "in": "query",
             "required": false,
             "type": "array",
@@ -163,6 +207,19 @@
               "format": "int64"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ISSUE_TYPE_UNKNOWN",
+              "ISSUE_TYPE_STORY",
+              "ISSUE_TYPE_TASK",
+              "ISSUE_TYPE_SUBTASK"
+            ],
+            "default": "ISSUE_TYPE_UNKNOWN"
           },
           {
             "name": "assigned",
@@ -219,18 +276,18 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "IssueRegistry"
         ]
       }
     },
-    "/v1/task_info/{id}": {
+    "/v1/issue_info/{id}": {
       "get": {
-        "operationId": "TaskRegistry_GetTaskInfoByID",
+        "operationId": "IssueRegistry_GetIssueInfoByID",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskInfoGetByIDResponse"
+              "$ref": "#/definitions/issueIssueInfoGetByIDResponse"
             }
           },
           "default": {
@@ -250,18 +307,18 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "IssueRegistry"
         ]
       }
     },
-    "/v1/tasks": {
+    "/v1/issues": {
       "get": {
-        "operationId": "TaskRegistry_GetTasks",
+        "operationId": "IssueRegistry_GetIssues",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/taskTaskGetResponse"
+              "$ref": "#/definitions/issueIssueGetResponse"
             }
           },
           "default": {
@@ -284,7 +341,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "storyIds",
+            "name": "parentIds",
             "in": "query",
             "required": false,
             "type": "array",
@@ -293,6 +350,19 @@
               "format": "int64"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ISSUE_TYPE_UNKNOWN",
+              "ISSUE_TYPE_STORY",
+              "ISSUE_TYPE_TASK",
+              "ISSUE_TYPE_SUBTASK"
+            ],
+            "default": "ISSUE_TYPE_UNKNOWN"
           },
           {
             "name": "author",
@@ -362,7 +432,7 @@
           }
         ],
         "tags": [
-          "TaskRegistry"
+          "IssueRegistry"
         ]
       }
     }
@@ -389,6 +459,206 @@
         },
         "text": {
           "type": "string"
+        }
+      }
+    },
+    "issueIssue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/issueIssueType"
+        },
+        "parentId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "description": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commentsComment"
+          }
+        },
+        "author": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "qa": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "template": {
+          "$ref": "#/definitions/templateTemplate"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/statusTaskStatus"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "projectId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "componentId": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issueIssue"
+          }
+        }
+      }
+    },
+    "issueIssueCreateRequest": {
+      "type": "object",
+      "properties": {
+        "issue": {
+          "$ref": "#/definitions/issueIssue"
+        }
+      }
+    },
+    "issueIssueCreateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueCreateSubtaskResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/issueIssue"
+        }
+      }
+    },
+    "issueIssueGetResponse": {
+      "type": "object",
+      "properties": {
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issueIssue"
+          }
+        }
+      }
+    },
+    "issueIssueInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/issueIssueType"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueInfoGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "taskInfo": {
+          "$ref": "#/definitions/issueIssueInfo"
+        }
+      }
+    },
+    "issueIssueInfoGetResponse": {
+      "type": "object",
+      "properties": {
+        "taskInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issueIssueInfo"
+          }
+        }
+      }
+    },
+    "issueIssueType": {
+      "type": "string",
+      "enum": [
+        "ISSUE_TYPE_UNKNOWN",
+        "ISSUE_TYPE_STORY",
+        "ISSUE_TYPE_TASK",
+        "ISSUE_TYPE_SUBTASK"
+      ],
+      "default": "ISSUE_TYPE_UNKNOWN"
+    },
+    "issueIssueUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -472,175 +742,6 @@
         },
         "development": {
           "$ref": "#/definitions/statusTaskDevelopment"
-        }
-      }
-    },
-    "taskTask": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "compositeName": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "storyId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "description": {
-          "type": "string"
-        },
-        "comments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/commentsComment"
-          }
-        },
-        "author": {
-          "type": "string"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "qa": {
-          "type": "string"
-        },
-        "reviewer": {
-          "type": "string"
-        },
-        "template": {
-          "$ref": "#/definitions/templateTemplate"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "deadline": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "status": {
-          "$ref": "#/definitions/statusTaskStatus"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "projectId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "componentId": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "taskTaskCreateRequest": {
-      "type": "object",
-      "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
-        }
-      }
-    },
-    "taskTaskCreateResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "taskTaskGetByIDResponse": {
-      "type": "object",
-      "properties": {
-        "task": {
-          "$ref": "#/definitions/taskTask"
-        }
-      }
-    },
-    "taskTaskGetResponse": {
-      "type": "object",
-      "properties": {
-        "tasks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/taskTask"
-          }
-        }
-      }
-    },
-    "taskTaskInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "compositeName": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "taskTaskInfoGetByIDResponse": {
-      "type": "object",
-      "properties": {
-        "taskInfo": {
-          "$ref": "#/definitions/taskTaskInfo"
-        }
-      }
-    },
-    "taskTaskInfoGetResponse": {
-      "type": "object",
-      "properties": {
-        "taskInfo": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/taskTaskInfo"
-          }
-        }
-      }
-    },
-    "taskTaskUpdateResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },

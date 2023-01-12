@@ -7,8 +7,7 @@ import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 import "api/state/status/status.proto";
-import "api/tasks/task/task.proto";
-import "api/tasks/story/story.proto";
+import "api/tasks/issue/issue.proto";
 
 option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/sprint;sprint";
 
@@ -58,8 +57,7 @@ message Sprint {
 	int64 stories_backlog = 7;
 	int64 stories_in_progress = 8;
 	int64 stories_done = 9;
-	repeated tasks.task.TaskInfo tasks = 10;
-	repeated tasks.story.StoryInfo stories = 11;
+	repeated tasks.issue.IssueInfo issues = 10;
 }
 
 message SprintCreateRequest {

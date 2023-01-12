@@ -7,8 +7,7 @@ package sprint
 import (
 	fmt "fmt"
 	status "github.com/Constantine27K/crnt-data-manager/pkg/api/state/status"
-	story "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/story"
-	task "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/task"
+	issue "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
 	proto "google.golang.org/protobuf/proto"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -53,9 +52,9 @@ func (m *Sprint) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if len(m.Stories) > 0 {
-		for iNdEx := len(m.Stories) - 1; iNdEx >= 0; iNdEx-- {
-			if marshalto, ok := interface{}(m.Stories[iNdEx]).(interface {
+	if len(m.Issues) > 0 {
+		for iNdEx := len(m.Issues) - 1; iNdEx >= 0; iNdEx-- {
+			if marshalto, ok := interface{}(m.Issues[iNdEx]).(interface {
 				MarshalToSizedBufferVT([]byte) (int, error)
 			}); ok {
 				size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])
@@ -65,31 +64,7 @@ func (m *Sprint) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 				i -= size
 				i = encodeVarint(dAtA, i, uint64(size))
 			} else {
-				encoded, err := proto.Marshal(m.Stories[iNdEx])
-				if err != nil {
-					return 0, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = encodeVarint(dAtA, i, uint64(len(encoded)))
-			}
-			i--
-			dAtA[i] = 0x5a
-		}
-	}
-	if len(m.Tasks) > 0 {
-		for iNdEx := len(m.Tasks) - 1; iNdEx >= 0; iNdEx-- {
-			if marshalto, ok := interface{}(m.Tasks[iNdEx]).(interface {
-				MarshalToSizedBufferVT([]byte) (int, error)
-			}); ok {
-				size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarint(dAtA, i, uint64(size))
-			} else {
-				encoded, err := proto.Marshal(m.Tasks[iNdEx])
+				encoded, err := proto.Marshal(m.Issues[iNdEx])
 				if err != nil {
 					return 0, err
 				}
@@ -643,20 +618,8 @@ func (m *Sprint) SizeVT() (n int) {
 	if m.StoriesDone != 0 {
 		n += 1 + sov(uint64(m.StoriesDone))
 	}
-	if len(m.Tasks) > 0 {
-		for _, e := range m.Tasks {
-			if size, ok := interface{}(e).(interface {
-				SizeVT() int
-			}); ok {
-				l = size.SizeVT()
-			} else {
-				l = proto.Size(e)
-			}
-			n += 1 + l + sov(uint64(l))
-		}
-	}
-	if len(m.Stories) > 0 {
-		for _, e := range m.Stories {
+	if len(m.Issues) > 0 {
+		for _, e := range m.Issues {
 			if size, ok := interface{}(e).(interface {
 				SizeVT() int
 			}); ok {
@@ -1113,7 +1076,7 @@ func (m *Sprint) UnmarshalVT(dAtA []byte) error {
 			}
 		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tasks", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Issues", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1140,57 +1103,15 @@ func (m *Sprint) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Tasks = append(m.Tasks, &task.TaskInfo{})
-			if unmarshal, ok := interface{}(m.Tasks[len(m.Tasks)-1]).(interface {
+			m.Issues = append(m.Issues, &issue.IssueInfo{})
+			if unmarshal, ok := interface{}(m.Issues[len(m.Issues)-1]).(interface {
 				UnmarshalVT([]byte) error
 			}); ok {
 				if err := unmarshal.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 					return err
 				}
 			} else {
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Tasks[len(m.Tasks)-1]); err != nil {
-					return err
-				}
-			}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Stories", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLength
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLength
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Stories = append(m.Stories, &story.StoryInfo{})
-			if unmarshal, ok := interface{}(m.Stories[len(m.Stories)-1]).(interface {
-				UnmarshalVT([]byte) error
-			}); ok {
-				if err := unmarshal.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
-					return err
-				}
-			} else {
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Stories[len(m.Stories)-1]); err != nil {
+				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Issues[len(m.Issues)-1]); err != nil {
 					return err
 				}
 			}

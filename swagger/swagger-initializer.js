@@ -5,9 +5,7 @@ window.onload = function() {
   window.ui = SwaggerUIBundle({
     urls: [
         {"name":"sprint", "url":"sprint.swagger.json"},
-        {"name":"task", "url":"task.swagger.json"},
-        {"name":"subtask", "url":"subtask.swagger.json"},
-        {"name":"story", "url":"story.swagger.json"},
+        {"name":"issue", "url":"issue.swagger.json"},
         {"name":"epic", "url":"epic.swagger.json"}
     ],
     dom_id: '#swagger-ui',
