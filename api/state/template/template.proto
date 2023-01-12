@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.state.template;
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/state/template;template";
+
+enum Template {
+	TEMPLATE_UNKNOWN = 0;
+	TEMPLATE_COMMON = 1;
+	TEMPLATE_DEVELOPMENT = 2;
+}

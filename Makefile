@@ -1,10 +1,13 @@
 SRC_DIR_RELATIVE=./api
 DST_DIR_RELATIVE=./pkg
 
-TASK_PROTO=./api/task/task.proto
-STATUS_PROTO=./api/status/status.proto
-SPRINT_PROTO=./api/sprint/sprint.proto
-PROTO_FILES=$(STATUS_PROTO) $(SPRINT_PROTO) $(TASK_PROTO)
+PROTO_FILES=$(shell find $(SRC_DIR_RELATIVE) \
+	-not \( -path ./api/google -prune \) \
+	-not \( -path ./api/protoc* -prune \) \
+	-name '*.proto')
+
+SWAGGER_FILES=$(shell find $(DST_DIR_RELATIVE) \
+                     	-name '*.swagger.json*')
 
 .PHONY: .generate
 .generate: .gen-go-pb .gen-go-grpc .gen-gateway .gen-openapi
@@ -43,8 +46,7 @@ PROTO_FILES=$(STATUS_PROTO) $(SPRINT_PROTO) $(TASK_PROTO)
 
 .PHONY: .copy-swagger
 .copy-swagger:
-	cp ./pkg/task/task.swagger.json ./swagger
-	cp ./pkg/sprint/sprint.swagger.json ./swagger
+	cp $(SWAGGER_FILES) ./swagger
 
 .PHONY: .bin-deps
 .bin-deps:
@@ -57,6 +59,10 @@ PROTO_FILES=$(STATUS_PROTO) $(SPRINT_PROTO) $(TASK_PROTO)
 	go install github.com/mitchellh/gox@v1.0.1
 	go install golang.org/x/tools/cmd/goimports@v0.1.9
 
+.PHONY: buf-install
+buf-install:
+	brew install bufbuild/buf/buf
+
 .PHONY: .install-lint
 .install-lint:
 	$(info Installing linter)
@@ -66,11 +72,18 @@ PROTO_FILES=$(STATUS_PROTO) $(SPRINT_PROTO) $(TASK_PROTO)
 lint:
 	golangci-lint run
 
-.PHONY: generate
-generate: .bin-deps fast-generate
+.PHONY: generate-protoc
+generate-protoc: .bin-deps .generate .copy-swagger
 
-.PHONY: fast-generate
-fast-generate: .generate .copy-swagger
+.PHONY: generate
+generate:
+	buf mod update
+	buf generate
+	make .copy-swagger
+
+.PHONY: build
+build:
+	go build -o ./bin/crnt-data-manager ./cmd/crnt-data-manager/main.go
 
 .PHONY: run
 run:

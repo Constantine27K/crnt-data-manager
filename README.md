@@ -1,14 +1,23 @@
 # crnt-data-manager :man_office_worker:
-This service is an entrypoint to CurrentTask task-manager, which means that all the actions performing with the task-manager are being processed through this service
+
+This service is an entrypoint to CurrentTask task-manager, which means that all the actions performing with the
+task-manager are being processed through this service
 
 ### Running :runner:
-In the root directory there is a Makefile. All the commands you need are stored there. 
 
-1) Install Go, preferably the latest version
-2) Install Make. If you are using Mac, you may install XCode
-3) In the root directory type:
-    1) make generate - installs dependencies and generates proto and swagger files
-    2) make run - running application
+In the root directory there is a Makefile. All the commands you need are stored there.
+
+1) Install brew
+2) Install Go, preferably the latest version
+3) Install Make. If you are using Mac, you may install XCode
+4) In the root directory type:
+    1) make buf-install (only for first time)
+    2) make generate - generates proto and swagger files
+    3) make run - running application
+
+:thinking: Actually, only 'make run' is necessary. The shortest way to run the app:
+1) Install Go
+2) Type in the root directory command which is hidden under 'make run' in Makefile
 
 :atom_symbol: By default, app starts at port 9090 for GRPC and 8080 for HTTP.
 If you have any troubles with these ports, you may change them in the .env file

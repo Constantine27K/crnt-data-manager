@@ -6,7 +6,10 @@ import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/sprint;sprint";
+import "api/state/status/status.proto";
+import "api/tasks/issue/issue.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/sprint;sprint";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
@@ -19,26 +22,76 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	produces: "application/json";
 };
 
-message Sprint {
-	int64 id = 1;
-	string name = 2;
-	google.protobuf.Timestamp started_at = 3;
-	google.protobuf.Timestamp finished_at = 4;
-}
-
 service SprintRegistry {
-	rpc Create (SprintCreateRequest) returns (SprintCreateResponse) {
+	rpc CreateSprint (SprintCreateRequest) returns (SprintCreateResponse) {
 		option (google.api.http) = {
-			post: "/v1/sprint/create"
+			post: "/v1/sprint"
 			body: "*"
+		};
+	};
+	rpc UpdateSprint (SprintUpdateRequest) returns (SprintUpdateResponse) {
+		option (google.api.http) = {
+			put: "/v1/sprint/{id}"
+			body: "*"
+		};
+	};
+	rpc GetSprint (SprintGetRequest) returns (SprintGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/sprints"
+		};
+	};
+	rpc GetSprintByID (SprintGetByIDRequest) returns (SprintGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/sprint/{id}"
 		};
 	};
 }
 
-message SprintCreateRequest {
+message Sprint {
+	int64 id = 1;
+	string name = 2;
+	string project = 3;
+	google.protobuf.Timestamp started_at = 4;
+	google.protobuf.Timestamp finished_at = 5;
+	state.status.Sprint status = 6;
+	int64 stories_backlog = 7;
+	int64 stories_in_progress = 8;
+	int64 stories_done = 9;
+	repeated tasks.issue.IssueInfo issues = 10;
+}
 
+message SprintCreateRequest {
+	Sprint sprint = 1;
 }
 
 message SprintCreateResponse {
+	int64 id = 1;
+}
 
+message SprintUpdateRequest {
+	int64 id = 1;
+	Sprint sprint = 2;
+}
+
+message SprintUpdateResponse {
+	int64 id = 2;
+}
+
+message SprintGetRequest {
+	repeated int64 ids = 1;
+	google.protobuf.Timestamp started_at_after = 3;
+	google.protobuf.Timestamp finished_at_before = 4;
+	state.status.Sprint status = 5;
+}
+
+message SprintGetResponse {
+	repeated Sprint sprint = 1;
+}
+
+message SprintGetByIDRequest {
+	int64 id = 1;
+}
+
+message SprintGetByIDResponse {
+	Sprint sprint = 1;
 }

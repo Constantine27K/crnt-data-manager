@@ -8,10 +8,12 @@ import (
 	"os"
 	"strconv"
 
+	epicService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/epic"
+	issueService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/issue"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
-	taskService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/task"
-	"github.com/Constantine27K/crnt-data-manager/pkg/sprint"
-	"github.com/Constantine27K/crnt-data-manager/pkg/task"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/epic"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
@@ -47,6 +49,29 @@ func setLogger() {
 	log.SetLevel(log.Level(logLevel))
 }
 
+func createGrpcServer() {
+	port := os.Getenv("GRPC_PORT")
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
+	if err != nil {
+		log.Error(fmt.Sprintf("failed to listen localhost:%v", port),
+			zap.Error(err),
+		)
+	}
+
+	grpcServer := grpc.NewServer()
+	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService())
+	epic.RegisterEpicRegistryServer(grpcServer, epicService.NewService())
+	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
+	log.Infof("grpc service started on port %s", port)
+
+	err = grpcServer.Serve(lis)
+	if err != nil {
+		log.Error("error during serving GRPC",
+			zap.Error(err),
+		)
+	}
+}
+
 func createHttpServer() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -66,10 +91,17 @@ func createHttpServer() {
 	// create an HTTP router using the client connection above
 	// and register it with the service client
 	rmux := runtime.NewServeMux()
-	clientTask := task.NewTaskRegistryClient(conn)
-	err = task.RegisterTaskRegistryHandlerClient(ctx, rmux, clientTask)
+	clientIssue := issue.NewIssueRegistryClient(conn)
+	err = issue.RegisterIssueRegistryHandlerClient(ctx, rmux, clientIssue)
 	if err != nil {
 		log.Error("failed to register task handler client",
+			zap.Error(err),
+		)
+	}
+	clientEpic := epic.NewEpicRegistryClient(conn)
+	err = epic.RegisterEpicRegistryHandlerClient(ctx, rmux, clientEpic)
+	if err != nil {
+		log.Error("failed to register sprint handler client",
 			zap.Error(err),
 		)
 	}
@@ -97,28 +129,6 @@ func createHttpServer() {
 	err = http.ListenAndServe(fmt.Sprintf("localhost:%s", httpPort), mux)
 	if err != nil {
 		log.Error("error during listening and serving HTTP",
-			zap.Error(err),
-		)
-	}
-}
-
-func createGrpcServer() {
-	port := os.Getenv("GRPC_PORT")
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
-	if err != nil {
-		log.Error(fmt.Sprintf("failed to listen localhost:%v", port),
-			zap.Error(err),
-		)
-	}
-
-	grpcServer := grpc.NewServer()
-	task.RegisterTaskRegistryServer(grpcServer, taskService.NewService())
-	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
-	log.Infof("grpc service started on port %s", port)
-
-	err = grpcServer.Serve(lis)
-	if err != nil {
-		log.Error("error during serving GRPC",
 			zap.Error(err),
 		)
 	}

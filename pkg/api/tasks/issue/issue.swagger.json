@@ -1,0 +1,758 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Issue",
+    "version": "0.1"
+  },
+  "tags": [
+    {
+      "name": "IssueRegistry"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/issue": {
+      "post": {
+        "operationId": "IssueRegistry_CreateIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/issueIssueCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
+    "/v1/issue/{id}": {
+      "get": {
+        "operationId": "IssueRegistry_GetIssueByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueGetByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      },
+      "put": {
+        "operationId": "IssueRegistry_UpdateIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueUpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "issue": {
+                  "$ref": "#/definitions/issueIssue"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
+    "/v1/issue/{id}/subtask": {
+      "post": {
+        "operationId": "IssueRegistry_CreateSubtask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueCreateSubtaskResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "child": {
+                  "$ref": "#/definitions/issueIssue"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
+    "/v1/issue_info": {
+      "get": {
+        "operationId": "IssueRegistry_GetIssueInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueInfoGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "parentIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ISSUE_TYPE_UNKNOWN",
+              "ISSUE_TYPE_STORY",
+              "ISSUE_TYPE_TASK",
+              "ISSUE_TYPE_SUBTASK"
+            ],
+            "default": "ISSUE_TYPE_UNKNOWN"
+          },
+          {
+            "name": "assigned",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sprintId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "status.common",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_COMMON_UNKNOWN",
+              "STATUS_COMMON_BACKLOG",
+              "STATUS_COMMON_IN_PROGRESS",
+              "STATUS_COMMON_DONE",
+              "STATUS_COMMON_READY_FOR_REVIEW",
+              "STATUS_COMMON_IN_REVIEW",
+              "STATUS_COMMON_REVIEW_FAILED",
+              "STATUS_COMMON_REVIEW_PASSED",
+              "STATUS_COMMON_GIVEN_TO_CUSTOMER",
+              "STATUS_COMMON_CLOSED",
+              "STATUS_COMMON_ON_HOLD"
+            ],
+            "default": "STATUS_COMMON_UNKNOWN"
+          },
+          {
+            "name": "status.development",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_DEVELOPMENT_UNKNOWN",
+              "STATUS_DEVELOPMENT_BACKLOG",
+              "STATUS_DEVELOPMENT_IN_PROGRESS",
+              "STATUS_DEVELOPMENT_IN_REVIEW",
+              "STATUS_DEVELOPMENT_READY_FOR_TESTING",
+              "STATUS_DEVELOPMENT_TESTING",
+              "STATUS_DEVELOPMENT_TESTING_PASSED",
+              "STATUS_DEVELOPMENT_DONE",
+              "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
+              "STATUS_DEVELOPMENT_CLOSED",
+              "STATUS_DEVELOPMENT_ON_HOLD"
+            ],
+            "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
+    "/v1/issue_info/{id}": {
+      "get": {
+        "operationId": "IssueRegistry_GetIssueInfoByID",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueInfoGetByIDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
+    "/v1/issues": {
+      "get": {
+        "operationId": "IssueRegistry_GetIssues",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "parentIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ISSUE_TYPE_UNKNOWN",
+              "ISSUE_TYPE_STORY",
+              "ISSUE_TYPE_TASK",
+              "ISSUE_TYPE_SUBTASK"
+            ],
+            "default": "ISSUE_TYPE_UNKNOWN"
+          },
+          {
+            "name": "author",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "assigned",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sprintId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "projectId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "status.common",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_COMMON_UNKNOWN",
+              "STATUS_COMMON_BACKLOG",
+              "STATUS_COMMON_IN_PROGRESS",
+              "STATUS_COMMON_DONE",
+              "STATUS_COMMON_READY_FOR_REVIEW",
+              "STATUS_COMMON_IN_REVIEW",
+              "STATUS_COMMON_REVIEW_FAILED",
+              "STATUS_COMMON_REVIEW_PASSED",
+              "STATUS_COMMON_GIVEN_TO_CUSTOMER",
+              "STATUS_COMMON_CLOSED",
+              "STATUS_COMMON_ON_HOLD"
+            ],
+            "default": "STATUS_COMMON_UNKNOWN"
+          },
+          {
+            "name": "status.development",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_DEVELOPMENT_UNKNOWN",
+              "STATUS_DEVELOPMENT_BACKLOG",
+              "STATUS_DEVELOPMENT_IN_PROGRESS",
+              "STATUS_DEVELOPMENT_IN_REVIEW",
+              "STATUS_DEVELOPMENT_READY_FOR_TESTING",
+              "STATUS_DEVELOPMENT_TESTING",
+              "STATUS_DEVELOPMENT_TESTING_PASSED",
+              "STATUS_DEVELOPMENT_DONE",
+              "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
+              "STATUS_DEVELOPMENT_CLOSED",
+              "STATUS_DEVELOPMENT_ON_HOLD"
+            ],
+            "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "commentsComment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "authorId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "writtenAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "issueIssue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/issueIssueType"
+        },
+        "parentId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "description": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commentsComment"
+          }
+        },
+        "author": {
+          "type": "string"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "qa": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "template": {
+          "$ref": "#/definitions/templateTemplate"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/statusTaskStatus"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "projectId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "componentId": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issueIssue"
+          }
+        }
+      }
+    },
+    "issueIssueCreateRequest": {
+      "type": "object",
+      "properties": {
+        "issue": {
+          "$ref": "#/definitions/issueIssue"
+        }
+      }
+    },
+    "issueIssueCreateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueCreateSubtaskResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/issueIssue"
+        }
+      }
+    },
+    "issueIssueGetResponse": {
+      "type": "object",
+      "properties": {
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issueIssue"
+          }
+        }
+      }
+    },
+    "issueIssueInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "compositeName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/issueIssueType"
+        },
+        "assigned": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/definitions/priorityPriority"
+        },
+        "storyPoints": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "issueIssueInfoGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "taskInfo": {
+          "$ref": "#/definitions/issueIssueInfo"
+        }
+      }
+    },
+    "issueIssueInfoGetResponse": {
+      "type": "object",
+      "properties": {
+        "taskInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/issueIssueInfo"
+          }
+        }
+      }
+    },
+    "issueIssueType": {
+      "type": "string",
+      "enum": [
+        "ISSUE_TYPE_UNKNOWN",
+        "ISSUE_TYPE_STORY",
+        "ISSUE_TYPE_TASK",
+        "ISSUE_TYPE_SUBTASK"
+      ],
+      "default": "ISSUE_TYPE_UNKNOWN"
+    },
+    "issueIssueUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "priorityPriority": {
+      "type": "string",
+      "enum": [
+        "PRIORITY_UNKNOWN",
+        "PRIORITY_CRITICAL",
+        "PRIORITY_HIGH",
+        "PRIORITY_MEDIUM",
+        "PRIORITY_LOW"
+      ],
+      "default": "PRIORITY_UNKNOWN"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "statusTaskCommon": {
+      "type": "string",
+      "enum": [
+        "STATUS_COMMON_UNKNOWN",
+        "STATUS_COMMON_BACKLOG",
+        "STATUS_COMMON_IN_PROGRESS",
+        "STATUS_COMMON_DONE",
+        "STATUS_COMMON_READY_FOR_REVIEW",
+        "STATUS_COMMON_IN_REVIEW",
+        "STATUS_COMMON_REVIEW_FAILED",
+        "STATUS_COMMON_REVIEW_PASSED",
+        "STATUS_COMMON_GIVEN_TO_CUSTOMER",
+        "STATUS_COMMON_CLOSED",
+        "STATUS_COMMON_ON_HOLD"
+      ],
+      "default": "STATUS_COMMON_UNKNOWN"
+    },
+    "statusTaskDevelopment": {
+      "type": "string",
+      "enum": [
+        "STATUS_DEVELOPMENT_UNKNOWN",
+        "STATUS_DEVELOPMENT_BACKLOG",
+        "STATUS_DEVELOPMENT_IN_PROGRESS",
+        "STATUS_DEVELOPMENT_IN_REVIEW",
+        "STATUS_DEVELOPMENT_READY_FOR_TESTING",
+        "STATUS_DEVELOPMENT_TESTING",
+        "STATUS_DEVELOPMENT_TESTING_PASSED",
+        "STATUS_DEVELOPMENT_DONE",
+        "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
+        "STATUS_DEVELOPMENT_CLOSED",
+        "STATUS_DEVELOPMENT_ON_HOLD"
+      ],
+      "default": "STATUS_DEVELOPMENT_UNKNOWN"
+    },
+    "statusTaskStatus": {
+      "type": "object",
+      "properties": {
+        "common": {
+          "$ref": "#/definitions/statusTaskCommon"
+        },
+        "development": {
+          "$ref": "#/definitions/statusTaskDevelopment"
+        }
+      }
+    },
+    "templateTemplate": {
+      "type": "string",
+      "enum": [
+        "TEMPLATE_UNKNOWN",
+        "TEMPLATE_COMMON",
+        "TEMPLATE_DEVELOPMENT"
+      ],
+      "default": "TEMPLATE_UNKNOWN"
+    }
+  }
+}
