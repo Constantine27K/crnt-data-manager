@@ -10,10 +10,14 @@ import (
 
 	epicService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/epic"
 	issueService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/issue"
+	projectService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/project"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
+	teamService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/team"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/epic"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/team"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
@@ -62,6 +66,8 @@ func createGrpcServer() {
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService())
 	epic.RegisterEpicRegistryServer(grpcServer, epicService.NewService())
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
+	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService())
+	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService())
 	log.Infof("grpc service started on port %s", port)
 
 	err = grpcServer.Serve(lis)
@@ -109,6 +115,20 @@ func createHttpServer() {
 	err = sprint.RegisterSprintRegistryHandlerClient(ctx, rmux, clientSprint)
 	if err != nil {
 		log.Error("failed to register sprint handler client",
+			zap.Error(err),
+		)
+	}
+	clientTeam := team.NewTeamRegistryClient(conn)
+	err = team.RegisterTeamRegistryHandlerClient(ctx, rmux, clientTeam)
+	if err != nil {
+		log.Error("failed to register team handler client",
+			zap.Error(err),
+		)
+	}
+	clientProject := project.NewProjectRegistryClient(conn)
+	err = project.RegisterProjectRegistryHandlerClient(ctx, rmux, clientProject)
+	if err != nil {
+		log.Error("failed to register project handler client",
 			zap.Error(err),
 		)
 	}

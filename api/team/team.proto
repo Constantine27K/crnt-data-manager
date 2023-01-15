@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.team;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+import "api/project/project.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/team;team";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Team";
+		version: "0.1";
+	};
+
+	schemes: HTTP;
+	consumes: "application/json";
+	produces: "application/json";
+};
+
+service TeamRegistry {
+	rpc CreateTeam (TeamCreateRequest) returns (TeamCreateResponse) {
+		option (google.api.http) = {
+			post: "/v1/team"
+			body: "*"
+		};
+	}
+	rpc UpdateTeam (TeamUpdateRequest) returns (TeamUpdateResponse) {
+		option (google.api.http) = {
+			put: "/v1/team"
+			body: "*"
+		};
+	}
+	rpc GetTeams (TeamGetRequest) returns (TeamGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/teams"
+		};
+	};
+	rpc GetTeamByID (TeamGetByIDRequest) returns (TeamGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/team/{id}"
+		};
+	};
+}
+
+message Team {
+	int64 id = 1;
+	string name = 2;
+	repeated string members = 3;
+	repeated project.Project projects = 4;
+	string tech_owner = 5;
+	string business_owner = 6;
+	string department = 7;
+}
+
+message TeamCreateRequest {
+	Team team = 1;
+}
+
+message TeamCreateResponse {
+	int64 id = 1;
+}
+
+message TeamUpdateRequest {
+	int64 id = 1;
+	Team team = 2;
+}
+
+message TeamUpdateResponse {
+	int64 id = 1;
+}
+
+message TeamGetRequest {
+	repeated int64 ids = 1;
+	repeated string names = 2;
+	repeated string departments = 3;
+}
+
+message TeamGetResponse {
+	repeated Team teams = 1;
+}
+
+message TeamGetByIDRequest {
+	int64 id = 1;
+}
+
+message TeamGetByIDResponse {
+	Team team = 1;
+}
