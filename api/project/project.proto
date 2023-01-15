@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.project;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/project;project";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Project";
+		version: "0.1";
+	};
+
+	schemes: HTTP;
+	consumes: "application/json";
+	produces: "application/json";
+};
+
+
+service ProjectRegistry {
+	rpc CreateProject (ProjectCreateRequest) returns (ProjectCreateResponse) {
+		option (google.api.http) = {
+			post: "/v1/project"
+			body: "*"
+		};
+	};
+	rpc UpdateProject (ProjectUpdateRequest) returns (ProjectUpdateResponse) {
+		option (google.api.http) = {
+			put: "/v1/project/{id}"
+			body: "*"
+		};
+	};
+	rpc GetProjects (ProjectGetRequest) returns (ProjectGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/projects"
+		};
+	};
+	rpc GetProjectByID (ProjectGetByIDRequest) returns (ProjectGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/project/{id}"
+		};
+	};
+}
+
+message Project {
+	int64  id = 1;
+	string name = 2;
+	bool is_archived = 3;
+}
+
+message ProjectCreateRequest {
+	Project project = 1;
+}
+
+message ProjectCreateResponse {
+	int64 id = 1;
+}
+
+message ProjectUpdateRequest {
+	int64 id = 1;
+	Project project = 2;
+}
+
+message ProjectUpdateResponse {
+	int64 id = 1;
+}
+
+message ProjectGetRequest {
+	repeated int64 ids = 1;
+	repeated string names = 2;
+	bool is_archived = 3;
+}
+
+message ProjectGetResponse {
+	repeated Project projects = 1;
+}
+
+message ProjectGetByIDRequest {
+	int64 id = 1;
+}
+
+message ProjectGetByIDResponse {
+	Project project = 1;
+}
