@@ -6,9 +6,17 @@ option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/state/s
 
 message TaskStatus {
 	oneof status {
-		TaskCommon common = 1;
-		TaskDevelopment development = 2;
+		TaskStatusCommon common = 1;
+		TaskStatusDevelopment development = 2;
 	}
+}
+
+message TaskStatusCommon {
+	TaskCommon status = 1;
+}
+
+message TaskStatusDevelopment {
+	TaskDevelopment status = 2;
 }
 
 enum TaskCommon {

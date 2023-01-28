@@ -72,7 +72,7 @@ message Issue {
 	IssueType type = 4;
 	int64 parent_id = 5;
 	string description = 6;
-	repeated comments.Comment comments = 7;
+	comments.Comments comments = 7;
 	string author = 8;
 	string assigned = 9;
 	string qa = 10;
@@ -85,7 +85,7 @@ message Issue {
 	state.priority.Priority priority = 17;
 	int64 sprint_id = 18;
 	int64 project_id = 19;
-	repeated int64 component_id = 20;
+	repeated int64 component_ids = 20;
 	int64 story_points = 21;
 	repeated Issue children = 22;
 }
@@ -128,13 +128,14 @@ message IssueUpdateResponse {
 
 message IssueGetRequest {
 	repeated int64 ids = 1;
-	repeated int64 parent_ids = 2;
-	IssueType type = 3;
-	string author = 4;
-	string assigned = 5;
-	int64 sprint_id = 6;
-	int64 project_id = 7;
-	state.status.TaskStatus status = 8;
+	string name = 2;
+	int64 parent_id = 3;
+	IssueType type = 4;
+	string author = 5;
+	string assigned = 6;
+	int64 sprint_id = 7;
+	int64 project_id = 8;
+	state.status.TaskStatus status = 9;
 }
 
 message IssueGetResponse {
@@ -159,7 +160,7 @@ message IssueGetByIDRequest {
 }
 
 message IssueGetByIDResponse {
-	Issue task = 1;
+	Issue issue = 1;
 }
 
 message IssueInfoGetByIDRequest {
@@ -167,7 +168,7 @@ message IssueInfoGetByIDRequest {
 }
 
 message IssueInfoGetByIDResponse {
-	IssueInfo task_info = 1;
+	IssueInfo issue_info = 1;
 }
 
 enum IssueType {

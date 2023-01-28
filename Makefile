@@ -80,11 +80,26 @@ generate:
 	buf mod update
 	buf generate
 	make .copy-swagger
+	go mod tidy
 
 .PHONY: build
 build:
 	go build -o ./bin/crnt-data-manager ./cmd/crnt-data-manager/main.go
 
+.PHONY: vendor
+vendor:
+	go mod vendor
+
+.PHONY: .run
+.run:
+	go run ./cmd/crnt-auth-service/main.go
+
+.PHONY: .run-env
+.run-env:
+	cd ./scripts/dev && make up-local-db
+
 .PHONY: run
-run:
-	go run ./cmd/crnt-data-manager/main.go
+run: build .run
+
+.PHONY: run-all
+run-all: .run-env run

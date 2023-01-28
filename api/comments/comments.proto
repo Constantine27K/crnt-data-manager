@@ -13,3 +13,7 @@ message Comment {
 	google.protobuf.Timestamp updated_at = 4;
 	string text = 5;
 }
+
+message Comments {
+	map<int64, Comment> items = 1;
+}

@@ -235,7 +235,7 @@
             "format": "int64"
           },
           {
-            "name": "status.common",
+            "name": "status.common.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -255,7 +255,7 @@
             "default": "STATUS_COMMON_UNKNOWN"
           },
           {
-            "name": "status.development",
+            "name": "status.development.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -341,15 +341,17 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "parentIds",
+            "name": "name",
             "in": "query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "int64"
-            },
-            "collectionFormat": "multi"
+            "type": "string"
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
           },
           {
             "name": "type",
@@ -391,7 +393,7 @@
             "format": "int64"
           },
           {
-            "name": "status.common",
+            "name": "status.common.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -411,7 +413,7 @@
             "default": "STATUS_COMMON_UNKNOWN"
           },
           {
-            "name": "status.development",
+            "name": "status.development.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -462,6 +464,17 @@
         }
       }
     },
+    "commentsComments": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/commentsComment"
+          }
+        }
+      }
+    },
     "issueIssue": {
       "type": "object",
       "properties": {
@@ -486,10 +499,7 @@
           "type": "string"
         },
         "comments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/commentsComment"
-          }
+          "$ref": "#/definitions/commentsComments"
         },
         "author": {
           "type": "string"
@@ -532,7 +542,7 @@
           "type": "string",
           "format": "int64"
         },
-        "componentId": {
+        "componentIds": {
           "type": "array",
           "items": {
             "type": "string",
@@ -580,7 +590,7 @@
     "issueIssueGetByIDResponse": {
       "type": "object",
       "properties": {
-        "task": {
+        "issue": {
           "$ref": "#/definitions/issueIssue"
         }
       }
@@ -627,7 +637,7 @@
     "issueIssueInfoGetByIDResponse": {
       "type": "object",
       "properties": {
-        "taskInfo": {
+        "issueInfo": {
           "$ref": "#/definitions/issueIssueInfo"
         }
       }
@@ -738,9 +748,25 @@
       "type": "object",
       "properties": {
         "common": {
-          "$ref": "#/definitions/statusTaskCommon"
+          "$ref": "#/definitions/statusTaskStatusCommon"
         },
         "development": {
+          "$ref": "#/definitions/statusTaskStatusDevelopment"
+        }
+      }
+    },
+    "statusTaskStatusCommon": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/statusTaskCommon"
+        }
+      }
+    },
+    "statusTaskStatusDevelopment": {
+      "type": "object",
+      "properties": {
+        "status": {
           "$ref": "#/definitions/statusTaskDevelopment"
         }
       }
