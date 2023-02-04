@@ -75,14 +75,14 @@ func (m *Issue) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa8
 	}
-	if len(m.ComponentId) > 0 {
+	if len(m.ComponentIds) > 0 {
 		var pksize2 int
-		for _, num := range m.ComponentId {
+		for _, num := range m.ComponentIds {
 			pksize2 += sov(uint64(num))
 		}
 		i -= pksize2
 		j1 := i
-		for _, num1 := range m.ComponentId {
+		for _, num1 := range m.ComponentIds {
 			num := uint64(num1)
 			for num >= 1<<7 {
 				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
@@ -242,29 +242,27 @@ func (m *Issue) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x42
 	}
-	if len(m.Comments) > 0 {
-		for iNdEx := len(m.Comments) - 1; iNdEx >= 0; iNdEx-- {
-			if marshalto, ok := interface{}(m.Comments[iNdEx]).(interface {
-				MarshalToSizedBufferVT([]byte) (int, error)
-			}); ok {
-				size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarint(dAtA, i, uint64(size))
-			} else {
-				encoded, err := proto.Marshal(m.Comments[iNdEx])
-				if err != nil {
-					return 0, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = encodeVarint(dAtA, i, uint64(len(encoded)))
+	if m.Comments != nil {
+		if marshalto, ok := interface{}(m.Comments).(interface {
+			MarshalToSizedBufferVT([]byte) (int, error)
+		}); ok {
+			size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x3a
+			i -= size
+			i = encodeVarint(dAtA, i, uint64(size))
+		} else {
+			encoded, err := proto.Marshal(m.Comments)
+			if err != nil {
+				return 0, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = encodeVarint(dAtA, i, uint64(len(encoded)))
 		}
+		i--
+		dAtA[i] = 0x3a
 	}
 	if len(m.Description) > 0 {
 		i -= len(m.Description)
@@ -500,8 +498,8 @@ func (m *IssueCreateSubtaskRequest) MarshalToSizedBufferVT(dAtA []byte) (int, er
 		i--
 		dAtA[i] = 0x12
 	}
-	if m.Id != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.Id))
+	if m.ParentId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.ParentId))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -682,45 +680,57 @@ func (m *IssueGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i = encodeVarint(dAtA, i, uint64(len(encoded)))
 		}
 		i--
-		dAtA[i] = 0x42
+		dAtA[i] = 0x4a
 	}
 	if m.ProjectId != 0 {
 		i = encodeVarint(dAtA, i, uint64(m.ProjectId))
 		i--
-		dAtA[i] = 0x38
+		dAtA[i] = 0x40
 	}
 	if m.SprintId != 0 {
 		i = encodeVarint(dAtA, i, uint64(m.SprintId))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x38
 	}
 	if len(m.Assigned) > 0 {
 		i -= len(m.Assigned)
 		copy(dAtA[i:], m.Assigned)
 		i = encodeVarint(dAtA, i, uint64(len(m.Assigned)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 	}
 	if len(m.Author) > 0 {
 		i -= len(m.Author)
 		copy(dAtA[i:], m.Author)
 		i = encodeVarint(dAtA, i, uint64(len(m.Author)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x2a
 	}
 	if m.Type != 0 {
 		i = encodeVarint(dAtA, i, uint64(m.Type))
 		i--
+		dAtA[i] = 0x20
+	}
+	if m.ParentId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.ParentId))
+		i--
 		dAtA[i] = 0x18
 	}
-	if len(m.ParentIds) > 0 {
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarint(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Ids) > 0 {
 		var pksize2 int
-		for _, num := range m.ParentIds {
+		for _, num := range m.Ids {
 			pksize2 += sov(uint64(num))
 		}
 		i -= pksize2
 		j1 := i
-		for _, num1 := range m.ParentIds {
+		for _, num1 := range m.Ids {
 			num := uint64(num1)
 			for num >= 1<<7 {
 				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
@@ -731,27 +741,6 @@ func (m *IssueGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			j1++
 		}
 		i = encodeVarint(dAtA, i, uint64(pksize2))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Ids) > 0 {
-		var pksize4 int
-		for _, num := range m.Ids {
-			pksize4 += sov(uint64(num))
-		}
-		i -= pksize4
-		j3 := i
-		for _, num1 := range m.Ids {
-			num := uint64(num1)
-			for num >= 1<<7 {
-				dAtA[j3] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j3++
-			}
-			dAtA[j3] = uint8(num)
-			j3++
-		}
-		i = encodeVarint(dAtA, i, uint64(pksize4))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -853,33 +842,57 @@ func (m *IssueInfoGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i = encodeVarint(dAtA, i, uint64(len(encoded)))
 		}
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x4a
+	}
+	if m.ProjectId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.ProjectId))
+		i--
+		dAtA[i] = 0x40
 	}
 	if m.SprintId != 0 {
 		i = encodeVarint(dAtA, i, uint64(m.SprintId))
 		i--
-		dAtA[i] = 0x28
+		dAtA[i] = 0x38
 	}
 	if len(m.Assigned) > 0 {
 		i -= len(m.Assigned)
 		copy(dAtA[i:], m.Assigned)
 		i = encodeVarint(dAtA, i, uint64(len(m.Assigned)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x32
+	}
+	if len(m.Author) > 0 {
+		i -= len(m.Author)
+		copy(dAtA[i:], m.Author)
+		i = encodeVarint(dAtA, i, uint64(len(m.Author)))
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.Type != 0 {
 		i = encodeVarint(dAtA, i, uint64(m.Type))
 		i--
+		dAtA[i] = 0x20
+	}
+	if m.ParentId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.ParentId))
+		i--
 		dAtA[i] = 0x18
 	}
-	if len(m.ParentIds) > 0 {
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarint(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Ids) > 0 {
 		var pksize2 int
-		for _, num := range m.ParentIds {
+		for _, num := range m.Ids {
 			pksize2 += sov(uint64(num))
 		}
 		i -= pksize2
 		j1 := i
-		for _, num1 := range m.ParentIds {
+		for _, num1 := range m.Ids {
 			num := uint64(num1)
 			for num >= 1<<7 {
 				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
@@ -890,27 +903,6 @@ func (m *IssueInfoGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			j1++
 		}
 		i = encodeVarint(dAtA, i, uint64(pksize2))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Ids) > 0 {
-		var pksize4 int
-		for _, num := range m.Ids {
-			pksize4 += sov(uint64(num))
-		}
-		i -= pksize4
-		j3 := i
-		for _, num1 := range m.Ids {
-			num := uint64(num1)
-			for num >= 1<<7 {
-				dAtA[j3] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j3++
-			}
-			dAtA[j3] = uint8(num)
-			j3++
-		}
-		i = encodeVarint(dAtA, i, uint64(pksize4))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -947,9 +939,9 @@ func (m *IssueInfoGetResponse) MarshalToSizedBufferVT(dAtA []byte) (int, error) 
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if len(m.TaskInfo) > 0 {
-		for iNdEx := len(m.TaskInfo) - 1; iNdEx >= 0; iNdEx-- {
-			size, err := m.TaskInfo[iNdEx].MarshalToSizedBufferVT(dAtA[:i])
+	if len(m.IssueInfo) > 0 {
+		for iNdEx := len(m.IssueInfo) - 1; iNdEx >= 0; iNdEx-- {
+			size, err := m.IssueInfo[iNdEx].MarshalToSizedBufferVT(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1030,8 +1022,8 @@ func (m *IssueGetByIDResponse) MarshalToSizedBufferVT(dAtA []byte) (int, error) 
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.Task != nil {
-		size, err := m.Task.MarshalToSizedBufferVT(dAtA[:i])
+	if m.Issue != nil {
+		size, err := m.Issue.MarshalToSizedBufferVT(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -1111,8 +1103,8 @@ func (m *IssueInfoGetByIDResponse) MarshalToSizedBufferVT(dAtA []byte) (int, err
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.TaskInfo != nil {
-		size, err := m.TaskInfo.MarshalToSizedBufferVT(dAtA[:i])
+	if m.IssueInfo != nil {
+		size, err := m.IssueInfo.MarshalToSizedBufferVT(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -1162,17 +1154,15 @@ func (m *Issue) SizeVT() (n int) {
 	if l > 0 {
 		n += 1 + l + sov(uint64(l))
 	}
-	if len(m.Comments) > 0 {
-		for _, e := range m.Comments {
-			if size, ok := interface{}(e).(interface {
-				SizeVT() int
-			}); ok {
-				l = size.SizeVT()
-			} else {
-				l = proto.Size(e)
-			}
-			n += 1 + l + sov(uint64(l))
+	if m.Comments != nil {
+		if size, ok := interface{}(m.Comments).(interface {
+			SizeVT() int
+		}); ok {
+			l = size.SizeVT()
+		} else {
+			l = proto.Size(m.Comments)
 		}
+		n += 1 + l + sov(uint64(l))
 	}
 	l = len(m.Author)
 	if l > 0 {
@@ -1242,9 +1232,9 @@ func (m *Issue) SizeVT() (n int) {
 	if m.ProjectId != 0 {
 		n += 2 + sov(uint64(m.ProjectId))
 	}
-	if len(m.ComponentId) > 0 {
+	if len(m.ComponentIds) > 0 {
 		l = 0
-		for _, e := range m.ComponentId {
+		for _, e := range m.ComponentIds {
 			l += sov(uint64(e))
 		}
 		n += 2 + sov(uint64(l)) + l
@@ -1337,8 +1327,8 @@ func (m *IssueCreateSubtaskRequest) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Id != 0 {
-		n += 1 + sov(uint64(m.Id))
+	if m.ParentId != 0 {
+		n += 1 + sov(uint64(m.ParentId))
 	}
 	if m.Child != nil {
 		l = m.Child.SizeVT()
@@ -1412,12 +1402,12 @@ func (m *IssueGetRequest) SizeVT() (n int) {
 		}
 		n += 1 + sov(uint64(l)) + l
 	}
-	if len(m.ParentIds) > 0 {
-		l = 0
-		for _, e := range m.ParentIds {
-			l += sov(uint64(e))
-		}
-		n += 1 + sov(uint64(l)) + l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sov(uint64(l))
+	}
+	if m.ParentId != 0 {
+		n += 1 + sov(uint64(m.ParentId))
 	}
 	if m.Type != 0 {
 		n += 1 + sov(uint64(m.Type))
@@ -1483,15 +1473,19 @@ func (m *IssueInfoGetRequest) SizeVT() (n int) {
 		}
 		n += 1 + sov(uint64(l)) + l
 	}
-	if len(m.ParentIds) > 0 {
-		l = 0
-		for _, e := range m.ParentIds {
-			l += sov(uint64(e))
-		}
-		n += 1 + sov(uint64(l)) + l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sov(uint64(l))
+	}
+	if m.ParentId != 0 {
+		n += 1 + sov(uint64(m.ParentId))
 	}
 	if m.Type != 0 {
 		n += 1 + sov(uint64(m.Type))
+	}
+	l = len(m.Author)
+	if l > 0 {
+		n += 1 + l + sov(uint64(l))
 	}
 	l = len(m.Assigned)
 	if l > 0 {
@@ -1499,6 +1493,9 @@ func (m *IssueInfoGetRequest) SizeVT() (n int) {
 	}
 	if m.SprintId != 0 {
 		n += 1 + sov(uint64(m.SprintId))
+	}
+	if m.ProjectId != 0 {
+		n += 1 + sov(uint64(m.ProjectId))
 	}
 	if m.Status != nil {
 		if size, ok := interface{}(m.Status).(interface {
@@ -1522,8 +1519,8 @@ func (m *IssueInfoGetResponse) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.TaskInfo) > 0 {
-		for _, e := range m.TaskInfo {
+	if len(m.IssueInfo) > 0 {
+		for _, e := range m.IssueInfo {
 			l = e.SizeVT()
 			n += 1 + l + sov(uint64(l))
 		}
@@ -1555,8 +1552,8 @@ func (m *IssueGetByIDResponse) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.SizeVT()
+	if m.Issue != nil {
+		l = m.Issue.SizeVT()
 		n += 1 + l + sov(uint64(l))
 	}
 	if m.unknownFields != nil {
@@ -1586,8 +1583,8 @@ func (m *IssueInfoGetByIDResponse) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.TaskInfo != nil {
-		l = m.TaskInfo.SizeVT()
+	if m.IssueInfo != nil {
+		l = m.IssueInfo.SizeVT()
 		n += 1 + l + sov(uint64(l))
 	}
 	if m.unknownFields != nil {
@@ -1813,15 +1810,17 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Comments = append(m.Comments, &comments.Comment{})
-			if unmarshal, ok := interface{}(m.Comments[len(m.Comments)-1]).(interface {
+			if m.Comments == nil {
+				m.Comments = &comments.Comments{}
+			}
+			if unmarshal, ok := interface{}(m.Comments).(interface {
 				UnmarshalVT([]byte) error
 			}); ok {
 				if err := unmarshal.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 					return err
 				}
 			} else {
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Comments[len(m.Comments)-1]); err != nil {
+				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Comments); err != nil {
 					return err
 				}
 			}
@@ -2223,7 +2222,7 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 						break
 					}
 				}
-				m.ComponentId = append(m.ComponentId, v)
+				m.ComponentIds = append(m.ComponentIds, v)
 			} else if wireType == 2 {
 				var packedLen int
 				for shift := uint(0); ; shift += 7 {
@@ -2258,8 +2257,8 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 					}
 				}
 				elementCount = count
-				if elementCount != 0 && len(m.ComponentId) == 0 {
-					m.ComponentId = make([]int64, 0, elementCount)
+				if elementCount != 0 && len(m.ComponentIds) == 0 {
+					m.ComponentIds = make([]int64, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v int64
@@ -2277,10 +2276,10 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 							break
 						}
 					}
-					m.ComponentId = append(m.ComponentId, v)
+					m.ComponentIds = append(m.ComponentIds, v)
 				}
 			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field ComponentId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ComponentIds", wireType)
 			}
 		case 21:
 			if wireType != 0 {
@@ -2768,9 +2767,9 @@ func (m *IssueCreateSubtaskRequest) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ParentId", wireType)
 			}
-			m.Id = 0
+			m.ParentId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflow
@@ -2780,7 +2779,7 @@ func (m *IssueCreateSubtaskRequest) UnmarshalVT(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Id |= int64(b&0x7F) << shift
+				m.ParentId |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3195,82 +3194,57 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ids", wireType)
 			}
 		case 2:
-			if wireType == 0 {
-				var v int64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= int64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
 				}
-				m.ParentIds = append(m.ParentIds, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLength
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLength
-				}
-				if postIndex > l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
 				}
-				elementCount = count
-				if elementCount != 0 && len(m.ParentIds) == 0 {
-					m.ParentIds = make([]int64, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v int64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= int64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.ParentIds = append(m.ParentIds, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field ParentIds", wireType)
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ParentId", wireType)
+			}
+			m.ParentId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ParentId |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
 			}
@@ -3289,7 +3263,7 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Author", wireType)
 			}
@@ -3321,7 +3295,7 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Author = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Assigned", wireType)
 			}
@@ -3353,7 +3327,7 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Assigned = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SprintId", wireType)
 			}
@@ -3372,7 +3346,7 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ProjectId", wireType)
 			}
@@ -3391,7 +3365,7 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
-		case 8:
+		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -3648,82 +3622,57 @@ func (m *IssueInfoGetRequest) UnmarshalVT(dAtA []byte) error {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ids", wireType)
 			}
 		case 2:
-			if wireType == 0 {
-				var v int64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= int64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
 				}
-				m.ParentIds = append(m.ParentIds, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLength
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLength
-				}
-				if postIndex > l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
 				}
-				elementCount = count
-				if elementCount != 0 && len(m.ParentIds) == 0 {
-					m.ParentIds = make([]int64, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v int64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= int64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.ParentIds = append(m.ParentIds, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field ParentIds", wireType)
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ParentId", wireType)
+			}
+			m.ParentId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ParentId |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
 			}
@@ -3742,7 +3691,39 @@ func (m *IssueInfoGetRequest) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
-		case 4:
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Author", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Author = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Assigned", wireType)
 			}
@@ -3774,7 +3755,7 @@ func (m *IssueInfoGetRequest) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Assigned = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SprintId", wireType)
 			}
@@ -3793,7 +3774,26 @@ func (m *IssueInfoGetRequest) UnmarshalVT(dAtA []byte) error {
 					break
 				}
 			}
-		case 6:
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProjectId", wireType)
+			}
+			m.ProjectId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ProjectId |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
 			}
@@ -3890,7 +3890,7 @@ func (m *IssueInfoGetResponse) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TaskInfo", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IssueInfo", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3917,8 +3917,8 @@ func (m *IssueInfoGetResponse) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.TaskInfo = append(m.TaskInfo, &IssueInfo{})
-			if err := m.TaskInfo[len(m.TaskInfo)-1].UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+			m.IssueInfo = append(m.IssueInfo, &IssueInfo{})
+			if err := m.IssueInfo[len(m.IssueInfo)-1].UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4045,7 +4045,7 @@ func (m *IssueGetByIDResponse) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Issue", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4072,10 +4072,10 @@ func (m *IssueGetByIDResponse) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Issue{}
+			if m.Issue == nil {
+				m.Issue = &Issue{}
 			}
-			if err := m.Task.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Issue.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4202,7 +4202,7 @@ func (m *IssueInfoGetByIDResponse) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TaskInfo", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IssueInfo", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4229,10 +4229,10 @@ func (m *IssueInfoGetByIDResponse) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TaskInfo == nil {
-				m.TaskInfo = &IssueInfo{}
+			if m.IssueInfo == nil {
+				m.IssueInfo = &IssueInfo{}
 			}
-			if err := m.TaskInfo.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.IssueInfo.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

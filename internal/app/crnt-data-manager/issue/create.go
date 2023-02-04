@@ -2,19 +2,30 @@ package issue
 
 import (
 	"context"
-	"errors"
 
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
+	log "github.com/sirupsen/logrus"
+	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) CreateIssue(ctx context.Context, req *desc.IssueCreateRequest) (*desc.IssueCreateResponse, error) {
-	if req.GetIssue() == nil {
-		return nil, errors.New("issue should not be nil")
+	err := i.validator.CheckIssue(req.GetIssue())
+	if err != nil {
+		log.Error("issue is not valid",
+			zap.Any("issue", req.GetIssue()),
+			zap.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if len(req.GetIssue().GetName()) == 0 {
-		return nil, errors.New("name is too short")
+	id, err := i.storage.Add(req.GetIssue())
+	if err != nil {
+		log.Error("failed to store an issue",
+			zap.Any("issue", req.GetIssue()),
+			zap.Error(err))
+		return nil, err
 	}
 
-	return &desc.IssueCreateResponse{Id: req.GetIssue().GetId()}, nil
+	return &desc.IssueCreateResponse{Id: id}, nil
 }

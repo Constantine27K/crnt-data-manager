@@ -173,7 +173,7 @@
             "format": "int64"
           },
           {
-            "name": "status.common",
+            "name": "status.common.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -193,7 +193,7 @@
             "default": "STATUS_COMMON_UNKNOWN"
           },
           {
-            "name": "status.development",
+            "name": "status.development.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -298,7 +298,7 @@
             "format": "int64"
           },
           {
-            "name": "status.common",
+            "name": "status.common.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -318,7 +318,7 @@
             "default": "STATUS_COMMON_UNKNOWN"
           },
           {
-            "name": "status.development",
+            "name": "status.development.status",
             "in": "query",
             "required": false,
             "type": "string",
@@ -596,9 +596,25 @@
       "type": "object",
       "properties": {
         "common": {
-          "$ref": "#/definitions/statusTaskCommon"
+          "$ref": "#/definitions/statusTaskStatusCommon"
         },
         "development": {
+          "$ref": "#/definitions/statusTaskStatusDevelopment"
+        }
+      }
+    },
+    "statusTaskStatusCommon": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/statusTaskCommon"
+        }
+      }
+    },
+    "statusTaskStatusDevelopment": {
+      "type": "object",
+      "properties": {
+        "status": {
           "$ref": "#/definitions/statusTaskDevelopment"
         }
       }

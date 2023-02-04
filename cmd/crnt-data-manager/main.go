@@ -13,6 +13,10 @@ import (
 	projectService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/project"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
 	teamService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/team"
+	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
+	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
+	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
+	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/epic"
@@ -63,11 +67,28 @@ func createGrpcServer() {
 	}
 
 	grpcServer := grpc.NewServer()
-	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService())
+
+	db, err := postgres.NewPostgres(postgres.Options{
+		Host:     os.Getenv("POSTGRES_HOST"),
+		Port:     os.Getenv("POSTGRES_PORT"),
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("POSTGRES_DBNAME"),
+	})
+	if err != nil {
+		log.Fatalf("failed to connect to postgres: %v", err)
+	}
+
+	validator := validate.NewValidator()
+	issueGateway := gateway.NewIssueGateWay(db)
+	issueStorage := storage.NewIssueStorage(issueGateway)
+
+	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStorage))
 	epic.RegisterEpicRegistryServer(grpcServer, epicService.NewService())
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService())
 	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService())
+
 	log.Infof("grpc service started on port %s", port)
 
 	err = grpcServer.Serve(lis)
