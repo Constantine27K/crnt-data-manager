@@ -13,9 +13,12 @@ import (
 
 type IssueStorage interface {
 	Add(issue *desc.Issue) (int64, error)
-	Update(id int64, issue *desc.Issue) (int64, error)
+	CreateSubtask(parentID int64, child *desc.Issue) (int64, error)
 	Get(filter *models.IssueFilter) ([]*desc.Issue, error)
+	GetInfo(filter *models.IssueFilter) ([]*desc.IssueInfo, error)
 	GetByID(id int64) (*desc.Issue, error)
+	GetInfoByID(id int64) (*desc.IssueInfo, error)
+	Update(id int64, issue *desc.Issue) (int64, error)
 }
 
 type storage struct {
@@ -74,6 +77,20 @@ func (s *storage) Add(issue *desc.Issue) (int64, error) {
 	}
 
 	return s.gw.Add(model)
+}
+
+func (s *storage) CreateSubtask(parentID int64, child *desc.Issue) (int64, error) {
+	childID, err := s.Add(child)
+	if err != nil {
+		return 0, err
+	}
+
+	err = s.gw.AddChild(parentID, childID)
+	if err != nil {
+		return 0, err
+	}
+
+	return childID, nil
 }
 
 func (s *storage) Update(id int64, issue *desc.Issue) (int64, error) {
@@ -162,6 +179,32 @@ func (s *storage) Get(filter *models.IssueFilter) ([]*desc.Issue, error) {
 	return result, nil
 }
 
+func (s *storage) GetInfo(filter *models.IssueFilter) ([]*desc.IssueInfo, error) {
+	issueInfoRows, err := s.gw.GetInfo(filter)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]*desc.IssueInfo, 0, len(issueInfoRows))
+
+	for _, row := range issueInfoRows {
+		issueType := models.MapToProtoIssueType(row.IssueType)
+		priority := models.MapToProtoPriority(row.Priority)
+
+		result = append(result, &desc.IssueInfo{
+			Id:            row.ID,
+			CompositeName: row.CompositeName,
+			Name:          row.Name,
+			Type:          issueType,
+			Assigned:      row.Assigned,
+			Priority:      priority,
+			StoryPoints:   row.StoryPoints,
+		})
+	}
+
+	return result, nil
+}
+
 func (s *storage) GetByID(id int64) (*desc.Issue, error) {
 	row, err := s.gw.GetByID(id)
 	if err != nil {
@@ -211,5 +254,25 @@ func (s *storage) GetByID(id int64) (*desc.Issue, error) {
 		ComponentIds:  row.Components,
 		StoryPoints:   row.StoryPoints,
 		Children:      children,
+	}, nil
+}
+
+func (s *storage) GetInfoByID(id int64) (*desc.IssueInfo, error) {
+	row, err := s.gw.GetInfoByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	issueType := models.MapToProtoIssueType(row.IssueType)
+	priority := models.MapToProtoPriority(row.Priority)
+
+	return &desc.IssueInfo{
+		Id:            row.ID,
+		CompositeName: row.CompositeName,
+		Name:          row.Name,
+		Type:          issueType,
+		Assigned:      row.Assigned,
+		Priority:      priority,
+		StoryPoints:   row.StoryPoints,
 	}, nil
 }

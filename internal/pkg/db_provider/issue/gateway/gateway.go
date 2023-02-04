@@ -14,9 +14,12 @@ import (
 
 type IssueGateway interface {
 	Add(row *models.IssueRow) (int64, error)
-	Update(row *models.IssueRow) (int64, error)
+	AddChild(parentID, childID int64) error
 	Get(filter *models.IssueFilter) ([]*models.IssueRow, error)
+	GetInfo(filter *models.IssueFilter) ([]*models.IssueInfoRow, error)
 	GetByID(id int64) (*models.IssueRow, error)
+	GetInfoByID(id int64) (*models.IssueInfoRow, error)
+	Update(row *models.IssueRow) (int64, error)
 }
 
 type gateway struct {
@@ -39,6 +42,8 @@ var (
 	columns = []string{"id", "composite_name", "name", "issue_type", "parent_id", "description",
 		"comments", "author", "assigned", "qa", "reviewer", "template", "created_at", "updated_at",
 		"deadline", "status", "priority", "sprint_id", "project_id", "components", "story_points", "children"}
+
+	infoColumns = []string{"id", "composite_name", "name", "issue_type", "assigned", "priority", "story_points"}
 )
 
 func (g *gateway) Add(issueRow *models.IssueRow) (int64, error) {
@@ -219,6 +224,58 @@ func (g *gateway) Get(filter *models.IssueFilter) ([]*models.IssueRow, error) {
 	return result, nil
 }
 
+func (g *gateway) GetInfo(filter *models.IssueFilter) ([]*models.IssueInfoRow, error) {
+	query := g.builder.Select(infoColumns...).
+		From(table)
+
+	if filter != nil {
+		query = filter.Apply(query)
+	}
+
+	result := make([]*models.IssueInfoRow, 0)
+
+	stmt, args, err := query.ToSql()
+	if err != nil {
+		log.Error("Gateway.GetInfo query error",
+			zap.Any("filter", filter),
+			zap.Error(err),
+		)
+		return nil, err
+	}
+
+	rows, err := g.db.Query(stmt, args...)
+	if err != nil {
+		log.Error("Gateway.GetInfo query error",
+			zap.Any("filter", filter),
+			zap.Error(err),
+		)
+		return nil, err
+	}
+
+	for rows.Next() {
+		var issueRow models.IssueInfoRow
+		err = rows.Scan(
+			&issueRow.ID,
+			&issueRow.CompositeName,
+			&issueRow.Name,
+			&issueRow.IssueType,
+			&issueRow.Assigned,
+			&issueRow.Priority,
+			&issueRow.StoryPoints,
+		)
+		if err != nil {
+			log.Error("Gateway.GetInfo scan error",
+				zap.Any("filter", filter),
+				zap.Error(err),
+			)
+			return nil, err
+		}
+		result = append(result, &issueRow)
+	}
+
+	return result, nil
+}
+
 func (g *gateway) GetByID(id int64) (*models.IssueRow, error) {
 	query, args, err := g.builder.Select(columns...).
 		From(table).
@@ -263,4 +320,71 @@ func (g *gateway) GetByID(id int64) (*models.IssueRow, error) {
 	}
 
 	return &issueRow, nil
+}
+
+func (g *gateway) GetInfoByID(id int64) (*models.IssueInfoRow, error) {
+	query, args, err := g.builder.Select(infoColumns...).
+		From(table).
+		Where(sq.Eq{"id": id}).ToSql()
+	if err != nil {
+		log.Error("Gateway.GetInfoByID query error",
+			zap.Int64("id", id),
+			zap.Error(err),
+		)
+		return nil, err
+	}
+
+	var issueInfoRow models.IssueInfoRow
+	err = g.db.QueryRow(query, args...).Scan(&issueInfoRow.ID,
+		&issueInfoRow.CompositeName,
+		&issueInfoRow.Name,
+		&issueInfoRow.IssueType,
+		&issueInfoRow.Assigned,
+		&issueInfoRow.Priority,
+		&issueInfoRow.StoryPoints,
+	)
+	if err != nil {
+		log.Error("Gateway.GetInfoByID scan error",
+			zap.Int64("id", id),
+			zap.Error(err),
+		)
+		return nil, err
+	}
+
+	return &issueInfoRow, nil
+}
+
+func (g *gateway) AddChild(parentID, childID int64) error {
+	query := "update issue set children = array_append(children, $2) where id = $1"
+
+	res, err := g.db.Exec(query, parentID, childID)
+	if err != nil {
+		log.Error("Gateway.AddChild exec error",
+			zap.Int64("parentID", parentID),
+			zap.Int64("childID", childID),
+			zap.Error(err),
+		)
+		return err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		log.Error("Gateway.AddChild affected error",
+			zap.Int64("parentID", parentID),
+			zap.Int64("childID", childID),
+			zap.Error(err),
+		)
+		return err
+	}
+
+	if affected == 0 {
+		log.Error("Gateway.AddChild no rows affected",
+			zap.Int64("parentID", parentID),
+			zap.Int64("childID", childID),
+			zap.Error(err),
+		)
+		return fmt.Errorf("no rows affected")
+	}
+
+	return nil
 }

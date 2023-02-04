@@ -63,3 +63,13 @@ type IssueRow struct {
 	StoryPoints   int64     `db:"story_points"`
 	Children      []int64   `db:"children"`
 }
+
+type IssueInfoRow struct {
+	ID            int64     `db:"id"`
+	CompositeName string    `db:"composite_name"`
+	Name          string    `db:"name"`
+	IssueType     IssueType `db:"issue_type"`
+	Assigned      string    `db:"assigned"`
+	Priority      Priority  `db:"priority"`
+	StoryPoints   int64     `db:"story_points"`
+}

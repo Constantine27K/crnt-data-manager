@@ -31,6 +31,20 @@ func NewFilter(req *desc.IssueGetRequest) *IssueFilter {
 	}
 }
 
+func NewInfoFilter(req *desc.IssueInfoGetRequest) *IssueFilter {
+	return &IssueFilter{
+		IDs:       req.GetIds(),
+		Name:      req.GetName(),
+		ParentID:  req.GetParentId(),
+		Type:      MapFromProtoIssueType(req.GetType()),
+		Author:    req.GetAuthor(),
+		Assigned:  req.GetAssigned(),
+		SprintID:  req.GetSprintId(),
+		ProjectID: req.GetProjectId(),
+		Status:    MapFromProtoStatus(req.GetStatus()),
+	}
+}
+
 func (f *IssueFilter) Apply(query sq.SelectBuilder) sq.SelectBuilder {
 	if len(f.IDs) > 0 {
 		query = query.Where(sq.Eq{

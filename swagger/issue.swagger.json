@@ -124,7 +124,7 @@
         ]
       }
     },
-    "/v1/issue/{id}/subtask": {
+    "/v1/issue/{parentId}/subtask": {
       "post": {
         "operationId": "IssueRegistry_CreateSubtask",
         "responses": {
@@ -143,7 +143,7 @@
         },
         "parameters": [
           {
-            "name": "id",
+            "name": "parentId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -198,15 +198,17 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "parentIds",
+            "name": "name",
             "in": "query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "int64"
-            },
-            "collectionFormat": "multi"
+            "type": "string"
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
           },
           {
             "name": "type",
@@ -222,6 +224,12 @@
             "default": "ISSUE_TYPE_UNKNOWN"
           },
           {
+            "name": "author",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "assigned",
             "in": "query",
             "required": false,
@@ -229,6 +237,13 @@
           },
           {
             "name": "sprintId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "projectId",
             "in": "query",
             "required": false,
             "type": "string",
@@ -645,7 +660,7 @@
     "issueIssueInfoGetResponse": {
       "type": "object",
       "properties": {
-        "taskInfo": {
+        "issueInfo": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/issueIssueInfo"

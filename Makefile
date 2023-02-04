@@ -92,7 +92,7 @@ vendor:
 
 .PHONY: .run
 .run:
-	go run ./cmd/crnt-auth-service/main.go
+	go run ./cmd/crnt-data-manager/main.go
 
 .PHONY: .run-env
 .run-env:

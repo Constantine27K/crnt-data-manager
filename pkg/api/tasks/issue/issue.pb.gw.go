@@ -84,14 +84,14 @@ func request_IssueRegistry_CreateSubtask_0(ctx context.Context, marshaler runtim
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["parent_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "parent_id")
 	}
 
-	protoReq.Id, err = runtime.Int64(val)
+	protoReq.ParentId, err = runtime.Int64(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "parent_id", err)
 	}
 
 	msg, err := client.CreateSubtask(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -118,14 +118,14 @@ func local_request_IssueRegistry_CreateSubtask_0(ctx context.Context, marshaler 
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["parent_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "parent_id")
 	}
 
-	protoReq.Id, err = runtime.Int64(val)
+	protoReq.ParentId, err = runtime.Int64(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "parent_id", err)
 	}
 
 	msg, err := server.CreateSubtask(ctx, &protoReq)
@@ -416,7 +416,7 @@ func RegisterIssueRegistryHandlerServer(ctx context.Context, mux *runtime.ServeM
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/CreateSubtask", runtime.WithHTTPPathPattern("/v1/issue/{id}/subtask"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/CreateSubtask", runtime.WithHTTPPathPattern("/v1/issue/{parent_id}/subtask"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -627,7 +627,7 @@ func RegisterIssueRegistryHandlerClient(ctx context.Context, mux *runtime.ServeM
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/CreateSubtask", runtime.WithHTTPPathPattern("/v1/issue/{id}/subtask"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/CreateSubtask", runtime.WithHTTPPathPattern("/v1/issue/{parent_id}/subtask"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -759,7 +759,7 @@ func RegisterIssueRegistryHandlerClient(ctx context.Context, mux *runtime.ServeM
 var (
 	pattern_IssueRegistry_CreateIssue_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "issue"}, ""))
 
-	pattern_IssueRegistry_CreateSubtask_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "issue", "id", "subtask"}, ""))
+	pattern_IssueRegistry_CreateSubtask_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "issue", "parent_id", "subtask"}, ""))
 
 	pattern_IssueRegistry_UpdateIssue_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "issue", "id"}, ""))
 
