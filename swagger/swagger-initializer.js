@@ -6,7 +6,6 @@ window.onload = function() {
     urls: [
         {"name":"sprint", "url":"sprint.swagger.json"},
         {"name":"issue", "url":"issue.swagger.json"},
-        {"name":"epic", "url":"epic.swagger.json"},
         {"name":"team", "url":"team.swagger.json"},
         {"name":"project", "url":"project.swagger.json"}
     ],

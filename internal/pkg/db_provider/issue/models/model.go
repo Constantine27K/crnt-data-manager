@@ -27,6 +27,7 @@ const (
 	StatusUnknown     = 0
 	StatusCommon      = 100
 	StatusDevelopment = 200
+	StatusEpic        = 300
 )
 
 type Priority int64

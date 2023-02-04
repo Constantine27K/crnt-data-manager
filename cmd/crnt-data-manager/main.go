@@ -8,7 +8,6 @@ import (
 	"os"
 	"strconv"
 
-	epicService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/epic"
 	issueService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/issue"
 	projectService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/project"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
@@ -19,7 +18,6 @@ import (
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
-	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/epic"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/team"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -84,7 +82,6 @@ func createGrpcServer() {
 	issueStorage := storage.NewIssueStorage(issueGateway)
 
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStorage))
-	epic.RegisterEpicRegistryServer(grpcServer, epicService.NewService())
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService())
 	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService())
@@ -122,13 +119,6 @@ func createHttpServer() {
 	err = issue.RegisterIssueRegistryHandlerClient(ctx, rmux, clientIssue)
 	if err != nil {
 		log.Error("failed to register task handler client",
-			zap.Error(err),
-		)
-	}
-	clientEpic := epic.NewEpicRegistryClient(conn)
-	err = epic.RegisterEpicRegistryHandlerClient(ctx, rmux, clientEpic)
-	if err != nil {
-		log.Error("failed to register sprint handler client",
 			zap.Error(err),
 		)
 	}

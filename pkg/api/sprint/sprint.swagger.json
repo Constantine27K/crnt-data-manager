@@ -263,6 +263,7 @@
       "type": "string",
       "enum": [
         "ISSUE_TYPE_UNKNOWN",
+        "ISSUE_TYPE_EPIC",
         "ISSUE_TYPE_STORY",
         "ISSUE_TYPE_TASK",
         "ISSUE_TYPE_SUBTASK"

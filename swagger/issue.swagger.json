@@ -217,6 +217,7 @@
             "type": "string",
             "enum": [
               "ISSUE_TYPE_UNKNOWN",
+              "ISSUE_TYPE_EPIC",
               "ISSUE_TYPE_STORY",
               "ISSUE_TYPE_TASK",
               "ISSUE_TYPE_SUBTASK"
@@ -288,6 +289,23 @@
               "STATUS_DEVELOPMENT_ON_HOLD"
             ],
             "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          },
+          {
+            "name": "status.epic.status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_EPIC_UNKNOWN",
+              "STATUS_EPIC_BACKLOG",
+              "STATUS_EPIC_PLANNING",
+              "STATUS_EPIC_DESIGNING",
+              "STATUS_EPIC_IT",
+              "STATUS_EPIC_DONE",
+              "STATUS_EPIC_CLOSED",
+              "STATUS_EPIC_ON_HOLD"
+            ],
+            "default": "STATUS_EPIC_UNKNOWN"
           }
         ],
         "tags": [
@@ -375,6 +393,7 @@
             "type": "string",
             "enum": [
               "ISSUE_TYPE_UNKNOWN",
+              "ISSUE_TYPE_EPIC",
               "ISSUE_TYPE_STORY",
               "ISSUE_TYPE_TASK",
               "ISSUE_TYPE_SUBTASK"
@@ -446,6 +465,23 @@
               "STATUS_DEVELOPMENT_ON_HOLD"
             ],
             "default": "STATUS_DEVELOPMENT_UNKNOWN"
+          },
+          {
+            "name": "status.epic.status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS_EPIC_UNKNOWN",
+              "STATUS_EPIC_BACKLOG",
+              "STATUS_EPIC_PLANNING",
+              "STATUS_EPIC_DESIGNING",
+              "STATUS_EPIC_IT",
+              "STATUS_EPIC_DONE",
+              "STATUS_EPIC_CLOSED",
+              "STATUS_EPIC_ON_HOLD"
+            ],
+            "default": "STATUS_EPIC_UNKNOWN"
           }
         ],
         "tags": [
@@ -544,7 +580,7 @@
           "format": "date-time"
         },
         "status": {
-          "$ref": "#/definitions/statusTaskStatus"
+          "$ref": "#/definitions/statusIssueStatus"
         },
         "priority": {
           "$ref": "#/definitions/priorityPriority"
@@ -672,6 +708,7 @@
       "type": "string",
       "enum": [
         "ISSUE_TYPE_UNKNOWN",
+        "ISSUE_TYPE_EPIC",
         "ISSUE_TYPE_STORY",
         "ISSUE_TYPE_TASK",
         "ISSUE_TYPE_SUBTASK"
@@ -725,7 +762,7 @@
         }
       }
     },
-    "statusTaskCommon": {
+    "statusCommon": {
       "type": "string",
       "enum": [
         "STATUS_COMMON_UNKNOWN",
@@ -742,7 +779,7 @@
       ],
       "default": "STATUS_COMMON_UNKNOWN"
     },
-    "statusTaskDevelopment": {
+    "statusDevelopment": {
       "type": "string",
       "enum": [
         "STATUS_DEVELOPMENT_UNKNOWN",
@@ -759,30 +796,55 @@
       ],
       "default": "STATUS_DEVELOPMENT_UNKNOWN"
     },
-    "statusTaskStatus": {
+    "statusEpic": {
+      "type": "string",
+      "enum": [
+        "STATUS_EPIC_UNKNOWN",
+        "STATUS_EPIC_BACKLOG",
+        "STATUS_EPIC_PLANNING",
+        "STATUS_EPIC_DESIGNING",
+        "STATUS_EPIC_IT",
+        "STATUS_EPIC_DONE",
+        "STATUS_EPIC_CLOSED",
+        "STATUS_EPIC_ON_HOLD"
+      ],
+      "default": "STATUS_EPIC_UNKNOWN"
+    },
+    "statusIssueStatus": {
       "type": "object",
       "properties": {
         "common": {
-          "$ref": "#/definitions/statusTaskStatusCommon"
+          "$ref": "#/definitions/statusIssueStatusCommon"
         },
         "development": {
-          "$ref": "#/definitions/statusTaskStatusDevelopment"
+          "$ref": "#/definitions/statusIssueStatusDevelopment"
+        },
+        "epic": {
+          "$ref": "#/definitions/statusIssueStatusEpic"
         }
       }
     },
-    "statusTaskStatusCommon": {
+    "statusIssueStatusCommon": {
       "type": "object",
       "properties": {
         "status": {
-          "$ref": "#/definitions/statusTaskCommon"
+          "$ref": "#/definitions/statusCommon"
         }
       }
     },
-    "statusTaskStatusDevelopment": {
+    "statusIssueStatusDevelopment": {
       "type": "object",
       "properties": {
         "status": {
-          "$ref": "#/definitions/statusTaskDevelopment"
+          "$ref": "#/definitions/statusDevelopment"
+        }
+      }
+    },
+    "statusIssueStatusEpic": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/statusEpic"
         }
       }
     },
@@ -791,7 +853,8 @@
       "enum": [
         "TEMPLATE_UNKNOWN",
         "TEMPLATE_COMMON",
-        "TEMPLATE_DEVELOPMENT"
+        "TEMPLATE_DEVELOPMENT",
+        "TEMPLATE_EPIC"
       ],
       "default": "TEMPLATE_UNKNOWN"
     }
