@@ -2134,7 +2134,7 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Status == nil {
-				m.Status = &status.TaskStatus{}
+				m.Status = &status.IssueStatus{}
 			}
 			if unmarshal, ok := interface{}(m.Status).(interface {
 				UnmarshalVT([]byte) error
@@ -3395,7 +3395,7 @@ func (m *IssueGetRequest) UnmarshalVT(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Status == nil {
-				m.Status = &status.TaskStatus{}
+				m.Status = &status.IssueStatus{}
 			}
 			if unmarshal, ok := interface{}(m.Status).(interface {
 				UnmarshalVT([]byte) error
@@ -3823,7 +3823,7 @@ func (m *IssueInfoGetRequest) UnmarshalVT(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Status == nil {
-				m.Status = &status.TaskStatus{}
+				m.Status = &status.IssueStatus{}
 			}
 			if unmarshal, ok := interface{}(m.Status).(interface {
 				UnmarshalVT([]byte) error

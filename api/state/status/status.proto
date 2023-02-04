@@ -4,22 +4,27 @@ package github.constantine27k.crnt_data_manager.api.state.status;
 
 option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/state/status;status";
 
-message TaskStatus {
+message IssueStatus {
 	oneof status {
-		TaskStatusCommon common = 1;
-		TaskStatusDevelopment development = 2;
+		IssueStatusCommon common = 1;
+		IssueStatusDevelopment development = 2;
+		IssueStatusEpic epic = 3;
 	}
 }
 
-message TaskStatusCommon {
-	TaskCommon status = 1;
+message IssueStatusCommon {
+	Common status = 1;
 }
 
-message TaskStatusDevelopment {
-	TaskDevelopment status = 2;
+message IssueStatusDevelopment {
+	Development status = 2;
 }
 
-enum TaskCommon {
+message IssueStatusEpic {
+	Epic status = 2;
+}
+
+enum Common {
 	STATUS_COMMON_UNKNOWN = 0;
 	STATUS_COMMON_BACKLOG = 1;
 	STATUS_COMMON_IN_PROGRESS = 2;
@@ -33,7 +38,7 @@ enum TaskCommon {
 	STATUS_COMMON_ON_HOLD = 10;
 }
 
-enum TaskDevelopment {
+enum Development {
 	STATUS_DEVELOPMENT_UNKNOWN = 0;
 	STATUS_DEVELOPMENT_BACKLOG = 1;
 	STATUS_DEVELOPMENT_IN_PROGRESS = 2;
@@ -45,6 +50,17 @@ enum TaskDevelopment {
 	STATUS_DEVELOPMENT_READY_TO_DEPLOY = 8;
 	STATUS_DEVELOPMENT_CLOSED = 9;
 	STATUS_DEVELOPMENT_ON_HOLD = 10;
+}
+
+enum Epic {
+	STATUS_EPIC_UNKNOWN = 0;
+	STATUS_EPIC_BACKLOG = 1;
+	STATUS_EPIC_PLANNING = 2;
+	STATUS_EPIC_DESIGNING = 3;
+	STATUS_EPIC_IT = 4;
+	STATUS_EPIC_DONE = 5;
+	STATUS_EPIC_CLOSED = 6;
+	STATUS_EPIC_ON_HOLD = 7;
 }
 
 enum Sprint {

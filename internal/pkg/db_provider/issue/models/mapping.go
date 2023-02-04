@@ -55,28 +55,35 @@ func MapToProtoTemplate(temp Template) template.Template {
 	}
 }
 
-func MapFromProtoStatus(stat *status.TaskStatus) int32 {
-	if stat.GetCommon().GetStatus() != status.TaskCommon_STATUS_COMMON_UNKNOWN {
+func MapFromProtoStatus(stat *status.IssueStatus) int32 {
+	if stat.GetCommon().GetStatus() != status.Common_STATUS_COMMON_UNKNOWN {
 		statNum := int32(stat.GetCommon().GetStatus().Number())
 		return StatusCommon + statNum
 	}
-	if stat.GetDevelopment().GetStatus() != status.TaskDevelopment_STATUS_DEVELOPMENT_UNKNOWN {
+	if stat.GetDevelopment().GetStatus() != status.Development_STATUS_DEVELOPMENT_UNKNOWN {
 		statNum := int32(stat.GetDevelopment().GetStatus().Number())
 		return StatusDevelopment + statNum
+	}
+	if stat.GetEpic().GetStatus() != status.Epic_STATUS_EPIC_UNKNOWN {
+		statNum := int32(stat.GetEpic().GetStatus().Number())
+		return StatusEpic + statNum
 	}
 	return StatusUnknown
 }
 
-func MapToProtoStatus(stat int32) *status.TaskStatus {
+func MapToProtoStatus(stat int32) *status.IssueStatus {
 	switch stat / 100 {
 	case 1:
 		statNum := stat % 100
-		return &status.TaskStatus{Status: &status.TaskStatus_Common{Common: &status.TaskStatusCommon{Status: status.TaskCommon(statNum)}}}
+		return &status.IssueStatus{Status: &status.IssueStatus_Common{Common: &status.IssueStatusCommon{Status: status.Common(statNum)}}}
 	case 2:
 		statNum := stat % 200
-		return &status.TaskStatus{Status: &status.TaskStatus_Development{Development: &status.TaskStatusDevelopment{Status: status.TaskDevelopment(statNum)}}}
+		return &status.IssueStatus{Status: &status.IssueStatus_Development{Development: &status.IssueStatusDevelopment{Status: status.Development(statNum)}}}
+	case 3:
+		statNum := stat % 200
+		return &status.IssueStatus{Status: &status.IssueStatus_Epic{Epic: &status.IssueStatusEpic{Status: status.Epic(statNum)}}}
 	default:
-		return &status.TaskStatus{}
+		return &status.IssueStatus{}
 	}
 }
 

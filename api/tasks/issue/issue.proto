@@ -81,7 +81,7 @@ message Issue {
 	google.protobuf.Timestamp created_at = 13;
 	google.protobuf.Timestamp deadline = 14;
 	google.protobuf.Timestamp updated_at = 15;
-	state.status.TaskStatus status = 16;
+	state.status.IssueStatus status = 16;
 	state.priority.Priority priority = 17;
 	int64 sprint_id = 18;
 	int64 project_id = 19;
@@ -135,7 +135,7 @@ message IssueGetRequest {
 	string assigned = 6;
 	int64 sprint_id = 7;
 	int64 project_id = 8;
-	state.status.TaskStatus status = 9;
+	state.status.IssueStatus status = 9;
 }
 
 message IssueGetResponse {
@@ -151,7 +151,7 @@ message IssueInfoGetRequest {
 	string assigned = 6;
 	int64 sprint_id = 7;
 	int64 project_id = 8;
-	state.status.TaskStatus status = 9;
+	state.status.IssueStatus status = 9;
 }
 
 message IssueInfoGetResponse {
@@ -176,8 +176,9 @@ message IssueInfoGetByIDResponse {
 
 enum IssueType {
 	ISSUE_TYPE_UNKNOWN = 0;
-	ISSUE_TYPE_STORY = 1;
-	ISSUE_TYPE_TASK = 2;
-	ISSUE_TYPE_SUBTASK = 3;
+	ISSUE_TYPE_EPIC = 1;
+	ISSUE_TYPE_STORY = 2;
+	ISSUE_TYPE_TASK = 3;
+	ISSUE_TYPE_SUBTASK = 4;
 }
 
