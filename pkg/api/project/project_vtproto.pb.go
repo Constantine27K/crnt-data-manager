@@ -48,6 +48,27 @@ func (m *Project) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
+	if len(m.ResponsibleTeamIds) > 0 {
+		var pksize2 int
+		for _, num := range m.ResponsibleTeamIds {
+			pksize2 += sov(uint64(num))
+		}
+		i -= pksize2
+		j1 := i
+		for _, num1 := range m.ResponsibleTeamIds {
+			num := uint64(num1)
+			for num >= 1<<7 {
+				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA[j1] = uint8(num)
+			j1++
+		}
+		i = encodeVarint(dAtA, i, uint64(pksize2))
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.IsArchived {
 		i--
 		if m.IsArchived {
@@ -270,6 +291,27 @@ func (m *ProjectGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
+	if len(m.ResponsibleTeamIds) > 0 {
+		var pksize2 int
+		for _, num := range m.ResponsibleTeamIds {
+			pksize2 += sov(uint64(num))
+		}
+		i -= pksize2
+		j1 := i
+		for _, num1 := range m.ResponsibleTeamIds {
+			num := uint64(num1)
+			for num >= 1<<7 {
+				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA[j1] = uint8(num)
+			j1++
+		}
+		i = encodeVarint(dAtA, i, uint64(pksize2))
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.IsArchived {
 		i--
 		if m.IsArchived {
@@ -290,23 +332,23 @@ func (m *ProjectGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		}
 	}
 	if len(m.Ids) > 0 {
-		var pksize2 int
+		var pksize4 int
 		for _, num := range m.Ids {
-			pksize2 += sov(uint64(num))
+			pksize4 += sov(uint64(num))
 		}
-		i -= pksize2
-		j1 := i
+		i -= pksize4
+		j3 := i
 		for _, num1 := range m.Ids {
 			num := uint64(num1)
 			for num >= 1<<7 {
-				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA[j3] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j1++
+				j3++
 			}
-			dAtA[j1] = uint8(num)
-			j1++
+			dAtA[j3] = uint8(num)
+			j3++
 		}
-		i = encodeVarint(dAtA, i, uint64(pksize2))
+		i = encodeVarint(dAtA, i, uint64(pksize4))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -466,6 +508,13 @@ func (m *Project) SizeVT() (n int) {
 	if m.IsArchived {
 		n += 2
 	}
+	if len(m.ResponsibleTeamIds) > 0 {
+		l = 0
+		for _, e := range m.ResponsibleTeamIds {
+			l += sov(uint64(e))
+		}
+		n += 1 + sov(uint64(l)) + l
+	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
 	}
@@ -558,6 +607,13 @@ func (m *ProjectGetRequest) SizeVT() (n int) {
 	}
 	if m.IsArchived {
 		n += 2
+	}
+	if len(m.ResponsibleTeamIds) > 0 {
+		l = 0
+		for _, e := range m.ResponsibleTeamIds {
+			l += sov(uint64(e))
+		}
+		n += 1 + sov(uint64(l)) + l
 	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
@@ -720,6 +776,82 @@ func (m *Project) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.IsArchived = bool(v != 0)
+		case 4:
+			if wireType == 0 {
+				var v int64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ResponsibleTeamIds = append(m.ResponsibleTeamIds, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLength
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLength
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.ResponsibleTeamIds) == 0 {
+					m.ResponsibleTeamIds = make([]int64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v int64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ResponsibleTeamIds = append(m.ResponsibleTeamIds, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponsibleTeamIds", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skip(dAtA[iNdEx:])
@@ -1232,6 +1364,82 @@ func (m *ProjectGetRequest) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.IsArchived = bool(v != 0)
+		case 4:
+			if wireType == 0 {
+				var v int64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ResponsibleTeamIds = append(m.ResponsibleTeamIds, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLength
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLength
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.ResponsibleTeamIds) == 0 {
+					m.ResponsibleTeamIds = make([]int64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v int64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ResponsibleTeamIds = append(m.ResponsibleTeamIds, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponsibleTeamIds", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skip(dAtA[iNdEx:])

@@ -168,6 +168,17 @@
             "in": "query",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "responsibleTeamIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -189,6 +200,13 @@
         },
         "isArchived": {
           "type": "boolean"
+        },
+        "responsibleTeamIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
         }
       }
     },

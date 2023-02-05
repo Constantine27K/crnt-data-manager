@@ -12,8 +12,10 @@ import (
 	projectService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/project"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
 	teamService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/team"
-	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
-	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
+	issueGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
+	issueStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
+	teamGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/gateway"
+	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
@@ -78,12 +80,14 @@ func createGrpcServer() {
 	}
 
 	validator := validate.NewValidator()
-	issueGateway := gateway.NewIssueGateWay(db)
-	issueStorage := storage.NewIssueStorage(issueGateway)
+	issueGateway := issueGateway.NewIssueGateWay(db)
+	issueStorage := issueStorage.NewIssueStorage(issueGateway)
+	teamGateway := teamGateway.NewTeamGateway(db)
+	teamStorage := teamStorage.NewTeamStorage(teamGateway)
 
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStorage))
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
-	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService())
+	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStorage))
 	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService())
 
 	log.Infof("grpc service started on port %s", port)

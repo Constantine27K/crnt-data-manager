@@ -49,6 +49,7 @@ message Project {
 	int64  id = 1;
 	string name = 2;
 	bool is_archived = 3;
+	repeated int64 responsible_team_ids = 4;
 }
 
 message ProjectCreateRequest {
@@ -72,6 +73,7 @@ message ProjectGetRequest {
 	repeated int64 ids = 1;
 	repeated string names = 2;
 	bool is_archived = 3;
+	repeated int64 responsible_team_ids = 4;
 }
 
 message ProjectGetResponse {

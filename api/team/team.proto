@@ -30,7 +30,7 @@ service TeamRegistry {
 	}
 	rpc UpdateTeam (TeamUpdateRequest) returns (TeamUpdateResponse) {
 		option (google.api.http) = {
-			put: "/v1/team"
+			put: "/v1/team/{id}"
 			body: "*"
 		};
 	}
@@ -50,7 +50,7 @@ message Team {
 	int64 id = 1;
 	string name = 2;
 	repeated string members = 3;
-	repeated project.Project projects = 4;
+	repeated int64 projects = 4;
 	string tech_owner = 5;
 	string business_owner = 6;
 	string department = 7;
