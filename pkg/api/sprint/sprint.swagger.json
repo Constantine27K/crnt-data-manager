@@ -51,6 +51,70 @@
         ]
       }
     },
+    "/v1/sprint/issue/add": {
+      "post": {
+        "operationId": "SprintRegistry_AddIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintAddIssueResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sprintAddIssueRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      }
+    },
+    "/v1/sprint/issue/remove": {
+      "post": {
+        "operationId": "SprintRegistry_RemoveIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintRemoveIssueResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sprintRemoveIssueRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      }
+    },
     "/v1/sprint/{id}": {
       "get": {
         "operationId": "SprintRegistry_GetSprintByID",
@@ -154,6 +218,27 @@
             "collectionFormat": "multi"
           },
           {
+            "name": "names",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "projects",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
             "name": "startedAtAfter",
             "in": "query",
             "required": false,
@@ -199,7 +284,8 @@
           "type": "string"
         },
         "project": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "startedAt": {
           "type": "string",
@@ -227,63 +313,11 @@
         "issues": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/issueIssueInfo"
+            "type": "string",
+            "format": "int64"
           }
         }
       }
-    },
-    "issueIssueInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "compositeName": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "$ref": "#/definitions/issueIssueType"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "status": {
-          "$ref": "#/definitions/statusIssueStatus"
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "issueIssueType": {
-      "type": "string",
-      "enum": [
-        "ISSUE_TYPE_UNKNOWN",
-        "ISSUE_TYPE_EPIC",
-        "ISSUE_TYPE_STORY",
-        "ISSUE_TYPE_TASK",
-        "ISSUE_TYPE_SUBTASK"
-      ],
-      "default": "ISSUE_TYPE_UNKNOWN"
-    },
-    "priorityPriority": {
-      "type": "string",
-      "enum": [
-        "PRIORITY_UNKNOWN",
-        "PRIORITY_CRITICAL",
-        "PRIORITY_HIGH",
-        "PRIORITY_MEDIUM",
-        "PRIORITY_LOW"
-      ],
-      "default": "PRIORITY_UNKNOWN"
     },
     "protobufAny": {
       "type": "object",
@@ -309,6 +343,50 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "sprintAddIssueRequest": {
+      "type": "object",
+      "properties": {
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "issueId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "sprintAddIssueResponse": {
+      "type": "object",
+      "properties": {
+        "issueId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "sprintRemoveIssueRequest": {
+      "type": "object",
+      "properties": {
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "issueId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "sprintRemoveIssueResponse": {
+      "type": "object",
+      "properties": {
+        "issueId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -340,7 +418,7 @@
     "sprintSprintGetResponse": {
       "type": "object",
       "properties": {
-        "sprint": {
+        "sprints": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/apisprintSprint"
@@ -366,92 +444,6 @@
         "STATUS_SPRINT_FINISHED"
       ],
       "default": "STATUS_SPRINT_UNKNOWN"
-    },
-    "statusCommon": {
-      "type": "string",
-      "enum": [
-        "STATUS_COMMON_UNKNOWN",
-        "STATUS_COMMON_BACKLOG",
-        "STATUS_COMMON_IN_PROGRESS",
-        "STATUS_COMMON_DONE",
-        "STATUS_COMMON_READY_FOR_REVIEW",
-        "STATUS_COMMON_IN_REVIEW",
-        "STATUS_COMMON_REVIEW_FAILED",
-        "STATUS_COMMON_REVIEW_PASSED",
-        "STATUS_COMMON_GIVEN_TO_CUSTOMER",
-        "STATUS_COMMON_CLOSED",
-        "STATUS_COMMON_ON_HOLD"
-      ],
-      "default": "STATUS_COMMON_UNKNOWN"
-    },
-    "statusDevelopment": {
-      "type": "string",
-      "enum": [
-        "STATUS_DEVELOPMENT_UNKNOWN",
-        "STATUS_DEVELOPMENT_BACKLOG",
-        "STATUS_DEVELOPMENT_IN_PROGRESS",
-        "STATUS_DEVELOPMENT_IN_REVIEW",
-        "STATUS_DEVELOPMENT_READY_FOR_TESTING",
-        "STATUS_DEVELOPMENT_TESTING",
-        "STATUS_DEVELOPMENT_TESTING_PASSED",
-        "STATUS_DEVELOPMENT_DONE",
-        "STATUS_DEVELOPMENT_READY_TO_DEPLOY",
-        "STATUS_DEVELOPMENT_CLOSED",
-        "STATUS_DEVELOPMENT_ON_HOLD"
-      ],
-      "default": "STATUS_DEVELOPMENT_UNKNOWN"
-    },
-    "statusEpic": {
-      "type": "string",
-      "enum": [
-        "STATUS_EPIC_UNKNOWN",
-        "STATUS_EPIC_BACKLOG",
-        "STATUS_EPIC_PLANNING",
-        "STATUS_EPIC_DESIGNING",
-        "STATUS_EPIC_IT",
-        "STATUS_EPIC_DONE",
-        "STATUS_EPIC_CLOSED",
-        "STATUS_EPIC_ON_HOLD"
-      ],
-      "default": "STATUS_EPIC_UNKNOWN"
-    },
-    "statusIssueStatus": {
-      "type": "object",
-      "properties": {
-        "common": {
-          "$ref": "#/definitions/statusIssueStatusCommon"
-        },
-        "development": {
-          "$ref": "#/definitions/statusIssueStatusDevelopment"
-        },
-        "epic": {
-          "$ref": "#/definitions/statusIssueStatusEpic"
-        }
-      }
-    },
-    "statusIssueStatusCommon": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "#/definitions/statusCommon"
-        }
-      }
-    },
-    "statusIssueStatusDevelopment": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "#/definitions/statusDevelopment"
-        }
-      }
-    },
-    "statusIssueStatusEpic": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "#/definitions/statusEpic"
-        }
-      }
     }
   }
 }

@@ -2,16 +2,16 @@
 -- +goose StatementBegin
 create table if not exists sprint
 (
-    id                  bigserial primary key,
-    name                text      default '' not null,
-    project             integer   default 0  not null,
-    start               timestamp            not null,
-    finish              timestamp            not null,
-    status              integer              not null,
-    stories_backlog     integer   default 0,
-    stories_in_progress integer   default 0,
-    stories_done        integer   default 0,
-    issues              integer[] default array []::integer[]
+    id          bigserial primary key,
+    name        text      default '' not null,
+    project     integer   default 0  not null,
+    started_at  timestamp            not null,
+    finished_at timestamp            not null,
+    status      integer              not null,
+    in_backlog  integer   default 0,
+    in_progress integer   default 0,
+    in_done     integer   default 0,
+    issues      integer[] default array []::integer[]
 );
 -- +goose StatementEnd
 

@@ -13,7 +13,7 @@ import (
 
 type ProjectGateway interface {
 	Add(row *models.ProjectRow) (int64, error)
-	AddResponsibleTeam(projectID, teamID int64) error
+	AddResponsibleTeam(projectID, teamID int64) (int64, error)
 	Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error)
 	GetByID(id int64) (*models.ProjectRow, error)
 	Update(row *models.ProjectRow) (int64, error)
@@ -69,7 +69,7 @@ func (g *gateway) Add(row *models.ProjectRow) (int64, error) {
 	return id, nil
 }
 
-func (g *gateway) AddResponsibleTeam(projectID, teamID int64) error {
+func (g *gateway) AddResponsibleTeam(projectID, teamID int64) (int64, error) {
 	query := "update project set responsible_teams = array_append(responsible_teams, $2) where id = $1"
 
 	res, err := g.db.Exec(query, projectID, teamID)
@@ -79,7 +79,7 @@ func (g *gateway) AddResponsibleTeam(projectID, teamID int64) error {
 			zap.Int64("teamID", teamID),
 			zap.Error(err),
 		)
-		return err
+		return 0, err
 	}
 
 	affected, err := res.RowsAffected()
@@ -89,7 +89,7 @@ func (g *gateway) AddResponsibleTeam(projectID, teamID int64) error {
 			zap.Int64("teamID", teamID),
 			zap.Error(err),
 		)
-		return err
+		return 0, err
 	}
 
 	if affected == 0 {
@@ -98,10 +98,10 @@ func (g *gateway) AddResponsibleTeam(projectID, teamID int64) error {
 			zap.Int64("teamID", teamID),
 			zap.Error(err),
 		)
-		return fmt.Errorf("no rows affected")
+		return 0, fmt.Errorf("no rows affected")
 	}
 
-	return nil
+	return teamID, nil
 }
 
 func (g *gateway) Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error) {

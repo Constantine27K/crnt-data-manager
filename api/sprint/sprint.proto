@@ -29,6 +29,18 @@ service SprintRegistry {
 			body: "*"
 		};
 	};
+	rpc AddIssue (AddIssueRequest) returns (AddIssueResponse) {
+		option (google.api.http) = {
+			post: "/v1/sprint/issue/add"
+			body: "*"
+		};
+	};
+	rpc RemoveIssue (RemoveIssueRequest) returns (RemoveIssueResponse) {
+		option (google.api.http) = {
+			post: "/v1/sprint/issue/remove"
+			body: "*"
+		};
+	};
 	rpc UpdateSprint (SprintUpdateRequest) returns (SprintUpdateResponse) {
 		option (google.api.http) = {
 			put: "/v1/sprint/{id}"
@@ -50,14 +62,14 @@ service SprintRegistry {
 message Sprint {
 	int64 id = 1;
 	string name = 2;
-	string project = 3;
+	int64 project = 3;
 	google.protobuf.Timestamp started_at = 4;
 	google.protobuf.Timestamp finished_at = 5;
 	state.status.Sprint status = 6;
 	int64 stories_backlog = 7;
 	int64 stories_in_progress = 8;
 	int64 stories_done = 9;
-	repeated tasks.issue.IssueInfo issues = 10;
+	repeated int64 issues = 10;
 }
 
 message SprintCreateRequest {
@@ -66,6 +78,24 @@ message SprintCreateRequest {
 
 message SprintCreateResponse {
 	int64 id = 1;
+}
+
+message AddIssueRequest {
+	int64 sprint_id = 1;
+	int64 issue_id = 2;
+}
+
+message AddIssueResponse {
+	int64 issue_id = 1;
+}
+
+message RemoveIssueRequest {
+	int64 sprint_id = 1;
+	int64 issue_id = 2;
+}
+
+message RemoveIssueResponse {
+	int64 issue_id = 1;
 }
 
 message SprintUpdateRequest {
@@ -79,13 +109,15 @@ message SprintUpdateResponse {
 
 message SprintGetRequest {
 	repeated int64 ids = 1;
-	google.protobuf.Timestamp started_at_after = 3;
-	google.protobuf.Timestamp finished_at_before = 4;
-	state.status.Sprint status = 5;
+	repeated string names = 2;
+	repeated int64 projects = 3;
+	google.protobuf.Timestamp started_at_after = 4;
+	google.protobuf.Timestamp finished_at_before = 5;
+	state.status.Sprint status = 6;
 }
 
 message SprintGetResponse {
-	repeated Sprint sprint = 1;
+	repeated Sprint sprints = 1;
 }
 
 message SprintGetByIDRequest {

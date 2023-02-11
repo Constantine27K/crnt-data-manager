@@ -16,6 +16,8 @@ import (
 	issueStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
 	projectGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/gateway"
 	projectStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/storage"
+	sprintGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/sprint/gateway"
+	sprintStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/sprint/storage"
 	teamGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/gateway"
 	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
@@ -86,6 +88,9 @@ func createGrpcServer() {
 	issueGw := issueGateway.NewIssueGateWay(db)
 	issueStore := issueStorage.NewIssueStorage(issueGw)
 
+	sprintGw := sprintGateway.NewSprintGateway(db)
+	sprintStore := sprintStorage.NewSprintStorage(sprintGw)
+
 	teamGw := teamGateway.NewTeamGateway(db)
 	teamStore := teamStorage.NewTeamStorage(teamGw)
 
@@ -93,7 +98,7 @@ func createGrpcServer() {
 	projectStore := projectStorage.NewProjectStorage(projectGw)
 
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStore))
-	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
+	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore))
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStore))
 	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore))
 

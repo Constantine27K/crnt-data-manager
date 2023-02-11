@@ -35,12 +35,7 @@ func (s *storage) Add(project *desc.Project) (int64, error) {
 }
 
 func (s *storage) AddResponsibleTeam(projectID, teamID int64) (int64, error) {
-	err := s.gw.AddResponsibleTeam(projectID, teamID)
-	if err != nil {
-		return 0, err
-	}
-
-	return teamID, err
+	return s.gw.AddResponsibleTeam(projectID, teamID)
 }
 
 func (s *storage) Get(filter *models.ProjectFilter) ([]*desc.Project, error) {

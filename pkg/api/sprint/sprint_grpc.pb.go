@@ -23,6 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SprintRegistryClient interface {
 	CreateSprint(ctx context.Context, in *SprintCreateRequest, opts ...grpc.CallOption) (*SprintCreateResponse, error)
+	AddIssue(ctx context.Context, in *AddIssueRequest, opts ...grpc.CallOption) (*AddIssueResponse, error)
+	RemoveIssue(ctx context.Context, in *RemoveIssueRequest, opts ...grpc.CallOption) (*RemoveIssueResponse, error)
 	UpdateSprint(ctx context.Context, in *SprintUpdateRequest, opts ...grpc.CallOption) (*SprintUpdateResponse, error)
 	GetSprint(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error)
 	GetSprintByID(ctx context.Context, in *SprintGetByIDRequest, opts ...grpc.CallOption) (*SprintGetByIDResponse, error)
@@ -39,6 +41,24 @@ func NewSprintRegistryClient(cc grpc.ClientConnInterface) SprintRegistryClient {
 func (c *sprintRegistryClient) CreateSprint(ctx context.Context, in *SprintCreateRequest, opts ...grpc.CallOption) (*SprintCreateResponse, error) {
 	out := new(SprintCreateResponse)
 	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/CreateSprint", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sprintRegistryClient) AddIssue(ctx context.Context, in *AddIssueRequest, opts ...grpc.CallOption) (*AddIssueResponse, error) {
+	out := new(AddIssueResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/AddIssue", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sprintRegistryClient) RemoveIssue(ctx context.Context, in *RemoveIssueRequest, opts ...grpc.CallOption) (*RemoveIssueResponse, error) {
+	out := new(RemoveIssueResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/RemoveIssue", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,6 +97,8 @@ func (c *sprintRegistryClient) GetSprintByID(ctx context.Context, in *SprintGetB
 // for forward compatibility
 type SprintRegistryServer interface {
 	CreateSprint(context.Context, *SprintCreateRequest) (*SprintCreateResponse, error)
+	AddIssue(context.Context, *AddIssueRequest) (*AddIssueResponse, error)
+	RemoveIssue(context.Context, *RemoveIssueRequest) (*RemoveIssueResponse, error)
 	UpdateSprint(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error)
 	GetSprint(context.Context, *SprintGetRequest) (*SprintGetResponse, error)
 	GetSprintByID(context.Context, *SprintGetByIDRequest) (*SprintGetByIDResponse, error)
@@ -88,6 +110,12 @@ type UnimplementedSprintRegistryServer struct {
 
 func (UnimplementedSprintRegistryServer) CreateSprint(context.Context, *SprintCreateRequest) (*SprintCreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSprint not implemented")
+}
+func (UnimplementedSprintRegistryServer) AddIssue(context.Context, *AddIssueRequest) (*AddIssueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddIssue not implemented")
+}
+func (UnimplementedSprintRegistryServer) RemoveIssue(context.Context, *RemoveIssueRequest) (*RemoveIssueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveIssue not implemented")
 }
 func (UnimplementedSprintRegistryServer) UpdateSprint(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSprint not implemented")
@@ -124,6 +152,42 @@ func _SprintRegistry_CreateSprint_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SprintRegistryServer).CreateSprint(ctx, req.(*SprintCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SprintRegistry_AddIssue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddIssueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SprintRegistryServer).AddIssue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/AddIssue",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SprintRegistryServer).AddIssue(ctx, req.(*AddIssueRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SprintRegistry_RemoveIssue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveIssueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SprintRegistryServer).RemoveIssue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/RemoveIssue",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SprintRegistryServer).RemoveIssue(ctx, req.(*RemoveIssueRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,6 +256,14 @@ var SprintRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateSprint",
 			Handler:    _SprintRegistry_CreateSprint_Handler,
+		},
+		{
+			MethodName: "AddIssue",
+			Handler:    _SprintRegistry_AddIssue_Handler,
+		},
+		{
+			MethodName: "RemoveIssue",
+			Handler:    _SprintRegistry_RemoveIssue_Handler,
 		},
 		{
 			MethodName: "UpdateSprint",
