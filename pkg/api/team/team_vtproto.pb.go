@@ -6,8 +6,6 @@ package team
 
 import (
 	fmt "fmt"
-	project "github.com/Constantine27K/crnt-data-manager/pkg/api/project"
-	proto "google.golang.org/protobuf/proto"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	io "io"
 	bits "math/bits"
@@ -72,28 +70,25 @@ func (m *Team) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 	}
 	if len(m.Projects) > 0 {
-		for iNdEx := len(m.Projects) - 1; iNdEx >= 0; iNdEx-- {
-			if marshalto, ok := interface{}(m.Projects[iNdEx]).(interface {
-				MarshalToSizedBufferVT([]byte) (int, error)
-			}); ok {
-				size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarint(dAtA, i, uint64(size))
-			} else {
-				encoded, err := proto.Marshal(m.Projects[iNdEx])
-				if err != nil {
-					return 0, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = encodeVarint(dAtA, i, uint64(len(encoded)))
-			}
-			i--
-			dAtA[i] = 0x22
+		var pksize2 int
+		for _, num := range m.Projects {
+			pksize2 += sov(uint64(num))
 		}
+		i -= pksize2
+		j1 := i
+		for _, num1 := range m.Projects {
+			num := uint64(num1)
+			for num >= 1<<7 {
+				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA[j1] = uint8(num)
+			j1++
+		}
+		i = encodeVarint(dAtA, i, uint64(pksize2))
+		i--
+		dAtA[i] = 0x22
 	}
 	if len(m.Members) > 0 {
 		for iNdEx := len(m.Members) - 1; iNdEx >= 0; iNdEx-- {
@@ -515,16 +510,11 @@ func (m *Team) SizeVT() (n int) {
 		}
 	}
 	if len(m.Projects) > 0 {
+		l = 0
 		for _, e := range m.Projects {
-			if size, ok := interface{}(e).(interface {
-				SizeVT() int
-			}); ok {
-				l = size.SizeVT()
-			} else {
-				l = proto.Size(e)
-			}
-			n += 1 + l + sov(uint64(l))
+			l += sov(uint64(e))
 		}
+		n += 1 + sov(uint64(l)) + l
 	}
 	l = len(m.TechOwner)
 	if l > 0 {
@@ -808,47 +798,81 @@ func (m *Team) UnmarshalVT(dAtA []byte) error {
 			m.Members = append(m.Members, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Projects", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflow
+			if wireType == 0 {
+				var v int64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
 				}
-				if iNdEx >= l {
+				m.Projects = append(m.Projects, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLength
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLength
+				}
+				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
 				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLength
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLength
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Projects = append(m.Projects, &project.Project{})
-			if unmarshal, ok := interface{}(m.Projects[len(m.Projects)-1]).(interface {
-				UnmarshalVT([]byte) error
-			}); ok {
-				if err := unmarshal.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
-					return err
+				elementCount = count
+				if elementCount != 0 && len(m.Projects) == 0 {
+					m.Projects = make([]int64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v int64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Projects = append(m.Projects, v)
 				}
 			} else {
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], m.Projects[len(m.Projects)-1]); err != nil {
-					return err
-				}
+				return fmt.Errorf("proto: wrong wireType = %d for field Projects", wireType)
 			}
-			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TechOwner", wireType)

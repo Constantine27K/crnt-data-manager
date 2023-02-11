@@ -51,6 +51,70 @@
         ]
       }
     },
+    "/v1/sprint/issue/add": {
+      "post": {
+        "operationId": "SprintRegistry_AddIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintAddIssueResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sprintAddIssueRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      }
+    },
+    "/v1/sprint/issue/remove": {
+      "post": {
+        "operationId": "SprintRegistry_RemoveIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintRemoveIssueResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/sprintRemoveIssueRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      }
+    },
     "/v1/sprint/{id}": {
       "get": {
         "operationId": "SprintRegistry_GetSprintByID",
@@ -154,6 +218,27 @@
             "collectionFormat": "multi"
           },
           {
+            "name": "names",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "projects",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
             "name": "startedAtAfter",
             "in": "query",
             "required": false,
@@ -174,6 +259,7 @@
             "type": "string",
             "enum": [
               "STATUS_SPRINT_UNKNOWN",
+              "STATUS_SPRINT_BACKLOG",
               "STATUS_SPRINT_ACTIVE",
               "STATUS_SPRINT_FINISHED"
             ],
@@ -198,7 +284,8 @@
           "type": "string"
         },
         "project": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "startedAt": {
           "type": "string",
@@ -226,60 +313,11 @@
         "issues": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/issueIssueInfo"
+            "type": "string",
+            "format": "int64"
           }
         }
       }
-    },
-    "issueIssueInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "compositeName": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "$ref": "#/definitions/issueIssueType"
-        },
-        "assigned": {
-          "type": "string"
-        },
-        "priority": {
-          "$ref": "#/definitions/priorityPriority"
-        },
-        "storyPoints": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "issueIssueType": {
-      "type": "string",
-      "enum": [
-        "ISSUE_TYPE_UNKNOWN",
-        "ISSUE_TYPE_EPIC",
-        "ISSUE_TYPE_STORY",
-        "ISSUE_TYPE_TASK",
-        "ISSUE_TYPE_SUBTASK"
-      ],
-      "default": "ISSUE_TYPE_UNKNOWN"
-    },
-    "priorityPriority": {
-      "type": "string",
-      "enum": [
-        "PRIORITY_UNKNOWN",
-        "PRIORITY_CRITICAL",
-        "PRIORITY_HIGH",
-        "PRIORITY_MEDIUM",
-        "PRIORITY_LOW"
-      ],
-      "default": "PRIORITY_UNKNOWN"
     },
     "protobufAny": {
       "type": "object",
@@ -305,6 +343,50 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "sprintAddIssueRequest": {
+      "type": "object",
+      "properties": {
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "issueId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "sprintAddIssueResponse": {
+      "type": "object",
+      "properties": {
+        "issueId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "sprintRemoveIssueRequest": {
+      "type": "object",
+      "properties": {
+        "sprintId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "issueId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "sprintRemoveIssueResponse": {
+      "type": "object",
+      "properties": {
+        "issueId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -336,7 +418,7 @@
     "sprintSprintGetResponse": {
       "type": "object",
       "properties": {
-        "sprint": {
+        "sprints": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/apisprintSprint"
@@ -357,6 +439,7 @@
       "type": "string",
       "enum": [
         "STATUS_SPRINT_UNKNOWN",
+        "STATUS_SPRINT_BACKLOG",
         "STATUS_SPRINT_ACTIVE",
         "STATUS_SPRINT_FINISHED"
       ],

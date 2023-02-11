@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProjectRegistryClient interface {
 	CreateProject(ctx context.Context, in *ProjectCreateRequest, opts ...grpc.CallOption) (*ProjectCreateResponse, error)
+	AddResponsibleTeam(ctx context.Context, in *ProjectAddTeamRequest, opts ...grpc.CallOption) (*ProjectAddTeamResponse, error)
 	UpdateProject(ctx context.Context, in *ProjectUpdateRequest, opts ...grpc.CallOption) (*ProjectUpdateResponse, error)
 	GetProjects(ctx context.Context, in *ProjectGetRequest, opts ...grpc.CallOption) (*ProjectGetResponse, error)
 	GetProjectByID(ctx context.Context, in *ProjectGetByIDRequest, opts ...grpc.CallOption) (*ProjectGetByIDResponse, error)
@@ -39,6 +40,15 @@ func NewProjectRegistryClient(cc grpc.ClientConnInterface) ProjectRegistryClient
 func (c *projectRegistryClient) CreateProject(ctx context.Context, in *ProjectCreateRequest, opts ...grpc.CallOption) (*ProjectCreateResponse, error) {
 	out := new(ProjectCreateResponse)
 	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.project.ProjectRegistry/CreateProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectRegistryClient) AddResponsibleTeam(ctx context.Context, in *ProjectAddTeamRequest, opts ...grpc.CallOption) (*ProjectAddTeamResponse, error) {
+	out := new(ProjectAddTeamResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.project.ProjectRegistry/AddResponsibleTeam", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,6 +87,7 @@ func (c *projectRegistryClient) GetProjectByID(ctx context.Context, in *ProjectG
 // for forward compatibility
 type ProjectRegistryServer interface {
 	CreateProject(context.Context, *ProjectCreateRequest) (*ProjectCreateResponse, error)
+	AddResponsibleTeam(context.Context, *ProjectAddTeamRequest) (*ProjectAddTeamResponse, error)
 	UpdateProject(context.Context, *ProjectUpdateRequest) (*ProjectUpdateResponse, error)
 	GetProjects(context.Context, *ProjectGetRequest) (*ProjectGetResponse, error)
 	GetProjectByID(context.Context, *ProjectGetByIDRequest) (*ProjectGetByIDResponse, error)
@@ -88,6 +99,9 @@ type UnimplementedProjectRegistryServer struct {
 
 func (UnimplementedProjectRegistryServer) CreateProject(context.Context, *ProjectCreateRequest) (*ProjectCreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProject not implemented")
+}
+func (UnimplementedProjectRegistryServer) AddResponsibleTeam(context.Context, *ProjectAddTeamRequest) (*ProjectAddTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddResponsibleTeam not implemented")
 }
 func (UnimplementedProjectRegistryServer) UpdateProject(context.Context, *ProjectUpdateRequest) (*ProjectUpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProject not implemented")
@@ -124,6 +138,24 @@ func _ProjectRegistry_CreateProject_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProjectRegistryServer).CreateProject(ctx, req.(*ProjectCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectRegistry_AddResponsibleTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProjectAddTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectRegistryServer).AddResponsibleTeam(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.project.ProjectRegistry/AddResponsibleTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectRegistryServer).AddResponsibleTeam(ctx, req.(*ProjectAddTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,6 +224,10 @@ var ProjectRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateProject",
 			Handler:    _ProjectRegistry_CreateProject_Handler,
+		},
+		{
+			MethodName: "AddResponsibleTeam",
+			Handler:    _ProjectRegistry_AddResponsibleTeam_Handler,
 		},
 		{
 			MethodName: "UpdateProject",

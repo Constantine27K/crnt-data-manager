@@ -189,6 +189,7 @@ func (s *storage) GetInfo(filter *models.IssueFilter) ([]*desc.IssueInfo, error)
 
 	for _, row := range issueInfoRows {
 		issueType := models.MapToProtoIssueType(row.IssueType)
+		status := models.MapToProtoStatus(row.Status)
 		priority := models.MapToProtoPriority(row.Priority)
 
 		result = append(result, &desc.IssueInfo{
@@ -197,6 +198,7 @@ func (s *storage) GetInfo(filter *models.IssueFilter) ([]*desc.IssueInfo, error)
 			Name:          row.Name,
 			Type:          issueType,
 			Assigned:      row.Assigned,
+			Status:        status,
 			Priority:      priority,
 			StoryPoints:   row.StoryPoints,
 		})
@@ -265,6 +267,7 @@ func (s *storage) GetInfoByID(id int64) (*desc.IssueInfo, error) {
 
 	issueType := models.MapToProtoIssueType(row.IssueType)
 	priority := models.MapToProtoPriority(row.Priority)
+	status := models.MapToProtoStatus(row.Status)
 
 	return &desc.IssueInfo{
 		Id:            row.ID,
@@ -272,6 +275,7 @@ func (s *storage) GetInfoByID(id int64) (*desc.IssueInfo, error) {
 		Name:          row.Name,
 		Type:          issueType,
 		Assigned:      row.Assigned,
+		Status:        status,
 		Priority:      priority,
 		StoryPoints:   row.StoryPoints,
 	}, nil

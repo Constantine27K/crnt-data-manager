@@ -43,7 +43,7 @@ var (
 		"comments", "author", "assigned", "qa", "reviewer", "template", "created_at", "updated_at",
 		"deadline", "status", "priority", "sprint_id", "project_id", "components", "story_points", "children"}
 
-	infoColumns = []string{"id", "composite_name", "name", "issue_type", "assigned", "priority", "story_points"}
+	infoColumns = []string{"id", "composite_name", "name", "issue_type", "assigned", "status", "priority", "story_points"}
 )
 
 func (g *gateway) Add(issueRow *models.IssueRow) (int64, error) {
@@ -260,6 +260,7 @@ func (g *gateway) GetInfo(filter *models.IssueFilter) ([]*models.IssueInfoRow, e
 			&issueRow.Name,
 			&issueRow.IssueType,
 			&issueRow.Assigned,
+			&issueRow.Status,
 			&issueRow.Priority,
 			&issueRow.StoryPoints,
 		)
@@ -335,11 +336,13 @@ func (g *gateway) GetInfoByID(id int64) (*models.IssueInfoRow, error) {
 	}
 
 	var issueInfoRow models.IssueInfoRow
-	err = g.db.QueryRow(query, args...).Scan(&issueInfoRow.ID,
+	err = g.db.QueryRow(query, args...).Scan(
+		&issueInfoRow.ID,
 		&issueInfoRow.CompositeName,
 		&issueInfoRow.Name,
 		&issueInfoRow.IssueType,
 		&issueInfoRow.Assigned,
+		&issueInfoRow.Status,
 		&issueInfoRow.Priority,
 		&issueInfoRow.StoryPoints,
 	)

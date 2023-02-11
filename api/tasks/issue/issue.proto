@@ -97,7 +97,8 @@ message IssueInfo {
 	IssueType type = 4;
 	string assigned = 5;
 	state.priority.Priority priority = 6;
-	int64 story_points = 7;
+	state.status.IssueStatus status = 7;
+	int64 story_points = 8;
 }
 
 message IssueCreateRequest {

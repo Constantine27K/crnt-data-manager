@@ -49,36 +49,6 @@
         "tags": [
           "TeamRegistry"
         ]
-      },
-      "put": {
-        "operationId": "TeamRegistry_UpdateTeam",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/teamTeamUpdateResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/teamTeamUpdateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "TeamRegistry"
-        ]
       }
     },
     "/v1/team/{id}": {
@@ -105,6 +75,48 @@
             "required": true,
             "type": "string",
             "format": "int64"
+          }
+        ],
+        "tags": [
+          "TeamRegistry"
+        ]
+      },
+      "put": {
+        "operationId": "TeamRegistry_UpdateTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/teamTeamUpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "team": {
+                  "$ref": "#/definitions/teamTeam"
+                }
+              }
+            }
           }
         ],
         "tags": [
@@ -169,21 +181,6 @@
     }
   },
   "definitions": {
-    "projectProject": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        },
-        "isArchived": {
-          "type": "boolean"
-        }
-      }
-    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -230,7 +227,8 @@
         "projects": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/projectProject"
+            "type": "string",
+            "format": "int64"
           }
         },
         "techOwner": {
@@ -277,18 +275,6 @@
           "items": {
             "$ref": "#/definitions/teamTeam"
           }
-        }
-      }
-    },
-    "teamTeamUpdateRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "team": {
-          "$ref": "#/definitions/teamTeam"
         }
       }
     },

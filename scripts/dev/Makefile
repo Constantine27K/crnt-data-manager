@@ -5,8 +5,6 @@ MIGRATION_DIR := ../migrations/
 
 .PHONY: up-local-db
 up-local-db: down-local-db
-	#${INFO} "removing old database"
-	@docker-compose -p $(DEV_PROJECT) -f $(DEV_COMPOSE_FILE) down
 	#${INFO} "Starting shard database"
 	@docker-compose -p $(DEV_PROJECT) -f $(DEV_COMPOSE_FILE) up -d postgres
 	@docker-compose -p $(DEV_PROJECT) -f $(DEV_COMPOSE_FILE) run --rm pg-up-checker

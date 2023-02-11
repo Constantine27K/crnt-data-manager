@@ -51,6 +51,38 @@
         ]
       }
     },
+    "/v1/project/team": {
+      "post": {
+        "operationId": "ProjectRegistry_AddResponsibleTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/projectProjectAddTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/projectProjectAddTeamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProjectRegistry"
+        ]
+      }
+    },
     "/v1/project/{id}": {
       "get": {
         "operationId": "ProjectRegistry_GetProjectByID",
@@ -168,6 +200,17 @@
             "in": "query",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "responsibleTeamIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
           }
         ],
         "tags": [
@@ -189,6 +232,35 @@
         },
         "isArchived": {
           "type": "boolean"
+        },
+        "responsibleTeamIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "projectProjectAddTeamRequest": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "teamId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "projectProjectAddTeamResponse": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

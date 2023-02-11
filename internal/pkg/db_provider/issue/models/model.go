@@ -71,6 +71,7 @@ type IssueInfoRow struct {
 	Name          string    `db:"name"`
 	IssueType     IssueType `db:"issue_type"`
 	Assigned      string    `db:"assigned"`
+	Status        int32     `db:"status"`
 	Priority      Priority  `db:"priority"`
 	StoryPoints   int64     `db:"story_points"`
 }
