@@ -679,6 +679,9 @@
         "priority": {
           "$ref": "#/definitions/priorityPriority"
         },
+        "status": {
+          "$ref": "#/definitions/statusIssueStatus"
+        },
         "storyPoints": {
           "type": "string",
           "format": "int64"

@@ -14,6 +14,8 @@ import (
 	teamService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/team"
 	issueGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
 	issueStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
+	projectGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/gateway"
+	projectStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/storage"
 	teamGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/gateway"
 	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
@@ -80,15 +82,20 @@ func createGrpcServer() {
 	}
 
 	validator := validate.NewValidator()
-	issueGateway := issueGateway.NewIssueGateWay(db)
-	issueStorage := issueStorage.NewIssueStorage(issueGateway)
-	teamGateway := teamGateway.NewTeamGateway(db)
-	teamStorage := teamStorage.NewTeamStorage(teamGateway)
 
-	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStorage))
+	issueGw := issueGateway.NewIssueGateWay(db)
+	issueStore := issueStorage.NewIssueStorage(issueGw)
+
+	teamGw := teamGateway.NewTeamGateway(db)
+	teamStore := teamStorage.NewTeamStorage(teamGw)
+
+	projectGw := projectGateway.NewProjectGateway(db)
+	projectStore := projectStorage.NewProjectStorage(projectGw)
+
+	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStore))
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService())
-	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStorage))
-	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService())
+	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStore))
+	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore))
 
 	log.Infof("grpc service started on port %s", port)
 
