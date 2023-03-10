@@ -8,16 +8,16 @@ import (
 
 type Implementation struct {
 	project.UnimplementedProjectRegistryServer
-	storage   storage.ProjectStorage
 	validator validate.Validator
+	storage   storage.ProjectStorage
 }
 
 func NewService(
-	storage storage.ProjectStorage,
 	validator validate.Validator,
+	storage storage.ProjectStorage,
 ) *Implementation {
 	return &Implementation{
-		storage:   storage,
 		validator: validator,
+		storage:   storage,
 	}
 }

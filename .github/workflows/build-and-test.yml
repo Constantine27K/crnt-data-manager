@@ -1,0 +1,29 @@
+name: build-and-test
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+      - main
+      - release/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.19.x'
+          cache: true
+      - name: Install dependencies
+        run: go get .
+      - name: Build
+        run: go build -o ./bin/crnt-data-manager ./cmd/crnt-data-manager/main.go
+      - name: Test with the Go CLI
+        run: |
+          go test ./...
+          go test -v -count=1 -tags integration ./integration_tests/suites/...
