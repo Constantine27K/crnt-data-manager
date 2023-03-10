@@ -124,6 +124,50 @@
         ]
       }
     },
+    "/v1/issue/{id}/comment": {
+      "post": {
+        "operationId": "IssueRegistry_AddComment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssueAddCommentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "$ref": "#/definitions/commentsComment"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
+    },
     "/v1/issue/{parentId}/subtask": {
       "post": {
         "operationId": "IssueRegistry_CreateSubtask",
@@ -494,10 +538,6 @@
     "commentsComment": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
         "author": {
           "type": "string"
         },
@@ -508,6 +548,9 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string"
         },
         "text": {
           "type": "string"
@@ -608,6 +651,15 @@
           "items": {
             "$ref": "#/definitions/issueIssue"
           }
+        }
+      }
+    },
+    "issueIssueAddCommentResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

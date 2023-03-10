@@ -15,6 +15,7 @@ import (
 type IssueGateway interface {
 	Add(row *models.IssueRow) (int64, error)
 	AddChild(parentID, childID int64) error
+	AddComment(id int64, comments string) (int64, error)
 	Get(filter *models.IssueFilter) ([]*models.IssueRow, error)
 	GetInfo(filter *models.IssueFilter) ([]*models.IssueInfoRow, error)
 	GetByID(id int64) (*models.IssueRow, error)
@@ -75,6 +76,49 @@ func (g *gateway) Add(issueRow *models.IssueRow) (int64, error) {
 			zap.Error(err),
 		)
 		return 0, err
+	}
+
+	return id, nil
+}
+
+func (g *gateway) AddComment(id int64, comments string) (int64, error) {
+	query := g.builder.Update(table).
+		Where(sq.Eq{"id": id}).
+		Set("comments", comments)
+
+	stmt, args, err := query.ToSql()
+	if err != nil {
+		log.Error("Gateway.AddComment query error",
+			zap.Any("issue", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	res, err := g.db.Exec(stmt, args...)
+	if err != nil {
+		log.Error("Gateway.AddComment exec error",
+			zap.Any("issue", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		log.Error("Gateway.AddComment affected error",
+			zap.Any("issue", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	if affected == 0 {
+		log.Error("Gateway.AddComment no rows affected",
+			zap.Any("issue", id),
+			zap.Error(err),
+		)
+		return 0, fmt.Errorf("no rows affected")
 	}
 
 	return id, nil

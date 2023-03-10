@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type IssueRegistryClient interface {
 	CreateIssue(ctx context.Context, in *IssueCreateRequest, opts ...grpc.CallOption) (*IssueCreateResponse, error)
 	CreateSubtask(ctx context.Context, in *IssueCreateSubtaskRequest, opts ...grpc.CallOption) (*IssueCreateSubtaskResponse, error)
+	AddComment(ctx context.Context, in *IssueAddCommentRequest, opts ...grpc.CallOption) (*IssueAddCommentResponse, error)
 	UpdateIssue(ctx context.Context, in *IssueUpdateRequest, opts ...grpc.CallOption) (*IssueUpdateResponse, error)
 	GetIssues(ctx context.Context, in *IssueGetRequest, opts ...grpc.CallOption) (*IssueGetResponse, error)
 	GetIssueByID(ctx context.Context, in *IssueGetByIDRequest, opts ...grpc.CallOption) (*IssueGetByIDResponse, error)
@@ -51,6 +52,15 @@ func (c *issueRegistryClient) CreateIssue(ctx context.Context, in *IssueCreateRe
 func (c *issueRegistryClient) CreateSubtask(ctx context.Context, in *IssueCreateSubtaskRequest, opts ...grpc.CallOption) (*IssueCreateSubtaskResponse, error) {
 	out := new(IssueCreateSubtaskResponse)
 	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/CreateSubtask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *issueRegistryClient) AddComment(ctx context.Context, in *IssueAddCommentRequest, opts ...grpc.CallOption) (*IssueAddCommentResponse, error) {
+	out := new(IssueAddCommentResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/AddComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +118,7 @@ func (c *issueRegistryClient) GetIssueInfoByID(ctx context.Context, in *IssueInf
 type IssueRegistryServer interface {
 	CreateIssue(context.Context, *IssueCreateRequest) (*IssueCreateResponse, error)
 	CreateSubtask(context.Context, *IssueCreateSubtaskRequest) (*IssueCreateSubtaskResponse, error)
+	AddComment(context.Context, *IssueAddCommentRequest) (*IssueAddCommentResponse, error)
 	UpdateIssue(context.Context, *IssueUpdateRequest) (*IssueUpdateResponse, error)
 	GetIssues(context.Context, *IssueGetRequest) (*IssueGetResponse, error)
 	GetIssueByID(context.Context, *IssueGetByIDRequest) (*IssueGetByIDResponse, error)
@@ -124,6 +135,9 @@ func (UnimplementedIssueRegistryServer) CreateIssue(context.Context, *IssueCreat
 }
 func (UnimplementedIssueRegistryServer) CreateSubtask(context.Context, *IssueCreateSubtaskRequest) (*IssueCreateSubtaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSubtask not implemented")
+}
+func (UnimplementedIssueRegistryServer) AddComment(context.Context, *IssueAddCommentRequest) (*IssueAddCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddComment not implemented")
 }
 func (UnimplementedIssueRegistryServer) UpdateIssue(context.Context, *IssueUpdateRequest) (*IssueUpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateIssue not implemented")
@@ -184,6 +198,24 @@ func _IssueRegistry_CreateSubtask_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IssueRegistryServer).CreateSubtask(ctx, req.(*IssueCreateSubtaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IssueRegistry_AddComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueAddCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IssueRegistryServer).AddComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/AddComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IssueRegistryServer).AddComment(ctx, req.(*IssueAddCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -292,6 +324,10 @@ var IssueRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateSubtask",
 			Handler:    _IssueRegistry_CreateSubtask_Handler,
+		},
+		{
+			MethodName: "AddComment",
+			Handler:    _IssueRegistry_AddComment_Handler,
 		},
 		{
 			MethodName: "UpdateIssue",

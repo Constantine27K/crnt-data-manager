@@ -7,10 +7,10 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/comments;comments";
 
 message Comment {
-	int64 id = 1;
-	string author = 2;
-	google.protobuf.Timestamp written_at = 3;
-	google.protobuf.Timestamp updated_at = 4;
+	string author = 1;
+	google.protobuf.Timestamp written_at = 2;
+	google.protobuf.Timestamp updated_at = 3;
+	string updated_by = 4;
 	string text = 5;
 }
 
