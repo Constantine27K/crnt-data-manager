@@ -67,7 +67,7 @@ func (m *Project) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		}
 		i = encodeVarint(dAtA, i, uint64(pksize2))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x2a
 	}
 	if m.IsArchived {
 		i--
@@ -77,7 +77,14 @@ func (m *Project) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
+	}
+	if len(m.ShortName) > 0 {
+		i -= len(m.ShortName)
+		copy(dAtA[i:], m.ShortName)
+		i = encodeVarint(dAtA, i, uint64(len(m.ShortName)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
@@ -391,7 +398,7 @@ func (m *ProjectGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		}
 		i = encodeVarint(dAtA, i, uint64(pksize2))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x2a
 	}
 	if m.IsArchived {
 		i--
@@ -401,7 +408,16 @@ func (m *ProjectGetRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
+	}
+	if len(m.ShortNames) > 0 {
+		for iNdEx := len(m.ShortNames) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ShortNames[iNdEx])
+			copy(dAtA[i:], m.ShortNames[iNdEx])
+			i = encodeVarint(dAtA, i, uint64(len(m.ShortNames[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
 	}
 	if len(m.Names) > 0 {
 		for iNdEx := len(m.Names) - 1; iNdEx >= 0; iNdEx-- {
@@ -586,6 +602,10 @@ func (m *Project) SizeVT() (n int) {
 	if l > 0 {
 		n += 1 + l + sov(uint64(l))
 	}
+	l = len(m.ShortName)
+	if l > 0 {
+		n += 1 + l + sov(uint64(l))
+	}
 	if m.IsArchived {
 		n += 2
 	}
@@ -715,6 +735,12 @@ func (m *ProjectGetRequest) SizeVT() (n int) {
 	}
 	if len(m.Names) > 0 {
 		for _, s := range m.Names {
+			l = len(s)
+			n += 1 + l + sov(uint64(l))
+		}
+	}
+	if len(m.ShortNames) > 0 {
+		for _, s := range m.ShortNames {
 			l = len(s)
 			n += 1 + l + sov(uint64(l))
 		}
@@ -871,6 +897,38 @@ func (m *Project) UnmarshalVT(dAtA []byte) error {
 			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShortName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ShortName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IsArchived", wireType)
 			}
@@ -890,7 +948,7 @@ func (m *Project) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.IsArchived = bool(v != 0)
-		case 4:
+		case 5:
 			if wireType == 0 {
 				var v int64
 				for shift := uint(0); ; shift += 7 {
@@ -1618,6 +1676,38 @@ func (m *ProjectGetRequest) UnmarshalVT(dAtA []byte) error {
 			m.Names = append(m.Names, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ShortNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ShortNames = append(m.ShortNames, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IsArchived", wireType)
 			}
@@ -1637,7 +1727,7 @@ func (m *ProjectGetRequest) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.IsArchived = bool(v != 0)
-		case 4:
+		case 5:
 			if wireType == 0 {
 				var v int64
 				for shift := uint(0); ; shift += 7 {

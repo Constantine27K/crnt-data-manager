@@ -19,9 +19,11 @@ type validator struct {
 	checks []checker
 }
 
-func NewIssueValidator() Validator {
+func NewValidator() Validator {
 	return &validator{
-		checks: []checker{checkTemplate, checkName, checkType, checkDescription, checkAuthor},
+		checks: []checker{
+			checkTemplate, checkName, checkType, checkDescription, checkAuthor, checkProject,
+		},
 	}
 }
 
@@ -93,6 +95,14 @@ func checkDescription(issue *issPack.Issue) error {
 func checkAuthor(issue *issPack.Issue) error {
 	if len(issue.GetAuthor()) == 0 {
 		return ErrIssueNoAuthor
+	}
+
+	return nil
+}
+
+func checkProject(issue *issPack.Issue) error {
+	if issue.GetProjectId() == 0 {
+		return ErrIssueNoProjectID
 	}
 
 	return nil

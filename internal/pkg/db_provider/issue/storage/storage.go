@@ -1,10 +1,12 @@
 package storage
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/models"
+	projectGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/gateway"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/comments"
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -22,15 +24,27 @@ type IssueStorage interface {
 }
 
 type storage struct {
-	gw gateway.IssueGateway
+	gw        gateway.IssueGateway
+	projectGw projectGateway.ProjectGateway
 }
 
-func NewIssueStorage(gw gateway.IssueGateway) IssueStorage {
-	return &storage{gw: gw}
+func NewIssueStorage(
+	gw gateway.IssueGateway,
+	projectGw projectGateway.ProjectGateway,
+) IssueStorage {
+	return &storage{
+		gw:        gw,
+		projectGw: projectGw,
+	}
 }
 
 func (s *storage) Add(issue *desc.Issue) (int64, error) {
 	comm, err := protojson.MarshalOptions{EmitUnpopulated: true}.Marshal(issue.GetComments())
+	if err != nil {
+		return 0, err
+	}
+
+	compositeName, err := s.generateCompositeName(issue)
 	if err != nil {
 		return 0, err
 	}
@@ -53,7 +67,7 @@ func (s *storage) Add(issue *desc.Issue) (int64, error) {
 	now := time.Now().UTC()
 
 	model := &models.IssueRow{
-		CompositeName: issue.GetCompositeName(),
+		CompositeName: compositeName,
 		Name:          issue.GetName(),
 		IssueType:     issueType,
 		ParentID:      issue.GetParentId(),
@@ -77,6 +91,20 @@ func (s *storage) Add(issue *desc.Issue) (int64, error) {
 	}
 
 	return s.gw.Add(model)
+}
+
+func (s *storage) generateCompositeName(issue *desc.Issue) (string, error) {
+	projectShortName, err := s.projectGw.GetShortName(issue.GetProjectId())
+	if err != nil {
+		return "", err
+	}
+
+	lastProjectID, err := s.gw.GetProjectLastID(issue.GetProjectId())
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%s-%v", projectShortName, lastProjectID+1), nil
 }
 
 func (s *storage) CreateSubtask(parentID int64, child *desc.Issue) (int64, error) {

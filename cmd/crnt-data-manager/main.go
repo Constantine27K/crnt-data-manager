@@ -85,9 +85,6 @@ func createGrpcServer() {
 
 	validator := validate.NewValidator()
 
-	issueGw := issueGateway.NewIssueGateWay(db)
-	issueStore := issueStorage.NewIssueStorage(issueGw)
-
 	sprintGw := sprintGateway.NewSprintGateway(db)
 	sprintStore := sprintStorage.NewSprintStorage(sprintGw)
 
@@ -97,10 +94,13 @@ func createGrpcServer() {
 	projectGw := projectGateway.NewProjectGateway(db)
 	projectStore := projectStorage.NewProjectStorage(projectGw)
 
+	issueGw := issueGateway.NewIssueGateWay(db)
+	issueStore := issueStorage.NewIssueStorage(issueGw, projectGw)
+
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStore))
-	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore))
+	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore, validator))
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStore))
-	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore))
+	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore, validator))
 
 	log.Infof("grpc service started on port %s", port)
 
