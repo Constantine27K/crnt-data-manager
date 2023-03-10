@@ -104,6 +104,10 @@ run: build .run
 .PHONY: run-all
 run-all: .run-env run
 
+PHONY: test
+test:
+	go test ./internal/pkg/...
+
 PHONY: test-integration
 test-integration:
 	$(info Running local inegration tests...)

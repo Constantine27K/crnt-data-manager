@@ -109,6 +109,15 @@ func (s *storage) generateCompositeName(issue *desc.Issue) (string, error) {
 }
 
 func (s *storage) CreateSubtask(parentID int64, child *desc.Issue) (int64, error) {
+	parent, err := s.GetByID(parentID)
+	if err != nil {
+		return 0, err
+	}
+
+	child.SprintId = parent.SprintId
+	child.ProjectId = parent.ProjectId
+	child.Template = parent.Template
+
 	childID, err := s.Add(child)
 	if err != nil {
 		return 0, err

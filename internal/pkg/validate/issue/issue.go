@@ -72,11 +72,6 @@ func checkType(issue *issPack.Issue) error {
 		return ErrIssueUnknownType
 	}
 
-	if issue.GetType() == issPack.IssueType_ISSUE_TYPE_SUBTASK &&
-		issue.GetParentId() == 0 {
-		return ErrIssueNoParentIDInSubtask
-	}
-
 	return nil
 }
 

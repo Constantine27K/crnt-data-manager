@@ -35,8 +35,9 @@ func CreateIssue(opts ...issueOpt) *desc.Issue {
 				},
 			},
 		},
-		Priority:    priority.Priority_PRIORITY_LOW,
+		Priority:    priority.Priority_PRIORITY_MEDIUM,
 		StoryPoints: sp,
+		Comments:    &comments.Comments{Items: make([]*comments.Comment, 0)},
 	}
 
 	for _, opt := range opts {
@@ -46,7 +47,41 @@ func CreateIssue(opts ...issueOpt) *desc.Issue {
 	return result
 }
 
-func WithComments(author, text string) issueOpt {
+func CreateChildIssue(opts ...issueOpt) *desc.Issue {
+	const (
+		deadline = 24 * time.Hour
+		sp       = 1
+	)
+
+	result := &desc.Issue{
+		Name:        "Child issue",
+		Type:        desc.IssueType_ISSUE_TYPE_SUBTASK,
+		Description: "child issue",
+		Author:      "kibragimov",
+		Assigned:    "kibragimov",
+		Template:    template.Template_TEMPLATE_DEVELOPMENT,
+		CreatedAt:   timestamppb.Now(),
+		Deadline:    timestamppb.New(time.Now().Add(deadline)),
+		Status: &status.IssueStatus{
+			Status: &status.IssueStatus_Development{
+				Development: &status.IssueStatusDevelopment{
+					Status: status.Development_STATUS_DEVELOPMENT_IN_PROGRESS,
+				},
+			},
+		},
+		Priority:    priority.Priority_PRIORITY_LOW,
+		StoryPoints: sp,
+		Comments:    &comments.Comments{Items: make([]*comments.Comment, 0)},
+	}
+
+	for _, opt := range opts {
+		opt(result)
+	}
+
+	return result
+}
+
+func WithComment(author, text string) issueOpt {
 	return func(issue *desc.Issue) {
 		issue.Comments.Items = append(issue.Comments.Items, &comments.Comment{
 			Author:    author,
