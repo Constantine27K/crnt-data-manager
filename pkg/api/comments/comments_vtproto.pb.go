@@ -57,6 +57,13 @@ func (m *Comment) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
+	if len(m.UpdatedBy) > 0 {
+		i -= len(m.UpdatedBy)
+		copy(dAtA[i:], m.UpdatedBy)
+		i = encodeVarint(dAtA, i, uint64(len(m.UpdatedBy)))
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.UpdatedAt != nil {
 		if marshalto, ok := interface{}(m.UpdatedAt).(interface {
 			MarshalToSizedBufferVT([]byte) (int, error)
@@ -77,7 +84,7 @@ func (m *Comment) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i = encodeVarint(dAtA, i, uint64(len(encoded)))
 		}
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x1a
 	}
 	if m.WrittenAt != nil {
 		if marshalto, ok := interface{}(m.WrittenAt).(interface {
@@ -99,19 +106,14 @@ func (m *Comment) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i = encodeVarint(dAtA, i, uint64(len(encoded)))
 		}
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x12
 	}
 	if len(m.Author) > 0 {
 		i -= len(m.Author)
 		copy(dAtA[i:], m.Author)
 		i = encodeVarint(dAtA, i, uint64(len(m.Author)))
 		i--
-		dAtA[i] = 0x12
-	}
-	if m.Id != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.Id))
-		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -178,9 +180,6 @@ func (m *Comment) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Id != 0 {
-		n += 1 + sov(uint64(m.Id))
-	}
 	l = len(m.Author)
 	if l > 0 {
 		n += 1 + l + sov(uint64(l))
@@ -203,6 +202,10 @@ func (m *Comment) SizeVT() (n int) {
 		} else {
 			l = proto.Size(m.UpdatedAt)
 		}
+		n += 1 + l + sov(uint64(l))
+	}
+	l = len(m.UpdatedBy)
+	if l > 0 {
 		n += 1 + l + sov(uint64(l))
 	}
 	l = len(m.Text)
@@ -269,25 +272,6 @@ func (m *Comment) UnmarshalVT(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			m.Id = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Id |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Author", wireType)
 			}
@@ -319,7 +303,7 @@ func (m *Comment) UnmarshalVT(dAtA []byte) error {
 			}
 			m.Author = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field WrittenAt", wireType)
 			}
@@ -363,7 +347,7 @@ func (m *Comment) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
 			}
@@ -406,6 +390,38 @@ func (m *Comment) UnmarshalVT(dAtA []byte) error {
 					return err
 				}
 			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedBy", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedBy = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {

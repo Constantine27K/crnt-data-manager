@@ -37,6 +37,12 @@ service IssueRegistry {
 			body: "*"
 		};
 	};
+	rpc AddComment (IssueAddCommentRequest) returns (IssueAddCommentResponse) {
+		option (google.api.http) = {
+			post: "/v1/issue/{id}/comment"
+			body: "*"
+		};
+	};
 	rpc UpdateIssue (IssueUpdateRequest) returns (IssueUpdateResponse) {
 		option (google.api.http) = {
 			put: "/v1/issue/{id}"
@@ -115,6 +121,15 @@ message IssueCreateSubtaskRequest {
 }
 
 message IssueCreateSubtaskResponse {
+	int64 id = 1;
+}
+
+message IssueAddCommentRequest {
+	int64 id = 1;
+	comments.Comment comment = 2;
+}
+
+message IssueAddCommentResponse {
 	int64 id = 1;
 }
 

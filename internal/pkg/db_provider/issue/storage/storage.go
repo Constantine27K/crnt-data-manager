@@ -16,6 +16,7 @@ import (
 type IssueStorage interface {
 	Add(issue *desc.Issue) (int64, error)
 	CreateSubtask(parentID int64, child *desc.Issue) (int64, error)
+	AddComment(id int64, comment *comments.Comment) (int64, error)
 	Get(filter *models.IssueFilter) ([]*desc.Issue, error)
 	GetInfo(filter *models.IssueFilter) ([]*desc.IssueInfo, error)
 	GetByID(id int64) (*desc.Issue, error)
@@ -119,6 +120,30 @@ func (s *storage) CreateSubtask(parentID int64, child *desc.Issue) (int64, error
 	}
 
 	return childID, nil
+}
+
+func (s *storage) AddComment(id int64, comment *comments.Comment) (int64, error) {
+	issue, err := s.gw.GetByID(id)
+	if err != nil {
+		return 0, err
+	}
+
+	var oldComments comments.Comments
+	err = protojson.UnmarshalOptions{DiscardUnknown: true}.Unmarshal([]byte(issue.Comments), &oldComments)
+	if err != nil {
+		return 0, err
+	}
+
+	newComments := make([]*comments.Comment, 0, len(oldComments.GetItems())+1)
+	newComments = append(newComments, oldComments.GetItems()...)
+	newComments = append(newComments, comment)
+
+	comms, err := protojson.MarshalOptions{EmitUnpopulated: true}.Marshal(&comments.Comments{Items: newComments})
+	if err != nil {
+		return 0, err
+	}
+
+	return s.gw.AddComment(id, string(comms))
 }
 
 func (s *storage) Update(id int64, issue *desc.Issue) (int64, error) {
