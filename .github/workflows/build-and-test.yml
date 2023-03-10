@@ -21,16 +21,16 @@ jobs:
           cache: true
       - name: Install dependencies
         run: |
-          go get github.com/Masterminds/squirrel v1.5.3
-          go get github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.0
-          go get github.com/joho/godotenv v1.4.0
-          go get github.com/lib/pq v1.10.7
-          go get github.com/sirupsen/logrus v1.9.0
-          go get github.com/stretchr/testify v1.8.0
-          go get go.uber.org/zap v1.24.0
-          go get google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37
-          go get google.golang.org/grpc v1.52.0
-          go get google.golang.org/protobuf v1.28.2-0.20220831092852-f930b1dc76e8
+          go get github.com/Masterminds/squirrel@v1.5.3
+          go get github.com/grpc-ecosystem/grpc-gateway/v2@v2.15.0
+          go get github.com/joho/godotenv@v1.4.0
+          go get github.com/lib/pq@v1.10.7
+          go get github.com/sirupsen/logrus@v1.9.0
+          go get github.com/stretchr/testify@v1.8.0
+          go get go.uber.org/zap@v1.24.0
+          go get google.golang.org/genproto@v0.0.0-20221207170731-23e4bf6bdc37
+          go get google.golang.org/grpc@v1.52.0
+          go get google.golang.org/protobuf@v1.28.2-0.20220831092852-f930b1dc76e8
       - name: Build
         run: go build -o ./bin/crnt-data-manager ./cmd/crnt-data-manager/main.go
       - name: Test with the Go CLI
