@@ -27,6 +27,7 @@ func NewProjectStorage(gw gateway.ProjectGateway) ProjectStorage {
 func (s *storage) Add(project *desc.Project) (int64, error) {
 	row := &models.ProjectRow{
 		Name:             project.GetName(),
+		ShortName:        project.GetShortName(),
 		IsArchived:       false,
 		ResponsibleTeams: project.GetResponsibleTeamIds(),
 	}
@@ -50,6 +51,7 @@ func (s *storage) Get(filter *models.ProjectFilter) ([]*desc.Project, error) {
 		result = append(result, &desc.Project{
 			Id:                 row.ID,
 			Name:               row.Name,
+			ShortName:          row.ShortName,
 			IsArchived:         row.IsArchived,
 			ResponsibleTeamIds: row.ResponsibleTeams,
 		})
@@ -67,6 +69,7 @@ func (s *storage) GetByID(id int64) (*desc.Project, error) {
 	result := &desc.Project{
 		Id:                 row.ID,
 		Name:               row.Name,
+		ShortName:          row.ShortName,
 		IsArchived:         row.IsArchived,
 		ResponsibleTeamIds: row.ResponsibleTeams,
 	}
@@ -78,6 +81,7 @@ func (s *storage) Update(id int64, project *desc.Project) (int64, error) {
 	row := &models.ProjectRow{
 		ID:               id,
 		Name:             project.GetName(),
+		ShortName:        project.GetShortName(),
 		IsArchived:       false,
 		ResponsibleTeams: project.GetResponsibleTeamIds(),
 	}

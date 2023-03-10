@@ -1,6 +1,5 @@
 DEV_PROJECT := crnt-dm-dev
 DEV_COMPOSE_FILE := docker-compose.yml
-LOCAL_COMPOSE_FILE := docker-compose-local.yml
 MIGRATION_DIR := ../migrations/
 
 .PHONY: up-local-db
@@ -16,4 +15,4 @@ down-local-db:
 
 .PHONY: migration-apply
 migration-apply:
-	goose -dir ${MIGRATION_DIR} postgres "user=crnt-dm-user dbname=crnt-dm-db host=$(CRNT_DM_DATABASE_HOST) port=5432 sslmode=disable" up
+	goose -dir ${MIGRATION_DIR} postgres "user=crnt-dm-user dbname=crnt-dm-db password=crnt-dm-password host=localhost port=5432 sslmode=disable" up

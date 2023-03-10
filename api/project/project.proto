@@ -54,8 +54,9 @@ service ProjectRegistry {
 message Project {
 	int64  id = 1;
 	string name = 2;
-	bool is_archived = 3;
-	repeated int64 responsible_team_ids = 4;
+	string short_name = 3;
+	bool is_archived = 4;
+	repeated int64 responsible_team_ids = 5;
 }
 
 message ProjectCreateRequest {
@@ -87,8 +88,9 @@ message ProjectUpdateResponse {
 message ProjectGetRequest {
 	repeated int64 ids = 1;
 	repeated string names = 2;
-	bool is_archived = 3;
-	repeated int64 responsible_team_ids = 4;
+	repeated string short_names = 3;
+	bool is_archived = 4;
+	repeated int64 responsible_team_ids = 5;
 }
 
 message ProjectGetResponse {

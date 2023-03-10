@@ -16,6 +16,7 @@ type ProjectGateway interface {
 	AddResponsibleTeam(projectID, teamID int64) (int64, error)
 	Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error)
 	GetByID(id int64) (*models.ProjectRow, error)
+	GetShortName(id int64) (string, error)
 	Update(row *models.ProjectRow) (int64, error)
 }
 
@@ -36,12 +37,12 @@ const (
 )
 
 var (
-	columns = []string{"id", "name", "is_archived", "responsible_teams"}
+	columns = []string{"id", "name", "short_name", "is_archived", "responsible_teams"}
 )
 
 func (g *gateway) Add(row *models.ProjectRow) (int64, error) {
 	values := []interface{}{
-		row.Name, row.IsArchived, pq.Array(row.ResponsibleTeams),
+		row.Name, row.ShortName, row.IsArchived, pq.Array(row.ResponsibleTeams),
 	}
 
 	query, args, err := g.builder.Insert(table).
@@ -137,6 +138,7 @@ func (g *gateway) Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error
 		err = rows.Scan(
 			&row.ID,
 			&row.Name,
+			&row.ShortName,
 			&row.IsArchived,
 			pq.Array(&row.ResponsibleTeams),
 		)
@@ -169,6 +171,7 @@ func (g *gateway) GetByID(id int64) (*models.ProjectRow, error) {
 	err = g.db.QueryRow(query, args...).Scan(
 		&row.ID,
 		&row.Name,
+		&row.ShortName,
 		&row.IsArchived,
 		pq.Array(&row.ResponsibleTeams),
 	)
@@ -183,12 +186,41 @@ func (g *gateway) GetByID(id int64) (*models.ProjectRow, error) {
 	return &row, nil
 }
 
+func (g *gateway) GetShortName(id int64) (string, error) {
+	query, args, err := g.builder.Select("short_name").
+		From(table).
+		Where(sq.Eq{"id": id}).ToSql()
+	if err != nil {
+		log.Error("Gateway.GetShortName query error",
+			zap.Int64("id", id),
+			zap.Error(err),
+		)
+		return "", err
+	}
+
+	var shortName string
+	err = g.db.QueryRow(query, args...).Scan(&shortName)
+	if err != nil {
+		log.Error("Gateway.GetShortName scan error",
+			zap.Int64("id", id),
+			zap.Error(err),
+		)
+		return "", err
+	}
+
+	return shortName, nil
+}
+
 func (g *gateway) Update(row *models.ProjectRow) (int64, error) {
 	query := g.builder.Update(table).
 		Where(sq.Eq{"id": row.ID})
 
 	if len(row.Name) > 0 {
 		query = query.Set("name", row.Name)
+	}
+
+	if len(row.ShortName) > 0 {
+		query = query.Set("short_name", row.ShortName)
 	}
 
 	if len(row.ResponsibleTeams) > 0 {

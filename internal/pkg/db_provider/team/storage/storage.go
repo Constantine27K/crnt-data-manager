@@ -6,6 +6,7 @@ import (
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/api/team"
 )
 
+//go:generate mockery --case=underscore  --recursive --name TeamStorage
 type TeamStorage interface {
 	Add(team *desc.Team) (int64, error)
 	Get(filter *models.TeamFilter) ([]*desc.Team, error)

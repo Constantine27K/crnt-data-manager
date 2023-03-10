@@ -19,6 +19,7 @@ type IssueGateway interface {
 	GetInfo(filter *models.IssueFilter) ([]*models.IssueInfoRow, error)
 	GetByID(id int64) (*models.IssueRow, error)
 	GetInfoByID(id int64) (*models.IssueInfoRow, error)
+	GetProjectLastID(id int64) (int64, error)
 	Update(row *models.IssueRow) (int64, error)
 }
 
@@ -221,6 +222,10 @@ func (g *gateway) Get(filter *models.IssueFilter) ([]*models.IssueRow, error) {
 		result = append(result, &issueRow)
 	}
 
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return result, nil
 }
 
@@ -272,6 +277,10 @@ func (g *gateway) GetInfo(filter *models.IssueFilter) ([]*models.IssueInfoRow, e
 			return nil, err
 		}
 		result = append(result, &issueRow)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return result, nil
@@ -355,6 +364,22 @@ func (g *gateway) GetInfoByID(id int64) (*models.IssueInfoRow, error) {
 	}
 
 	return &issueInfoRow, nil
+}
+
+func (g *gateway) GetProjectLastID(id int64) (int64, error) {
+	query := "select count(id) from issue where project_id = $1"
+
+	var count int64
+	err := g.db.QueryRow(query, id).Scan(&count)
+	if err != nil {
+		log.Error("Gateway.GetLastID scan error",
+			zap.Int64("id", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (g *gateway) AddChild(parentID, childID int64) error {

@@ -498,9 +498,8 @@
           "type": "string",
           "format": "int64"
         },
-        "authorId": {
-          "type": "string",
-          "format": "int64"
+        "author": {
+          "type": "string"
         },
         "writtenAt": {
           "type": "string",
@@ -519,8 +518,8 @@
       "type": "object",
       "properties": {
         "items": {
-          "type": "object",
-          "additionalProperties": {
+          "type": "array",
+          "items": {
             "$ref": "#/definitions/commentsComment"
           }
         }

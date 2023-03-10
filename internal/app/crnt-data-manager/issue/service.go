@@ -12,7 +12,10 @@ type Implementation struct {
 	storage   storage.IssueStorage
 }
 
-func NewService(validator validate.Validator, storage storage.IssueStorage) *Implementation {
+func NewService(
+	validator validate.Validator,
+	storage storage.IssueStorage,
+) *Implementation {
 	return &Implementation{
 		validator: validator,
 		storage:   storage,
