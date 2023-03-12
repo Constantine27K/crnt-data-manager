@@ -78,7 +78,7 @@ func (s *CrntDMSuite) SetupSuite() {
 	s.helper = dbHelper
 
 	s.issueService = issueService.NewService(validator, issueStore)
-	s.projectService = projectService.NewService(validator, projectStore)
+	s.projectService = projectService.NewService(validator, projectStore, sprintStore)
 	s.teamService = teamService.NewService(validator, teamStore)
 	s.sprintService = sprintService.NewService(sprintStore, validator)
 }

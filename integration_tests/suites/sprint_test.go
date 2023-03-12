@@ -67,6 +67,36 @@ func (s *CrntDMSuite) TestSprint_Update() {
 	s.assertSprint(updSprint, gotUpdatedSprint)
 }
 
+func (s *CrntDMSuite) TestSprint_ChangeStatus() {
+	sp := fixtures.CreateSprint(
+		fixtures.WithDates(now, now.Add(time.Hour)),
+	)
+
+	respCreateSprint, err := s.sprintService.CreateSprint(s.ctx, &sprint.SprintCreateRequest{Sprint: sp})
+	require.NoError(s.T(), err)
+	sprintID := respCreateSprint.GetId()
+
+	require.Greater(s.T(), sprintID, int64(0))
+
+	respGetSprint, err := s.sprintService.GetSprintByID(s.ctx, &sprint.SprintGetByIDRequest{Id: sprintID})
+	require.NoError(s.T(), err)
+	gotSprint := respGetSprint.GetSprint()
+
+	s.assertSprint(sp, gotSprint)
+
+	respUpdateSprint, err := s.sprintService.SprintChangeStatus(s.ctx, &sprint.SprintChangeStatusRequest{Id: sprintID, Status: status.Sprint_STATUS_SPRINT_ACTIVE})
+	require.NoError(s.T(), err)
+	sprintUpdatedID := respUpdateSprint.GetId()
+
+	require.Equal(s.T(), sprintID, sprintUpdatedID)
+
+	respGetUpdatedSprint, err := s.sprintService.GetSprintByID(s.ctx, &sprint.SprintGetByIDRequest{Id: sprintID})
+	require.NoError(s.T(), err)
+	gotUpdatedSprint := respGetUpdatedSprint.GetSprint()
+
+	require.Equal(s.T(), status.Sprint_STATUS_SPRINT_ACTIVE, gotUpdatedSprint.GetStatus())
+}
+
 func (s *CrntDMSuite) TestSprint_AddIssue() {
 	sp := fixtures.CreateSprint(
 		fixtures.WithDates(now, now.Add(time.Hour)),

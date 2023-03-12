@@ -3,7 +3,10 @@ package suites
 import (
 	"github.com/Constantine27K/crnt-data-manager/integration_tests/fixtures"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/state/status"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func (s *CrntDMSuite) TestProject_Create() {
@@ -22,6 +25,27 @@ func (s *CrntDMSuite) TestProject_Create() {
 	gotProject := respGetProject.GetProject()
 
 	s.assertProject(proj, gotProject)
+
+	respGetDefaultSprint, err := s.sprintService.GetSprint(s.ctx, &sprint.SprintGetRequest{Projects: []int64{projectID}})
+	require.NoError(s.T(), err)
+	require.Equal(s.T(), 1, len(respGetDefaultSprint.GetSprints()))
+
+	sp := respGetDefaultSprint.GetSprints()[0]
+	require.Greater(s.T(), sp.GetId(), int64(0))
+	require.Equal(s.T(), "Backlog", sp.GetName())
+	require.Equal(s.T(), status.Sprint_STATUS_SPRINT_ACTIVE, sp.GetStatus())
+
+	// should meet constraint unique_backlog
+	_, err = s.sprintService.CreateSprint(s.ctx,
+		&sprint.SprintCreateRequest{
+			Sprint: &sprint.Sprint{
+				Project:    projectID,
+				Name:       "Backlog",
+				StartedAt:  timestamppb.Now(),
+				FinishedAt: timestamppb.Now(),
+			},
+		})
+	require.Error(s.T(), err)
 }
 
 func (s *CrntDMSuite) TestProject_Update() {

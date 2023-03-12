@@ -14,8 +14,14 @@ create table if not exists sprint
     issues      integer[] default array []::integer[]
 );
 -- +goose StatementEnd
+-- +goose StatementBegin
+create unique index unique_backlog on sprint (name, project) where name like 'Backlog';
+-- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 drop table if exists sprint;
+-- +goose StatementEnd
+-- +goose StatementBegin
+drop index if exists unique_backlog;
 -- +goose StatementEnd

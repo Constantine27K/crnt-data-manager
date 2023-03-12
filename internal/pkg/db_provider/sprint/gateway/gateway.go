@@ -18,6 +18,7 @@ type SprintGateway interface {
 	Get(filter *models.SprintFilter) ([]*models.SprintRow, error)
 	GetByID(id int64) (*models.SprintRow, error)
 	Update(row *models.SprintRow) (int64, error)
+	ChangeStatus(id int64, status models.Status) (int64, error)
 }
 
 const (
@@ -302,4 +303,47 @@ func (g *gateway) Update(row *models.SprintRow) (int64, error) {
 	}
 
 	return row.ID, nil
+}
+
+func (g *gateway) ChangeStatus(id int64, status models.Status) (int64, error) {
+	query := g.builder.Update(table).
+		Where(sq.Eq{"id": id}).
+		Set("status", status)
+
+	stmt, args, err := query.ToSql()
+	if err != nil {
+		log.Error("Gateway.ChangeStatus query error",
+			zap.Any("id", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	res, err := g.db.Exec(stmt, args...)
+	if err != nil {
+		log.Error("Gateway.ChangeStatus exec error",
+			zap.Any("id", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		log.Error("Gateway.ChangeStatus affected error",
+			zap.Any("id", id),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	if affected == 0 {
+		log.Error("Gateway.ChangeStatus no rows affected",
+			zap.Any("id", id),
+			zap.Error(err),
+		)
+		return 0, fmt.Errorf("no rows affected")
+	}
+
+	return id, nil
 }

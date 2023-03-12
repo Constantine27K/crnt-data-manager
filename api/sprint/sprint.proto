@@ -47,6 +47,12 @@ service SprintRegistry {
 			body: "*"
 		};
 	};
+	rpc SprintChangeStatus (SprintChangeStatusRequest) returns (SprintChangeStatusResponse) {
+		option (google.api.http) = {
+			post: "/v1/sprint/status"
+			body: "*"
+		};
+	};
 	rpc GetSprint (SprintGetRequest) returns (SprintGetResponse) {
 		option (google.api.http) = {
 			get: "/v1/sprints"
@@ -104,6 +110,15 @@ message SprintUpdateRequest {
 }
 
 message SprintUpdateResponse {
+	int64 id = 2;
+}
+
+message SprintChangeStatusRequest {
+	int64 id = 1;
+	state.status.Sprint status = 2;
+}
+
+message SprintChangeStatusResponse {
 	int64 id = 2;
 }
 
