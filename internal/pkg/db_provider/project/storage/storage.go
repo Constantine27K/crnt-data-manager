@@ -9,6 +9,7 @@ import (
 type ProjectStorage interface {
 	Add(project *desc.Project) (int64, error)
 	AddResponsibleTeam(projectID, teamID int64) (int64, error)
+	RemoveResponsibleTeam(projectID, teamID int64) (int64, error)
 	Get(filter *models.ProjectFilter) ([]*desc.Project, error)
 	GetByID(id int64) (*desc.Project, error)
 	Update(id int64, project *desc.Project) (int64, error)
@@ -37,6 +38,10 @@ func (s *storage) Add(project *desc.Project) (int64, error) {
 
 func (s *storage) AddResponsibleTeam(projectID, teamID int64) (int64, error) {
 	return s.gw.AddResponsibleTeam(projectID, teamID)
+}
+
+func (s *storage) RemoveResponsibleTeam(projectID, teamID int64) (int64, error) {
+	return s.gw.RemoveResponsibleTeam(projectID, teamID)
 }
 
 func (s *storage) Get(filter *models.ProjectFilter) ([]*desc.Project, error) {

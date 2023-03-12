@@ -110,7 +110,7 @@ test-unit:
 
 PHONY: test-integration
 test-integration:
-	$(info Running local inegration tests...)
+	$(info Running inegration tests...)
 	go test -v -count=1 -tags integration ./integration_tests/suites/...
 
 PHONY: test-all

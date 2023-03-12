@@ -14,6 +14,7 @@ import (
 type ProjectGateway interface {
 	Add(row *models.ProjectRow) (int64, error)
 	AddResponsibleTeam(projectID, teamID int64) (int64, error)
+	RemoveResponsibleTeam(projectID, teamID int64) (int64, error)
 	Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error)
 	GetByID(id int64) (*models.ProjectRow, error)
 	GetShortName(id int64) (string, error)
@@ -95,6 +96,41 @@ func (g *gateway) AddResponsibleTeam(projectID, teamID int64) (int64, error) {
 
 	if affected == 0 {
 		log.Error("Gateway.AddResponsibleTeam no rows affected",
+			zap.Int64("projectID", projectID),
+			zap.Int64("teamID", teamID),
+			zap.Error(err),
+		)
+		return 0, fmt.Errorf("no rows affected")
+	}
+
+	return projectID, nil
+}
+
+func (g *gateway) RemoveResponsibleTeam(projectID, teamID int64) (int64, error) {
+	query := "update project set responsible_teams = array_remove(responsible_teams, $2) where id = $1"
+
+	res, err := g.db.Exec(query, projectID, teamID)
+	if err != nil {
+		log.Error("Gateway.RemoveResponsibleTeam exec error",
+			zap.Int64("projectID", projectID),
+			zap.Int64("teamID", teamID),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		log.Error("Gateway.RemoveResponsibleTeam affected error",
+			zap.Int64("projectID", projectID),
+			zap.Int64("teamID", teamID),
+			zap.Error(err),
+		)
+		return 0, err
+	}
+
+	if affected == 0 {
+		log.Error("Gateway.RemoveResponsibleTeam no rows affected",
 			zap.Int64("projectID", projectID),
 			zap.Int64("teamID", teamID),
 			zap.Error(err),

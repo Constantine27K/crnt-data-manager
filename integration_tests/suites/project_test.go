@@ -102,7 +102,7 @@ func (s *CrntDMSuite) TestProject_AddTeam() {
 
 	s.assertProject(proj, gotProject)
 
-	respAddTeamProject, err := s.projectService.AddResponsibleTeam(s.ctx, &project.ProjectAddTeamRequest{ProjectId: projectID, TeamId: 2})
+	respAddTeamProject, err := s.projectService.AddResponsibleTeam(s.ctx, &project.ProjectAddTeamRequest{Id: projectID, TeamId: 2})
 	require.NoError(s.T(), err)
 	projectAddTeamID := respAddTeamProject.GetProjectId()
 
@@ -113,6 +113,48 @@ func (s *CrntDMSuite) TestProject_AddTeam() {
 	gotUpdatedProject := respGetUpdatedProject.GetProject()
 
 	require.Equal(s.T(), []int64{1, 2}, gotUpdatedProject.GetResponsibleTeamIds())
+}
+
+func (s *CrntDMSuite) TestProject_RemoveTeam() {
+	proj := fixtures.CreateProject(
+		fixtures.WithResponsibleTeams(1),
+	)
+
+	respCreateProject, err := s.projectService.CreateProject(s.ctx, &project.ProjectCreateRequest{Project: proj})
+	require.NoError(s.T(), err)
+	projectID := respCreateProject.GetId()
+
+	require.Greater(s.T(), projectID, int64(0))
+
+	respGetProject, err := s.projectService.GetProjectByID(s.ctx, &project.ProjectGetByIDRequest{Id: projectID})
+	require.NoError(s.T(), err)
+	gotProject := respGetProject.GetProject()
+
+	s.assertProject(proj, gotProject)
+
+	respAddTeamProject, err := s.projectService.AddResponsibleTeam(s.ctx, &project.ProjectAddTeamRequest{Id: projectID, TeamId: 2})
+	require.NoError(s.T(), err)
+	projectAddTeamID := respAddTeamProject.GetProjectId()
+
+	require.Equal(s.T(), projectID, projectAddTeamID)
+
+	respGetUpdatedProject, err := s.projectService.GetProjectByID(s.ctx, &project.ProjectGetByIDRequest{Id: projectID})
+	require.NoError(s.T(), err)
+	gotUpdatedProject := respGetUpdatedProject.GetProject()
+
+	require.Equal(s.T(), []int64{1, 2}, gotUpdatedProject.GetResponsibleTeamIds())
+
+	respRemoveTeamProject, err := s.projectService.RemoveResponsibleTeam(s.ctx, &project.ProjectRemoveTeamRequest{Id: projectID, TeamId: 2})
+	require.NoError(s.T(), err)
+	projectRemoveTeamID := respRemoveTeamProject.GetProjectId()
+
+	require.Equal(s.T(), projectID, projectRemoveTeamID)
+
+	respGetUpdatedProject2, err := s.projectService.GetProjectByID(s.ctx, &project.ProjectGetByIDRequest{Id: projectID})
+	require.NoError(s.T(), err)
+	gotUpdatedProject2 := respGetUpdatedProject2.GetProject()
+
+	require.Equal(s.T(), []int64{1}, gotUpdatedProject2.GetResponsibleTeamIds())
 }
 
 func (s *CrntDMSuite) assertProject(expected, actual *project.Project) {
