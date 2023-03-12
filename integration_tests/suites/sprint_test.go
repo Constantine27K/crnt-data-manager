@@ -147,7 +147,7 @@ func (s *CrntDMSuite) TestSprint_AddIssue() {
 	s.assertIssues(issue, gotIssue)
 	s.assertCompositeName(proj, gotIssue, 1)
 
-	respAddIssueToSprint, err := s.sprintService.AddIssue(s.ctx, &sprint.AddIssueRequest{SprintId: sprintID, IssueId: issueID})
+	respAddIssueToSprint, err := s.sprintService.AddIssue(s.ctx, &sprint.AddIssueRequest{Id: sprintID, IssueId: issueID})
 	require.NoError(s.T(), err)
 	sprintAddedID := respAddIssueToSprint.GetSprintId()
 
@@ -211,7 +211,7 @@ func (s *CrntDMSuite) TestSprint_RemoveIssue() {
 	s.assertIssues(issue, gotIssue)
 	s.assertCompositeName(proj, gotIssue, 1)
 
-	respAddIssueToSprint, err := s.sprintService.AddIssue(s.ctx, &sprint.AddIssueRequest{SprintId: sprintID, IssueId: issueID})
+	respAddIssueToSprint, err := s.sprintService.AddIssue(s.ctx, &sprint.AddIssueRequest{Id: sprintID, IssueId: issueID})
 	require.NoError(s.T(), err)
 	sprintAddedID := respAddIssueToSprint.GetSprintId()
 
@@ -224,7 +224,7 @@ func (s *CrntDMSuite) TestSprint_RemoveIssue() {
 	require.Equal(s.T(), 1, len(gotAddedSprint.GetIssues()))
 	require.Equal(s.T(), issueID, gotAddedSprint.GetIssues()[0])
 
-	respRemoveIssueFromSprint, err := s.sprintService.RemoveIssue(s.ctx, &sprint.RemoveIssueRequest{SprintId: sprintID, IssueId: issueID})
+	respRemoveIssueFromSprint, err := s.sprintService.RemoveIssue(s.ctx, &sprint.RemoveIssueRequest{Id: sprintID, IssueId: issueID})
 	require.NoError(s.T(), err)
 	sprintRemoveID := respRemoveIssueFromSprint.GetSprintId()
 

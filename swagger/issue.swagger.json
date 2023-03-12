@@ -168,7 +168,7 @@
         ]
       }
     },
-    "/v1/issue/{parentId}/subtask": {
+    "/v1/issue/{id}/subtask": {
       "post": {
         "operationId": "IssueRegistry_CreateSubtask",
         "responses": {
@@ -187,7 +187,7 @@
         },
         "parameters": [
           {
-            "name": "parentId",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string",

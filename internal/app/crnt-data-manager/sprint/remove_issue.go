@@ -9,7 +9,7 @@ import (
 )
 
 func (i *Implementation) RemoveIssue(ctx context.Context, req *desc.RemoveIssueRequest) (*desc.RemoveIssueResponse, error) {
-	sprintID, err := i.storage.RemoveIssue(req.GetSprintId(), req.GetIssueId())
+	sprintID, err := i.storage.RemoveIssue(req.GetId(), req.GetIssueId())
 	if err != nil {
 		log.Error("failed to remove an issue from sprint",
 			zap.Any("issue", req.GetIssueId()),

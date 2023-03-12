@@ -7,7 +7,8 @@ window.onload = function() {
         {"name":"sprint", "url":"sprint.swagger.json"},
         {"name":"issue", "url":"issue.swagger.json"},
         {"name":"team", "url":"team.swagger.json"},
-        {"name":"project", "url":"project.swagger.json"}
+        {"name":"project", "url":"project.swagger.json"},
+        {"name":"department", "url":"department.swagger.json"}
     ],
     dom_id: '#swagger-ui',
     deepLinking: true,

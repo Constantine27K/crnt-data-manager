@@ -124,7 +124,43 @@
         ]
       }
     },
-    "/v1/project/{id}/team": {
+    "/v1/project/{id}/team/{teamId}": {
+      "delete": {
+        "operationId": "ProjectRegistry_RemoveResponsibleTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/projectProjectRemoveTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ProjectRegistry"
+        ]
+      },
       "post": {
         "operationId": "ProjectRegistry_AddResponsibleTeam",
         "responses": {
@@ -150,63 +186,11 @@
             "format": "int64"
           },
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "teamId": {
-                  "type": "string",
-                  "format": "int64"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "ProjectRegistry"
-        ]
-      }
-    },
-    "/v1/project/{id}/team/remove": {
-      "post": {
-        "operationId": "ProjectRegistry_RemoveResponsibleTeam",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/projectProjectRemoveTeamResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
+            "name": "teamId",
             "in": "path",
             "required": true,
             "type": "string",
             "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "teamId": {
-                  "type": "string",
-                  "format": "int64"
-                }
-              }
-            }
           }
         ],
         "tags": [

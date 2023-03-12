@@ -204,7 +204,7 @@ func (s *CrntDMSuite) TestIssue_Children() {
 		fixtures.WithProject(respCreateProject.GetId()),
 	)
 
-	respCreateChild, err := s.issueService.CreateSubtask(s.ctx, &desc.IssueCreateSubtaskRequest{ParentId: issueID, Child: child})
+	respCreateChild, err := s.issueService.CreateSubtask(s.ctx, &desc.IssueCreateSubtaskRequest{Id: issueID, Child: child})
 	require.NoError(s.T(), err)
 	childID := respCreateChild.GetId()
 

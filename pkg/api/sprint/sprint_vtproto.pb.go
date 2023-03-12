@@ -272,8 +272,8 @@ func (m *AddIssueRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x10
 	}
-	if m.SprintId != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.SprintId))
+	if m.Id != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.Id))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -353,8 +353,8 @@ func (m *RemoveIssueRequest) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x10
 	}
-	if m.SprintId != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.SprintId))
+	if m.Id != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.Id))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -934,8 +934,8 @@ func (m *AddIssueRequest) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.SprintId != 0 {
-		n += 1 + sov(uint64(m.SprintId))
+	if m.Id != 0 {
+		n += 1 + sov(uint64(m.Id))
 	}
 	if m.IssueId != 0 {
 		n += 1 + sov(uint64(m.IssueId))
@@ -967,8 +967,8 @@ func (m *RemoveIssueRequest) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.SprintId != 0 {
-		n += 1 + sov(uint64(m.SprintId))
+	if m.Id != 0 {
+		n += 1 + sov(uint64(m.Id))
 	}
 	if m.IssueId != 0 {
 		n += 1 + sov(uint64(m.IssueId))
@@ -1720,9 +1720,9 @@ func (m *AddIssueRequest) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SprintId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			m.SprintId = 0
+			m.Id = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflow
@@ -1732,7 +1732,7 @@ func (m *AddIssueRequest) UnmarshalVT(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SprintId |= int64(b&0x7F) << shift
+				m.Id |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1879,9 +1879,9 @@ func (m *RemoveIssueRequest) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SprintId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			m.SprintId = 0
+			m.Id = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflow
@@ -1891,7 +1891,7 @@ func (m *RemoveIssueRequest) UnmarshalVT(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SprintId |= int64(b&0x7F) << shift
+				m.Id |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

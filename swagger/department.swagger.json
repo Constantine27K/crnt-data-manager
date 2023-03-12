@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Sprint",
+    "title": "Department",
     "version": "0.1"
   },
   "tags": [
     {
-      "name": "SprintRegistry"
+      "name": "DepartmentRegistry"
     }
   ],
   "schemes": [
@@ -19,14 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/sprint": {
+    "/v1/department": {
       "post": {
-        "operationId": "SprintRegistry_CreateSprint",
+        "operationId": "DepartmentRegistry_CreateDepartment",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/sprintSprintCreateResponse"
+              "$ref": "#/definitions/departmentDepartmentCreateResponse"
             }
           },
           "default": {
@@ -42,23 +42,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/sprintSprintCreateRequest"
+              "$ref": "#/definitions/departmentDepartmentCreateRequest"
             }
           }
         ],
         "tags": [
-          "SprintRegistry"
+          "DepartmentRegistry"
         ]
       }
     },
-    "/v1/sprint/{id}": {
+    "/v1/department/{id}": {
       "get": {
-        "operationId": "SprintRegistry_GetSprintByID",
+        "operationId": "DepartmentRegistry_GetDepartmentByID",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/sprintSprintGetByIDResponse"
+              "$ref": "#/definitions/departmentDepartmentGetByIDResponse"
             }
           },
           "default": {
@@ -78,16 +78,16 @@
           }
         ],
         "tags": [
-          "SprintRegistry"
+          "DepartmentRegistry"
         ]
       },
       "put": {
-        "operationId": "SprintRegistry_UpdateSprint",
+        "operationId": "DepartmentRegistry_UpdateDepartment",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/sprintSprintUpdateResponse"
+              "$ref": "#/definitions/departmentDepartmentUpdateResponse"
             }
           },
           "default": {
@@ -112,26 +112,26 @@
             "schema": {
               "type": "object",
               "properties": {
-                "sprint": {
-                  "$ref": "#/definitions/apisprintSprint"
+                "department": {
+                  "$ref": "#/definitions/departmentDepartment"
                 }
               }
             }
           }
         ],
         "tags": [
-          "SprintRegistry"
+          "DepartmentRegistry"
         ]
       }
     },
-    "/v1/sprint/{id}/issue/{issueId}": {
+    "/v1/department/{id}/project/{projectId}": {
       "delete": {
-        "operationId": "SprintRegistry_RemoveIssue",
+        "operationId": "DepartmentRegistry_DepartmentRemoveProject",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/sprintRemoveIssueResponse"
+              "$ref": "#/definitions/departmentDepartmentRemoveProjectResponse"
             }
           },
           "default": {
@@ -150,7 +150,7 @@
             "format": "int64"
           },
           {
-            "name": "issueId",
+            "name": "projectId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -158,16 +158,16 @@
           }
         ],
         "tags": [
-          "SprintRegistry"
+          "DepartmentRegistry"
         ]
       },
       "post": {
-        "operationId": "SprintRegistry_AddIssue",
+        "operationId": "DepartmentRegistry_DepartmentAddProject",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/sprintAddIssueResponse"
+              "$ref": "#/definitions/departmentDepartmentAddProjectResponse"
             }
           },
           "default": {
@@ -186,7 +186,7 @@
             "format": "int64"
           },
           {
-            "name": "issueId",
+            "name": "projectId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -194,62 +194,18 @@
           }
         ],
         "tags": [
-          "SprintRegistry"
+          "DepartmentRegistry"
         ]
       }
     },
-    "/v1/sprint/{id}/status": {
-      "post": {
-        "operationId": "SprintRegistry_SprintChangeStatus",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/sprintSprintChangeStatusResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "$ref": "#/definitions/statestatusSprint"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "SprintRegistry"
-        ]
-      }
-    },
-    "/v1/sprints": {
+    "/v1/departments": {
       "get": {
-        "operationId": "SprintRegistry_GetSprint",
+        "operationId": "DepartmentRegistry_GetDepartments",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/sprintSprintGetResponse"
+              "$ref": "#/definitions/departmentDepartmentGetResponse"
             }
           },
           "default": {
@@ -280,54 +236,16 @@
               "type": "string"
             },
             "collectionFormat": "multi"
-          },
-          {
-            "name": "projects",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "int64"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "startedAtAfter",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
-          },
-          {
-            "name": "finishedAtBefore",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "STATUS_SPRINT_UNKNOWN",
-              "STATUS_SPRINT_BACKLOG",
-              "STATUS_SPRINT_ACTIVE",
-              "STATUS_SPRINT_FINISHED"
-            ],
-            "default": "STATUS_SPRINT_UNKNOWN"
           }
         ],
         "tags": [
-          "SprintRegistry"
+          "DepartmentRegistry"
         ]
       }
     }
   },
   "definitions": {
-    "apisprintSprint": {
+    "departmentDepartment": {
       "type": "object",
       "properties": {
         "id": {
@@ -337,39 +255,75 @@
         "name": {
           "type": "string"
         },
-        "project": {
-          "type": "string",
-          "format": "int64"
-        },
-        "startedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "finishedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "status": {
-          "$ref": "#/definitions/statestatusSprint"
-        },
-        "storiesBacklog": {
-          "type": "string",
-          "format": "int64"
-        },
-        "storiesInProgress": {
-          "type": "string",
-          "format": "int64"
-        },
-        "storiesDone": {
-          "type": "string",
-          "format": "int64"
-        },
-        "issues": {
+        "projects": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "int64"
           }
+        }
+      }
+    },
+    "departmentDepartmentAddProjectResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "departmentDepartmentCreateRequest": {
+      "type": "object",
+      "properties": {
+        "department": {
+          "$ref": "#/definitions/departmentDepartment"
+        }
+      }
+    },
+    "departmentDepartmentCreateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "departmentDepartmentGetByIDResponse": {
+      "type": "object",
+      "properties": {
+        "department": {
+          "$ref": "#/definitions/departmentDepartment"
+        }
+      }
+    },
+    "departmentDepartmentGetResponse": {
+      "type": "object",
+      "properties": {
+        "departments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/departmentDepartment"
+          }
+        }
+      }
+    },
+    "departmentDepartmentRemoveProjectResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "departmentDepartmentUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -399,88 +353,6 @@
           }
         }
       }
-    },
-    "sprintAddIssueResponse": {
-      "type": "object",
-      "properties": {
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "sprintRemoveIssueResponse": {
-      "type": "object",
-      "properties": {
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "sprintSprintChangeStatusResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "sprintSprintCreateRequest": {
-      "type": "object",
-      "properties": {
-        "sprint": {
-          "$ref": "#/definitions/apisprintSprint"
-        }
-      }
-    },
-    "sprintSprintCreateResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "sprintSprintGetByIDResponse": {
-      "type": "object",
-      "properties": {
-        "sprint": {
-          "$ref": "#/definitions/apisprintSprint"
-        }
-      }
-    },
-    "sprintSprintGetResponse": {
-      "type": "object",
-      "properties": {
-        "sprints": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apisprintSprint"
-          }
-        }
-      }
-    },
-    "sprintSprintUpdateResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "statestatusSprint": {
-      "type": "string",
-      "enum": [
-        "STATUS_SPRINT_UNKNOWN",
-        "STATUS_SPRINT_BACKLOG",
-        "STATUS_SPRINT_ACTIVE",
-        "STATUS_SPRINT_FINISHED"
-      ],
-      "default": "STATUS_SPRINT_UNKNOWN"
     }
   }
 }

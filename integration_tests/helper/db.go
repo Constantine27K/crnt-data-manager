@@ -31,6 +31,10 @@ func (h *helper) FlushAllTables() error {
 	if err != nil {
 		return err
 	}
+	_, err = h.db.Exec("truncate table department")
+	if err != nil {
+		return err
+	}
 	_, err = h.db.Exec("truncate table team")
 	return err
 }

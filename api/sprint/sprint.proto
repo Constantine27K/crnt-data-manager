@@ -31,14 +31,12 @@ service SprintRegistry {
 	};
 	rpc AddIssue (AddIssueRequest) returns (AddIssueResponse) {
 		option (google.api.http) = {
-			post: "/v1/sprint/issue/add"
-			body: "*"
+			post: "/v1/sprint/{id}/issue/{issue_id}"
 		};
 	};
 	rpc RemoveIssue (RemoveIssueRequest) returns (RemoveIssueResponse) {
 		option (google.api.http) = {
-			post: "/v1/sprint/issue/remove"
-			body: "*"
+			delete: "/v1/sprint/{id}/issue/{issue_id}"
 		};
 	};
 	rpc UpdateSprint (SprintUpdateRequest) returns (SprintUpdateResponse) {
@@ -49,7 +47,7 @@ service SprintRegistry {
 	};
 	rpc SprintChangeStatus (SprintChangeStatusRequest) returns (SprintChangeStatusResponse) {
 		option (google.api.http) = {
-			post: "/v1/sprint/status"
+			post: "/v1/sprint/{id}/status"
 			body: "*"
 		};
 	};
@@ -87,7 +85,7 @@ message SprintCreateResponse {
 }
 
 message AddIssueRequest {
-	int64 sprint_id = 1;
+	int64 id = 1;
 	int64 issue_id = 2;
 }
 
@@ -96,7 +94,7 @@ message AddIssueResponse {
 }
 
 message RemoveIssueRequest {
-	int64 sprint_id = 1;
+	int64 id = 1;
 	int64 issue_id = 2;
 }
 
