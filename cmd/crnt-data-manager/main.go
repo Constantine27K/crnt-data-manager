@@ -100,7 +100,7 @@ func createGrpcServer() {
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStore))
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore, validator))
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStore))
-	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(validator, projectStore))
+	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(validator, projectStore, sprintStore))
 
 	log.Infof("grpc service started on port %s", port)
 

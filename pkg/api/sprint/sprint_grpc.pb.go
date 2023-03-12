@@ -26,6 +26,7 @@ type SprintRegistryClient interface {
 	AddIssue(ctx context.Context, in *AddIssueRequest, opts ...grpc.CallOption) (*AddIssueResponse, error)
 	RemoveIssue(ctx context.Context, in *RemoveIssueRequest, opts ...grpc.CallOption) (*RemoveIssueResponse, error)
 	UpdateSprint(ctx context.Context, in *SprintUpdateRequest, opts ...grpc.CallOption) (*SprintUpdateResponse, error)
+	SprintChangeStatus(ctx context.Context, in *SprintChangeStatusRequest, opts ...grpc.CallOption) (*SprintChangeStatusResponse, error)
 	GetSprint(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error)
 	GetSprintByID(ctx context.Context, in *SprintGetByIDRequest, opts ...grpc.CallOption) (*SprintGetByIDResponse, error)
 }
@@ -74,6 +75,15 @@ func (c *sprintRegistryClient) UpdateSprint(ctx context.Context, in *SprintUpdat
 	return out, nil
 }
 
+func (c *sprintRegistryClient) SprintChangeStatus(ctx context.Context, in *SprintChangeStatusRequest, opts ...grpc.CallOption) (*SprintChangeStatusResponse, error) {
+	out := new(SprintChangeStatusResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/SprintChangeStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *sprintRegistryClient) GetSprint(ctx context.Context, in *SprintGetRequest, opts ...grpc.CallOption) (*SprintGetResponse, error) {
 	out := new(SprintGetResponse)
 	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/GetSprint", in, out, opts...)
@@ -100,6 +110,7 @@ type SprintRegistryServer interface {
 	AddIssue(context.Context, *AddIssueRequest) (*AddIssueResponse, error)
 	RemoveIssue(context.Context, *RemoveIssueRequest) (*RemoveIssueResponse, error)
 	UpdateSprint(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error)
+	SprintChangeStatus(context.Context, *SprintChangeStatusRequest) (*SprintChangeStatusResponse, error)
 	GetSprint(context.Context, *SprintGetRequest) (*SprintGetResponse, error)
 	GetSprintByID(context.Context, *SprintGetByIDRequest) (*SprintGetByIDResponse, error)
 }
@@ -119,6 +130,9 @@ func (UnimplementedSprintRegistryServer) RemoveIssue(context.Context, *RemoveIss
 }
 func (UnimplementedSprintRegistryServer) UpdateSprint(context.Context, *SprintUpdateRequest) (*SprintUpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSprint not implemented")
+}
+func (UnimplementedSprintRegistryServer) SprintChangeStatus(context.Context, *SprintChangeStatusRequest) (*SprintChangeStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SprintChangeStatus not implemented")
 }
 func (UnimplementedSprintRegistryServer) GetSprint(context.Context, *SprintGetRequest) (*SprintGetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSprint not implemented")
@@ -210,6 +224,24 @@ func _SprintRegistry_UpdateSprint_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SprintRegistry_SprintChangeStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SprintChangeStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SprintRegistryServer).SprintChangeStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.sprint.SprintRegistry/SprintChangeStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SprintRegistryServer).SprintChangeStatus(ctx, req.(*SprintChangeStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SprintRegistry_GetSprint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SprintGetRequest)
 	if err := dec(in); err != nil {
@@ -268,6 +300,10 @@ var SprintRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateSprint",
 			Handler:    _SprintRegistry_UpdateSprint_Handler,
+		},
+		{
+			MethodName: "SprintChangeStatus",
+			Handler:    _SprintRegistry_SprintChangeStatus_Handler,
 		},
 		{
 			MethodName: "GetSprint",

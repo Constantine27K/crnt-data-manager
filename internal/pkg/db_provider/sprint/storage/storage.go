@@ -4,6 +4,7 @@ import (
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/sprint/gateway"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/sprint/models"
 	desc "github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/state/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -14,6 +15,7 @@ type SprintStorage interface {
 	Get(filter *models.SprintFilter) ([]*desc.Sprint, error)
 	GetByID(id int64) (*desc.Sprint, error)
 	Update(id int64, sprint *desc.Sprint) (int64, error)
+	ChangeStatus(id int64, stat status.Sprint) (int64, error)
 }
 
 type storage struct {
@@ -27,14 +29,14 @@ func NewSprintStorage(gw gateway.SprintGateway) SprintStorage {
 }
 
 func (s *storage) Add(sprint *desc.Sprint) (int64, error) {
-	status := models.MapFromProtoStatus(sprint.GetStatus())
+	mappedStatus := models.MapFromProtoStatus(sprint.GetStatus())
 
 	row := &models.SprintRow{
 		Name:       sprint.GetName(),
 		Project:    sprint.GetProject(),
 		StartedAt:  sprint.GetStartedAt().AsTime().UTC(),
 		FinishedAt: sprint.GetFinishedAt().AsTime().UTC(),
-		Status:     status,
+		Status:     mappedStatus,
 		InBacklog:  sprint.GetStoriesBacklog(),
 		InProgress: sprint.GetStoriesInProgress(),
 		InDone:     sprint.GetStoriesDone(),
@@ -53,7 +55,7 @@ func (s *storage) Get(filter *models.SprintFilter) ([]*desc.Sprint, error) {
 	}
 
 	for _, row := range rows {
-		status := models.MapToProtoStatus(row.Status)
+		mappedStatus := models.MapToProtoStatus(row.Status)
 
 		result = append(result, &desc.Sprint{
 			Id:                row.ID,
@@ -61,7 +63,7 @@ func (s *storage) Get(filter *models.SprintFilter) ([]*desc.Sprint, error) {
 			Project:           row.Project,
 			StartedAt:         timestamppb.New(row.StartedAt),
 			FinishedAt:        timestamppb.New(row.FinishedAt),
-			Status:            status,
+			Status:            mappedStatus,
 			StoriesBacklog:    row.InBacklog,
 			StoriesInProgress: row.InProgress,
 			StoriesDone:       row.InDone,
@@ -78,7 +80,7 @@ func (s *storage) GetByID(id int64) (*desc.Sprint, error) {
 		return nil, err
 	}
 
-	status := models.MapToProtoStatus(row.Status)
+	mappedStatus := models.MapToProtoStatus(row.Status)
 
 	result := &desc.Sprint{
 		Id:                row.ID,
@@ -86,7 +88,7 @@ func (s *storage) GetByID(id int64) (*desc.Sprint, error) {
 		Project:           row.Project,
 		StartedAt:         timestamppb.New(row.StartedAt),
 		FinishedAt:        timestamppb.New(row.FinishedAt),
-		Status:            status,
+		Status:            mappedStatus,
 		StoriesBacklog:    row.InBacklog,
 		StoriesInProgress: row.InProgress,
 		StoriesDone:       row.InDone,
@@ -97,7 +99,7 @@ func (s *storage) GetByID(id int64) (*desc.Sprint, error) {
 }
 
 func (s *storage) Update(id int64, sprint *desc.Sprint) (int64, error) {
-	status := models.MapFromProtoStatus(sprint.GetStatus())
+	mappedStatus := models.MapFromProtoStatus(sprint.GetStatus())
 
 	row := &models.SprintRow{
 		ID:         id,
@@ -105,7 +107,7 @@ func (s *storage) Update(id int64, sprint *desc.Sprint) (int64, error) {
 		Project:    sprint.GetProject(),
 		StartedAt:  sprint.GetStartedAt().AsTime().UTC(),
 		FinishedAt: sprint.GetFinishedAt().AsTime().UTC(),
-		Status:     status,
+		Status:     mappedStatus,
 		InBacklog:  sprint.GetStoriesBacklog(),
 		InProgress: sprint.GetStoriesInProgress(),
 		InDone:     sprint.GetStoriesDone(),
@@ -113,6 +115,12 @@ func (s *storage) Update(id int64, sprint *desc.Sprint) (int64, error) {
 	}
 
 	return s.gw.Update(row)
+}
+
+func (s *storage) ChangeStatus(id int64, stat status.Sprint) (int64, error) {
+	mappedStatus := models.MapFromProtoStatus(stat)
+
+	return s.gw.ChangeStatus(id, mappedStatus)
 }
 
 func (s *storage) AddIssue(sprintID, issueID int64) (int64, error) {

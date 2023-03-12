@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	sprintPack "github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/state/status"
 )
 
 type Validator interface {
@@ -19,7 +20,7 @@ type validator struct {
 func NewValidator() Validator {
 	return &validator{
 		checks: []checker{
-			checkName, checkProject, checkDates,
+			checkName, checkProject, checkStatus, checkDates,
 		},
 	}
 }
@@ -46,6 +47,14 @@ func checkName(sprint *sprintPack.Sprint) error {
 func checkProject(sprint *sprintPack.Sprint) error {
 	if sprint.GetProject() == 0 {
 		return fmt.Errorf("sprint should be linked to a project")
+	}
+
+	return nil
+}
+
+func checkStatus(sprint *sprintPack.Sprint) error {
+	if sprint.GetStatus() != status.Sprint_STATUS_SPRINT_BACKLOG {
+		return fmt.Errorf("new sprint should have backlog status")
 	}
 
 	return nil

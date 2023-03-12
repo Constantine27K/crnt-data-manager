@@ -224,10 +224,19 @@ func TestSprintValidator(t *testing.T) {
 			wantErr: true,
 		},
 		{
+			name: "no status",
+			input: &sprint.Sprint{
+				Name:    gofakeit.Word(),
+				Project: 1,
+			},
+			wantErr: true,
+		},
+		{
 			name: "no start date",
 			input: &sprint.Sprint{
 				Name:    gofakeit.Word(),
 				Project: 1,
+				Status:  status.Sprint_STATUS_SPRINT_BACKLOG,
 			},
 			wantErr: true,
 		},
@@ -236,6 +245,7 @@ func TestSprintValidator(t *testing.T) {
 			input: &sprint.Sprint{
 				Name:      gofakeit.Word(),
 				Project:   1,
+				Status:    status.Sprint_STATUS_SPRINT_BACKLOG,
 				StartedAt: timestamppb.Now(),
 			},
 			wantErr: true,
@@ -245,6 +255,7 @@ func TestSprintValidator(t *testing.T) {
 			input: &sprint.Sprint{
 				Name:       gofakeit.Word(),
 				Project:    1,
+				Status:     status.Sprint_STATUS_SPRINT_BACKLOG,
 				StartedAt:  timestamppb.Now(),
 				FinishedAt: timestamppb.New(time.Now().Add(-24 * time.Hour)),
 			},
@@ -255,6 +266,7 @@ func TestSprintValidator(t *testing.T) {
 			input: &sprint.Sprint{
 				Name:       gofakeit.Word(),
 				Project:    1,
+				Status:     status.Sprint_STATUS_SPRINT_BACKLOG,
 				StartedAt:  timestamppb.Now(),
 				FinishedAt: timestamppb.New(time.Now().Add(24 * time.Hour)),
 			},

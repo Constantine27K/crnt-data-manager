@@ -41,7 +41,7 @@ func (f *SprintFilter) Apply(query sq.SelectBuilder) sq.SelectBuilder {
 
 	if len(f.Projects) > 0 {
 		query = query.Where(sq.Eq{
-			"projects": f.Projects,
+			"project": f.Projects,
 		})
 	}
 
