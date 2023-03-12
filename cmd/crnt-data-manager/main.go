@@ -45,7 +45,7 @@ func main() {
 func loadEnv() {
 	// loads values from .env into the system
 	if err := godotenv.Load(); err != nil {
-		log.Error("No .env file found",
+		log.Fatal("No .env file found",
 			zap.Error(err),
 		)
 	}
@@ -100,7 +100,7 @@ func createGrpcServer() {
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStore))
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore, validator))
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStore))
-	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore, validator))
+	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(validator, projectStore))
 
 	log.Infof("grpc service started on port %s", port)
 

@@ -103,3 +103,12 @@ run: build .run
 
 .PHONY: run-all
 run-all: .run-env run
+
+PHONY: test-unit
+test-unit:
+	go test ./internal/pkg/...
+
+PHONY: test-integration
+test-integration:
+	$(info Running local inegration tests...)
+	go test -v -count=1 -tags integration ./integration_tests/suites/...

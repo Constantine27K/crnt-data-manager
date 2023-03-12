@@ -86,7 +86,7 @@ message AddIssueRequest {
 }
 
 message AddIssueResponse {
-	int64 issue_id = 1;
+	int64 sprint_id = 1;
 }
 
 message RemoveIssueRequest {
@@ -95,7 +95,7 @@ message RemoveIssueRequest {
 }
 
 message RemoveIssueResponse {
-	int64 issue_id = 1;
+	int64 sprint_id = 1;
 }
 
 message SprintUpdateRequest {

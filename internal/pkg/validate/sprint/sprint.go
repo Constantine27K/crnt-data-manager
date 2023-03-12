@@ -60,5 +60,9 @@ func checkDates(sprint *sprintPack.Sprint) error {
 		return fmt.Errorf("sprint should have a finish date")
 	}
 
+	if sprint.GetStartedAt().AsTime().After(sprint.GetFinishedAt().AsTime()) {
+		return fmt.Errorf("finish date should after start date")
+	}
+
 	return nil
 }

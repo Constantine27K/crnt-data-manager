@@ -271,7 +271,7 @@
     "projectProjectAddTeamResponse": {
       "type": "object",
       "properties": {
-        "teamId": {
+        "projectId": {
           "type": "string",
           "format": "int64"
         }

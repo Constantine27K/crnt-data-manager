@@ -25,9 +25,5 @@ func NewPostgres(opts Options) (*sql.DB, error) {
 	}
 
 	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	return db, nil
+	return db, err
 }

@@ -64,17 +64,16 @@ func checkName(issue *issPack.Issue) error {
 		return ErrIssueUnnamed
 	}
 
+	if len(issue.GetName()) > 50 {
+		return ErrIssueNameTooLong
+	}
+
 	return nil
 }
 
 func checkType(issue *issPack.Issue) error {
 	if issue.GetType() == issPack.IssueType_ISSUE_TYPE_UNKNOWN {
 		return ErrIssueUnknownType
-	}
-
-	if issue.GetType() == issPack.IssueType_ISSUE_TYPE_SUBTASK &&
-		issue.GetParentId() == 0 {
-		return ErrIssueNoParentIDInSubtask
 	}
 
 	return nil
