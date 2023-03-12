@@ -33,7 +33,7 @@ service IssueRegistry {
 	};
 	rpc CreateSubtask (IssueCreateSubtaskRequest) returns (IssueCreateSubtaskResponse) {
 		option (google.api.http) = {
-			post: "/v1/issue/{parent_id}/subtask"
+			post: "/v1/issue/{id}/subtask"
 			body: "*"
 		};
 	};
@@ -116,7 +116,7 @@ message IssueCreateResponse {
 }
 
 message IssueCreateSubtaskRequest {
-	int64 parent_id = 1;
+	int64 id = 1;
 	Issue child = 2;
 }
 

@@ -11,8 +11,14 @@ create table if not exists team
     department     text      default ''
 );
 -- +goose StatementEnd
+-- +goose StatementBegin
+create unique index unique_team on team (name);
+-- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 drop table if exists team;
+-- +goose StatementEnd
+-- +goose StatementBegin
+drop index if exists unique_team;
 -- +goose StatementEnd

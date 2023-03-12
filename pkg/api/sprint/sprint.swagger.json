@@ -51,102 +51,6 @@
         ]
       }
     },
-    "/v1/sprint/issue/add": {
-      "post": {
-        "operationId": "SprintRegistry_AddIssue",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/sprintAddIssueResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/sprintAddIssueRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SprintRegistry"
-        ]
-      }
-    },
-    "/v1/sprint/issue/remove": {
-      "post": {
-        "operationId": "SprintRegistry_RemoveIssue",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/sprintRemoveIssueResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/sprintRemoveIssueRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SprintRegistry"
-        ]
-      }
-    },
-    "/v1/sprint/status": {
-      "post": {
-        "operationId": "SprintRegistry_SprintChangeStatus",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/sprintSprintChangeStatusResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/sprintSprintChangeStatusRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SprintRegistry"
-        ]
-      }
-    },
     "/v1/sprint/{id}": {
       "get": {
         "operationId": "SprintRegistry_GetSprintByID",
@@ -210,6 +114,124 @@
               "properties": {
                 "sprint": {
                   "$ref": "#/definitions/apisprintSprint"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      }
+    },
+    "/v1/sprint/{id}/issue/{issueId}": {
+      "delete": {
+        "operationId": "SprintRegistry_RemoveIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintRemoveIssueResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "issueId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      },
+      "post": {
+        "operationId": "SprintRegistry_AddIssue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintAddIssueResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "issueId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "SprintRegistry"
+        ]
+      }
+    },
+    "/v1/sprint/{id}/status": {
+      "post": {
+        "operationId": "SprintRegistry_SprintChangeStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/sprintSprintChangeStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/statestatusSprint"
                 }
               }
             }
@@ -378,36 +400,10 @@
         }
       }
     },
-    "sprintAddIssueRequest": {
-      "type": "object",
-      "properties": {
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "issueId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "sprintAddIssueResponse": {
       "type": "object",
       "properties": {
         "sprintId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "sprintRemoveIssueRequest": {
-      "type": "object",
-      "properties": {
-        "sprintId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "issueId": {
           "type": "string",
           "format": "int64"
         }
@@ -419,18 +415,6 @@
         "sprintId": {
           "type": "string",
           "format": "int64"
-        }
-      }
-    },
-    "sprintSprintChangeStatusRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "status": {
-          "$ref": "#/definitions/statestatusSprint"
         }
       }
     },

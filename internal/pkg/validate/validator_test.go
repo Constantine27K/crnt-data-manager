@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/department"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/team"
@@ -346,6 +347,44 @@ func TestTeamValidator(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 			err := val.CheckTeam(test.input)
+			if test.wantErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestDepartmentValidator(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name    string
+		input   *department.Department
+		wantErr bool
+	}{
+		{
+			name:    "no name",
+			input:   &department.Department{},
+			wantErr: true,
+		},
+		{
+			name: "positive",
+			input: &department.Department{
+				Name: gofakeit.Word(),
+			},
+			wantErr: false,
+		},
+	}
+
+	val := NewValidator()
+
+	for _, test := range cases {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			err := val.CheckDepartment(test.input)
 			if test.wantErr {
 				require.Error(t, err)
 			} else {

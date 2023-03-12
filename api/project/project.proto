@@ -29,14 +29,12 @@ service ProjectRegistry {
 	};
 	rpc AddResponsibleTeam (ProjectAddTeamRequest) returns (ProjectAddTeamResponse) {
 		option (google.api.http) = {
-			post: "/v1/project/{id}/team"
-			body: "*"
+			post: "/v1/project/{id}/team/{team_id}"
 		};
 	};
 	rpc RemoveResponsibleTeam (ProjectRemoveTeamRequest) returns (ProjectRemoveTeamResponse) {
 		option (google.api.http) = {
-			post: "/v1/project/{id}/team/remove"
-			body: "*"
+			delete: "/v1/project/{id}/team/{team_id}"
 		};
 	};
 	rpc UpdateProject (ProjectUpdateRequest) returns (ProjectUpdateResponse) {

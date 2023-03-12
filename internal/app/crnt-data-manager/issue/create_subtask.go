@@ -14,16 +14,16 @@ func (i *Implementation) CreateSubtask(ctx context.Context, req *desc.IssueCreat
 	err := i.validator.CheckIssue(req.GetChild())
 	if err != nil {
 		log.Error("issue is not valid",
-			zap.Any("parent", req.GetParentId()),
+			zap.Any("parent", req.GetId()),
 			zap.Any("child", req.GetChild()),
 			zap.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	id, err := i.storage.CreateSubtask(req.GetParentId(), req.GetChild())
+	id, err := i.storage.CreateSubtask(req.GetId(), req.GetChild())
 	if err != nil {
 		log.Error("failed to create a subtask",
-			zap.Any("parent", req.GetParentId()),
+			zap.Any("parent", req.GetId()),
 			zap.Any("child", req.GetChild()),
 			zap.Error(err))
 		return nil, err

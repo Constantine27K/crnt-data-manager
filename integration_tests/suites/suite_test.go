@@ -6,10 +6,13 @@ import (
 	"testing"
 
 	"github.com/Constantine27K/crnt-data-manager/integration_tests/helper"
+	departmentService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/department"
 	issueService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/issue"
 	projectService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/project"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
 	teamService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/team"
+	departmentGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/department/gateway"
+	departmentStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/department/storage"
 	issueGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
 	issueStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
 	projectGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/gateway"
@@ -30,10 +33,11 @@ type CrntDMSuite struct {
 	ctx      context.Context
 	cancelFn context.CancelFunc
 
-	issueService   *issueService.Implementation
-	projectService *projectService.Implementation
-	teamService    *teamService.Implementation
-	sprintService  *sprintService.Implementation
+	issueService      *issueService.Implementation
+	projectService    *projectService.Implementation
+	teamService       *teamService.Implementation
+	sprintService     *sprintService.Implementation
+	departmentService *departmentService.Implementation
 
 	helper helper.Helper
 }
@@ -71,6 +75,9 @@ func (s *CrntDMSuite) SetupSuite() {
 	projectStore := projectStorage.NewProjectStorage(projectGw)
 	issueStore := issueStorage.NewIssueStorage(issueGw, projectGw)
 
+	departmentGw := departmentGateway.NewDepartmentGateway(db)
+	departmentStore := departmentStorage.NewDepartmentStorage(departmentGw)
+
 	dbHelper := helper.NewDBHelper(db)
 
 	s.ctx = ctx
@@ -80,7 +87,8 @@ func (s *CrntDMSuite) SetupSuite() {
 	s.issueService = issueService.NewService(validator, issueStore)
 	s.projectService = projectService.NewService(validator, projectStore, sprintStore)
 	s.teamService = teamService.NewService(validator, teamStore)
-	s.sprintService = sprintService.NewService(sprintStore, validator)
+	s.sprintService = sprintService.NewService(validator, sprintStore)
+	s.departmentService = departmentService.NewService(validator, departmentStore)
 }
 
 func (s *CrntDMSuite) TearDownSuite() {

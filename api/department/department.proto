@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package github.constantine27k.crnt_data_manager.api.department;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/Constantine27K/crnt-data-manager/pkg/api/department;department";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Department";
+		version: "0.1";
+	};
+
+	schemes: HTTP;
+	consumes: "application/json";
+	produces: "application/json";
+};
+
+service DepartmentRegistry {
+	rpc CreateDepartment (DepartmentCreateRequest) returns (DepartmentCreateResponse) {
+		option (google.api.http) = {
+			post: "/v1/department"
+			body: "*"
+		};
+	};
+	rpc DepartmentAddProject (DepartmentAddProjectRequest) returns (DepartmentAddProjectResponse) {
+		option (google.api.http) = {
+			post: "/v1/department/{id}/project/{project_id}"
+		};
+	};
+	rpc DepartmentRemoveProject (DepartmentRemoveProjectRequest) returns (DepartmentRemoveProjectResponse) {
+		option (google.api.http) = {
+			delete: "/v1/department/{id}/project/{project_id}"
+		};
+	};
+	rpc GetDepartments (DepartmentGetRequest) returns (DepartmentGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/departments"
+		};
+	};
+	rpc GetDepartmentByID (DepartmentGetByIDRequest) returns (DepartmentGetByIDResponse) {
+		option (google.api.http) = {
+			get: "/v1/department/{id}"
+		};
+	};
+	rpc UpdateDepartment (DepartmentUpdateRequest) returns (DepartmentUpdateResponse) {
+		option (google.api.http) = {
+			put: "/v1/department/{id}"
+			body: "*"
+		};
+	};
+}
+
+message Department {
+	int64 id = 1;
+	string name = 2;
+	repeated int64 projects = 3;
+}
+
+message DepartmentCreateRequest {
+	Department department = 1;
+}
+
+message DepartmentCreateResponse {
+	int64 id = 1;
+}
+
+message DepartmentAddProjectRequest {
+	int64 id = 1;
+	int64 project_id = 2;
+}
+
+message DepartmentAddProjectResponse {
+	int64 id = 1;
+}
+
+message DepartmentRemoveProjectRequest {
+	int64 id = 1;
+	int64 project_id = 2;
+}
+
+message DepartmentRemoveProjectResponse {
+	int64 id = 1;
+}
+
+message DepartmentGetRequest {
+	repeated int64  ids = 1;
+	repeated string names = 2;
+}
+
+message DepartmentGetResponse {
+	repeated Department departments = 1;
+}
+
+message DepartmentGetByIDRequest {
+	int64 id = 1;
+}
+
+message DepartmentGetByIDResponse {
+	Department department = 1;
+}
+
+message DepartmentUpdateRequest {
+	int64 id = 1;
+	Department department = 2;
+}
+
+message DepartmentUpdateResponse {
+	int64 id = 1;
+}

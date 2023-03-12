@@ -8,10 +8,13 @@ import (
 	"os"
 	"strconv"
 
+	departmentService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/department"
 	issueService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/issue"
 	projectService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/project"
 	sprintService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/sprint"
 	teamService "github.com/Constantine27K/crnt-data-manager/internal/app/crnt-data-manager/team"
+	departmentGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/department/gateway"
+	departmentStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/department/storage"
 	issueGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/gateway"
 	issueStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/issue/storage"
 	projectGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/project/gateway"
@@ -22,6 +25,7 @@ import (
 	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
+	"github.com/Constantine27K/crnt-data-manager/pkg/api/department"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
@@ -97,10 +101,14 @@ func createGrpcServer() {
 	issueGw := issueGateway.NewIssueGateWay(db)
 	issueStore := issueStorage.NewIssueStorage(issueGw, projectGw)
 
+	departmentGw := departmentGateway.NewDepartmentGateway(db)
+	departmentStore := departmentStorage.NewDepartmentStorage(departmentGw)
+
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(validator, issueStore))
-	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore, validator))
+	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(validator, sprintStore))
 	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(validator, teamStore))
 	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(validator, projectStore, sprintStore))
+	department.RegisterDepartmentRegistryServer(grpcServer, departmentService.NewService(validator, departmentStore))
 
 	log.Infof("grpc service started on port %s", port)
 
@@ -156,6 +164,13 @@ func createHttpServer() {
 	err = project.RegisterProjectRegistryHandlerClient(ctx, rmux, clientProject)
 	if err != nil {
 		log.Error("failed to register project handler client",
+			zap.Error(err),
+		)
+	}
+	clientDepartment := department.NewDepartmentRegistryClient(conn)
+	err = department.RegisterDepartmentRegistryHandlerClient(ctx, rmux, clientDepartment)
+	if err != nil {
+		log.Error("failed to register department handler client",
 			zap.Error(err),
 		)
 	}
