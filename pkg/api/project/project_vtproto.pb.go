@@ -255,8 +255,8 @@ func (m *ProjectAddTeamResponse) MarshalToSizedBufferVT(dAtA []byte) (int, error
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.TeamId != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.TeamId))
+	if m.ProjectId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.ProjectId))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -677,8 +677,8 @@ func (m *ProjectAddTeamResponse) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.TeamId != 0 {
-		n += 1 + sov(uint64(m.TeamId))
+	if m.ProjectId != 0 {
+		n += 1 + sov(uint64(m.ProjectId))
 	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
@@ -1323,9 +1323,9 @@ func (m *ProjectAddTeamResponse) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TeamId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ProjectId", wireType)
 			}
-			m.TeamId = 0
+			m.ProjectId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflow
@@ -1335,7 +1335,7 @@ func (m *ProjectAddTeamResponse) UnmarshalVT(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TeamId |= int64(b&0x7F) << shift
+				m.ProjectId |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

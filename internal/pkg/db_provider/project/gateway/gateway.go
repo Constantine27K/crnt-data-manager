@@ -102,7 +102,7 @@ func (g *gateway) AddResponsibleTeam(projectID, teamID int64) (int64, error) {
 		return 0, fmt.Errorf("no rows affected")
 	}
 
-	return teamID, nil
+	return projectID, nil
 }
 
 func (g *gateway) Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error) {

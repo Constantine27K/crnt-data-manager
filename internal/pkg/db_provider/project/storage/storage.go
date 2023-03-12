@@ -82,7 +82,7 @@ func (s *storage) Update(id int64, project *desc.Project) (int64, error) {
 		ID:               id,
 		Name:             project.GetName(),
 		ShortName:        project.GetShortName(),
-		IsArchived:       false,
+		IsArchived:       project.GetIsArchived(),
 		ResponsibleTeams: project.GetResponsibleTeamIds(),
 	}
 

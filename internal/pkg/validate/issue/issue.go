@@ -64,6 +64,10 @@ func checkName(issue *issPack.Issue) error {
 		return ErrIssueUnnamed
 	}
 
+	if len(issue.GetName()) > 50 {
+		return ErrIssueNameTooLong
+	}
+
 	return nil
 }
 

@@ -18,7 +18,9 @@ type validator struct {
 
 func NewValidator() Validator {
 	return &validator{
-		checks: []checker{},
+		checks: []checker{
+			checkNames, checkTeams,
+		},
 	}
 }
 

@@ -310,8 +310,8 @@ func (m *AddIssueResponse) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.IssueId != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.IssueId))
+	if m.SprintId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.SprintId))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -391,8 +391,8 @@ func (m *RemoveIssueResponse) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.IssueId != 0 {
-		i = encodeVarint(dAtA, i, uint64(m.IssueId))
+	if m.SprintId != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.SprintId))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -871,8 +871,8 @@ func (m *AddIssueResponse) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.IssueId != 0 {
-		n += 1 + sov(uint64(m.IssueId))
+	if m.SprintId != 0 {
+		n += 1 + sov(uint64(m.SprintId))
 	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
@@ -904,8 +904,8 @@ func (m *RemoveIssueResponse) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.IssueId != 0 {
-		n += 1 + sov(uint64(m.IssueId))
+	if m.SprintId != 0 {
+		n += 1 + sov(uint64(m.SprintId))
 	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
@@ -1695,9 +1695,9 @@ func (m *AddIssueResponse) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IssueId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SprintId", wireType)
 			}
-			m.IssueId = 0
+			m.SprintId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflow
@@ -1707,7 +1707,7 @@ func (m *AddIssueResponse) UnmarshalVT(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IssueId |= int64(b&0x7F) << shift
+				m.SprintId |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1854,9 +1854,9 @@ func (m *RemoveIssueResponse) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IssueId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SprintId", wireType)
 			}
-			m.IssueId = 0
+			m.SprintId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflow
@@ -1866,7 +1866,7 @@ func (m *RemoveIssueResponse) UnmarshalVT(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IssueId |= int64(b&0x7F) << shift
+				m.SprintId |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

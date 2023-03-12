@@ -362,7 +362,7 @@
     "sprintAddIssueResponse": {
       "type": "object",
       "properties": {
-        "issueId": {
+        "sprintId": {
           "type": "string",
           "format": "int64"
         }
@@ -384,7 +384,7 @@
     "sprintRemoveIssueResponse": {
       "type": "object",
       "properties": {
-        "issueId": {
+        "sprintId": {
           "type": "string",
           "format": "int64"
         }

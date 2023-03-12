@@ -4,6 +4,7 @@ import "errors"
 
 var (
 	ErrIssueUnnamed             = errors.New("issue should be named")
+	ErrIssueNameTooLong         = errors.New("issue name should be less or equal to 50 symbols")
 	ErrIssueUnknownType         = errors.New("issue should have type")
 	ErrIssueUnknownTemplate     = errors.New("issue should have template")
 	ErrIssueNoDescription       = errors.New("issue should have description")

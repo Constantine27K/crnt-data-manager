@@ -77,7 +77,7 @@ func (g *gateway) AddIssue(sprintID, issueID int64) (int64, error) {
 
 	res, err := g.db.Exec(query, sprintID, issueID)
 	if err != nil {
-		log.Error("Gateway.AddChild exec error",
+		log.Error("Gateway.AddIssue exec error",
 			zap.Int64("sprintID", sprintID),
 			zap.Int64("issueID", issueID),
 			zap.Error(err),
@@ -87,7 +87,7 @@ func (g *gateway) AddIssue(sprintID, issueID int64) (int64, error) {
 
 	affected, err := res.RowsAffected()
 	if err != nil {
-		log.Error("Gateway.AddChild affected error",
+		log.Error("Gateway.AddIssue affected error",
 			zap.Int64("sprintID", sprintID),
 			zap.Int64("issueID", issueID),
 			zap.Error(err),
@@ -96,7 +96,7 @@ func (g *gateway) AddIssue(sprintID, issueID int64) (int64, error) {
 	}
 
 	if affected == 0 {
-		log.Error("Gateway.AddChild no rows affected",
+		log.Error("Gateway.AddIssue no rows affected",
 			zap.Int64("sprintID", sprintID),
 			zap.Int64("issueID", issueID),
 			zap.Error(err),
@@ -104,7 +104,7 @@ func (g *gateway) AddIssue(sprintID, issueID int64) (int64, error) {
 		return 0, fmt.Errorf("no rows affected")
 	}
 
-	return issueID, nil
+	return sprintID, nil
 }
 
 func (g *gateway) RemoveIssue(sprintID, issueID int64) (int64, error) {
@@ -112,7 +112,7 @@ func (g *gateway) RemoveIssue(sprintID, issueID int64) (int64, error) {
 
 	res, err := g.db.Exec(query, sprintID, issueID)
 	if err != nil {
-		log.Error("Gateway.AddChild exec error",
+		log.Error("Gateway.RemoveIssue exec error",
 			zap.Int64("sprintID", sprintID),
 			zap.Int64("issueID", issueID),
 			zap.Error(err),
@@ -122,7 +122,7 @@ func (g *gateway) RemoveIssue(sprintID, issueID int64) (int64, error) {
 
 	affected, err := res.RowsAffected()
 	if err != nil {
-		log.Error("Gateway.AddChild affected error",
+		log.Error("Gateway.RemoveIssue affected error",
 			zap.Int64("sprintID", sprintID),
 			zap.Int64("issueID", issueID),
 			zap.Error(err),
@@ -131,7 +131,7 @@ func (g *gateway) RemoveIssue(sprintID, issueID int64) (int64, error) {
 	}
 
 	if affected == 0 {
-		log.Error("Gateway.AddChild no rows affected",
+		log.Error("Gateway.RemoveIssue no rows affected",
 			zap.Int64("sprintID", sprintID),
 			zap.Int64("issueID", issueID),
 			zap.Error(err),
@@ -139,7 +139,7 @@ func (g *gateway) RemoveIssue(sprintID, issueID int64) (int64, error) {
 		return 0, fmt.Errorf("no rows affected")
 	}
 
-	return issueID, nil
+	return sprintID, nil
 }
 
 func (g *gateway) Get(filter *models.SprintFilter) ([]*models.SprintRow, error) {

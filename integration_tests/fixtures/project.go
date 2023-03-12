@@ -6,9 +6,10 @@ type projOpts func(project *project.Project)
 
 func CreateProject(opts ...projOpts) *project.Project {
 	result := &project.Project{
-		Name:       "Organization",
-		ShortName:  "ORG",
-		IsArchived: false,
+		Name:               "Organization",
+		ShortName:          "ORG",
+		IsArchived:         false,
+		ResponsibleTeamIds: make([]int64, 0),
 	}
 
 	for _, opt := range opts {
@@ -16,6 +17,24 @@ func CreateProject(opts ...projOpts) *project.Project {
 	}
 
 	return result
+}
+
+func WithName(name string) projOpts {
+	return func(project *project.Project) {
+		project.Name = name
+	}
+}
+
+func WithShortName(shortName string) projOpts {
+	return func(project *project.Project) {
+		project.ShortName = shortName
+	}
+}
+
+func WithArchived(isArchived bool) projOpts {
+	return func(project *project.Project) {
+		project.IsArchived = isArchived
+	}
 }
 
 func WithResponsibleTeams(ids ...int64) projOpts {

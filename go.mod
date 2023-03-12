@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/Masterminds/squirrel v1.5.3
+	github.com/brianvoe/gofakeit v2.2.0+incompatible
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.0
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.7
