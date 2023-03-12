@@ -9,10 +9,10 @@ import (
 )
 
 func (i *Implementation) AddResponsibleTeam(ctx context.Context, req *desc.ProjectAddTeamRequest) (*desc.ProjectAddTeamResponse, error) {
-	projectID, err := i.storage.AddResponsibleTeam(req.GetProjectId(), req.GetTeamId())
+	projectID, err := i.storage.AddResponsibleTeam(req.GetId(), req.GetTeamId())
 	if err != nil {
 		log.Error("failed to add team",
-			zap.Int64("project", req.GetProjectId()),
+			zap.Int64("project", req.GetId()),
 			zap.Int64("team", req.GetTeamId()),
 			zap.Error(err))
 	}

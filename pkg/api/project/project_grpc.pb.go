@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ProjectRegistryClient interface {
 	CreateProject(ctx context.Context, in *ProjectCreateRequest, opts ...grpc.CallOption) (*ProjectCreateResponse, error)
 	AddResponsibleTeam(ctx context.Context, in *ProjectAddTeamRequest, opts ...grpc.CallOption) (*ProjectAddTeamResponse, error)
+	RemoveResponsibleTeam(ctx context.Context, in *ProjectRemoveTeamRequest, opts ...grpc.CallOption) (*ProjectRemoveTeamResponse, error)
 	UpdateProject(ctx context.Context, in *ProjectUpdateRequest, opts ...grpc.CallOption) (*ProjectUpdateResponse, error)
 	GetProjects(ctx context.Context, in *ProjectGetRequest, opts ...grpc.CallOption) (*ProjectGetResponse, error)
 	GetProjectByID(ctx context.Context, in *ProjectGetByIDRequest, opts ...grpc.CallOption) (*ProjectGetByIDResponse, error)
@@ -49,6 +50,15 @@ func (c *projectRegistryClient) CreateProject(ctx context.Context, in *ProjectCr
 func (c *projectRegistryClient) AddResponsibleTeam(ctx context.Context, in *ProjectAddTeamRequest, opts ...grpc.CallOption) (*ProjectAddTeamResponse, error) {
 	out := new(ProjectAddTeamResponse)
 	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.project.ProjectRegistry/AddResponsibleTeam", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectRegistryClient) RemoveResponsibleTeam(ctx context.Context, in *ProjectRemoveTeamRequest, opts ...grpc.CallOption) (*ProjectRemoveTeamResponse, error) {
+	out := new(ProjectRemoveTeamResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.project.ProjectRegistry/RemoveResponsibleTeam", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +98,7 @@ func (c *projectRegistryClient) GetProjectByID(ctx context.Context, in *ProjectG
 type ProjectRegistryServer interface {
 	CreateProject(context.Context, *ProjectCreateRequest) (*ProjectCreateResponse, error)
 	AddResponsibleTeam(context.Context, *ProjectAddTeamRequest) (*ProjectAddTeamResponse, error)
+	RemoveResponsibleTeam(context.Context, *ProjectRemoveTeamRequest) (*ProjectRemoveTeamResponse, error)
 	UpdateProject(context.Context, *ProjectUpdateRequest) (*ProjectUpdateResponse, error)
 	GetProjects(context.Context, *ProjectGetRequest) (*ProjectGetResponse, error)
 	GetProjectByID(context.Context, *ProjectGetByIDRequest) (*ProjectGetByIDResponse, error)
@@ -102,6 +113,9 @@ func (UnimplementedProjectRegistryServer) CreateProject(context.Context, *Projec
 }
 func (UnimplementedProjectRegistryServer) AddResponsibleTeam(context.Context, *ProjectAddTeamRequest) (*ProjectAddTeamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddResponsibleTeam not implemented")
+}
+func (UnimplementedProjectRegistryServer) RemoveResponsibleTeam(context.Context, *ProjectRemoveTeamRequest) (*ProjectRemoveTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveResponsibleTeam not implemented")
 }
 func (UnimplementedProjectRegistryServer) UpdateProject(context.Context, *ProjectUpdateRequest) (*ProjectUpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProject not implemented")
@@ -156,6 +170,24 @@ func _ProjectRegistry_AddResponsibleTeam_Handler(srv interface{}, ctx context.Co
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProjectRegistryServer).AddResponsibleTeam(ctx, req.(*ProjectAddTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectRegistry_RemoveResponsibleTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProjectRemoveTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectRegistryServer).RemoveResponsibleTeam(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.project.ProjectRegistry/RemoveResponsibleTeam",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectRegistryServer).RemoveResponsibleTeam(ctx, req.(*ProjectRemoveTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -228,6 +260,10 @@ var ProjectRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddResponsibleTeam",
 			Handler:    _ProjectRegistry_AddResponsibleTeam_Handler,
+		},
+		{
+			MethodName: "RemoveResponsibleTeam",
+			Handler:    _ProjectRegistry_RemoveResponsibleTeam_Handler,
 		},
 		{
 			MethodName: "UpdateProject",
