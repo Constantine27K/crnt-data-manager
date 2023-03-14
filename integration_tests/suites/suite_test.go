@@ -22,8 +22,10 @@ import (
 	teamGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/gateway"
 	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
+	"github.com/Constantine27K/crnt-data-manager/internal/pkg/rights/mocks"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
 	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 )
@@ -78,17 +80,21 @@ func (s *CrntDMSuite) SetupSuite() {
 	departmentGw := departmentGateway.NewDepartmentGateway(db)
 	departmentStore := departmentStorage.NewDepartmentStorage(departmentGw)
 
+	verifier := &mocks.Verifier{}
+	verifier.On("VerifyAdmin", mock.Anything).Return(nil)
+	verifier.On("VerifyUpdateTeam", mock.Anything, mock.Anything).Return(nil)
+
 	dbHelper := helper.NewDBHelper(db)
 
 	s.ctx = ctx
 	s.cancelFn = cancelFn
 	s.helper = dbHelper
 
-	s.issueService = issueService.NewService(validator, issueStore)
-	s.projectService = projectService.NewService(validator, projectStore, sprintStore)
-	s.teamService = teamService.NewService(validator, teamStore)
-	s.sprintService = sprintService.NewService(validator, sprintStore)
-	s.departmentService = departmentService.NewService(validator, departmentStore)
+	s.issueService = issueService.NewService(issueStore, validator)
+	s.projectService = projectService.NewService(projectStore, sprintStore, validator, verifier)
+	s.teamService = teamService.NewService(teamStore, validator, verifier)
+	s.sprintService = sprintService.NewService(sprintStore, validator)
+	s.departmentService = departmentService.NewService(departmentStore, validator, verifier)
 }
 
 func (s *CrntDMSuite) TearDownSuite() {

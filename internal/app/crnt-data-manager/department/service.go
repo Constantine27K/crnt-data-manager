@@ -2,22 +2,26 @@ package department
 
 import (
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/department/storage"
+	"github.com/Constantine27K/crnt-data-manager/internal/pkg/rights"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/department"
 )
 
 type Implementation struct {
 	department.UnimplementedDepartmentRegistryServer
-	validator validate.Validator
 	storage   storage.DepartmentStorage
+	validator validate.Validator
+	verifier  rights.Verifier
 }
 
 func NewService(
-	validator validate.Validator,
 	storage storage.DepartmentStorage,
+	validator validate.Validator,
+	verifier rights.Verifier,
 ) *Implementation {
 	return &Implementation{
-		validator: validator,
 		storage:   storage,
+		validator: validator,
+		verifier:  verifier,
 	}
 }

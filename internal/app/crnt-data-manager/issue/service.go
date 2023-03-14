@@ -8,16 +8,16 @@ import (
 
 type Implementation struct {
 	desc.UnimplementedIssueRegistryServer
-	validator validate.Validator
 	storage   storage.IssueStorage
+	validator validate.Validator
 }
 
 func NewService(
-	validator validate.Validator,
 	storage storage.IssueStorage,
+	validator validate.Validator,
 ) *Implementation {
 	return &Implementation{
-		validator: validator,
 		storage:   storage,
+		validator: validator,
 	}
 }
