@@ -11,7 +11,15 @@ import (
 )
 
 func (i *Implementation) CreateTeam(ctx context.Context, req *desc.TeamCreateRequest) (*desc.TeamCreateResponse, error) {
-	err := i.validator.CheckTeam(req.GetTeam())
+	err := i.verifier.VerifyAdmin(ctx)
+	if err != nil {
+		log.Error("error while verifying rights",
+			zap.Any("team", req.GetTeam()),
+			zap.Error(err))
+		return nil, status.Error(codes.Unauthenticated, err.Error())
+	}
+
+	err = i.validator.CheckTeam(req.GetTeam())
 	if err != nil {
 		log.Error("team is not valid",
 			zap.Any("team", req.GetTeam()),

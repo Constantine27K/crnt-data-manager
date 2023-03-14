@@ -13,7 +13,15 @@ import (
 )
 
 func (i *Implementation) CreateProject(ctx context.Context, req *desc.ProjectCreateRequest) (*desc.ProjectCreateResponse, error) {
-	err := i.validator.CheckProject(req.GetProject())
+	err := i.verifier.VerifyAdmin(ctx)
+	if err != nil {
+		log.Error("error while verifying rights",
+			zap.Any("project", req.GetProject()),
+			zap.Error(err))
+		return nil, status.Error(codes.Unauthenticated, err.Error())
+	}
+
+	err = i.validator.CheckProject(req.GetProject())
 	if err != nil {
 		log.Error("project is not valid",
 			zap.Any("project", req.GetProject()),

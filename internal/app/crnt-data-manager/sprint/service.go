@@ -8,16 +8,16 @@ import (
 
 type Implementation struct {
 	sprint.UnimplementedSprintRegistryServer
-	validator validate.Validator
 	storage   storage.SprintStorage
+	validator validate.Validator
 }
 
 func NewService(
-	validator validate.Validator,
 	storage storage.SprintStorage,
+	validator validate.Validator,
 ) *Implementation {
 	return &Implementation{
-		validator: validator,
 		storage:   storage,
+		validator: validator,
 	}
 }

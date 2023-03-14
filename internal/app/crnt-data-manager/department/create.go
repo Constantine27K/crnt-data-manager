@@ -11,7 +11,15 @@ import (
 )
 
 func (i *Implementation) CreateDepartment(ctx context.Context, req *desc.DepartmentCreateRequest) (*desc.DepartmentCreateResponse, error) {
-	err := i.validator.CheckDepartment(req.GetDepartment())
+	err := i.verifier.VerifyAdmin(ctx)
+	if err != nil {
+		log.Error("error while verifying rights",
+			zap.Any("department", req.GetDepartment()),
+			zap.Error(err))
+		return nil, status.Error(codes.Unauthenticated, err.Error())
+	}
+
+	err = i.validator.CheckDepartment(req.GetDepartment())
 	if err != nil {
 		log.Error("department is not valid",
 			zap.Any("department", req.GetDepartment()),
