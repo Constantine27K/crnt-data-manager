@@ -6,4 +6,7 @@ type ProjectRow struct {
 	ShortName        string  `db:"short_name"`
 	IsArchived       bool    `db:"is_archived"`
 	ResponsibleTeams []int64 `db:"responsible_teams"`
+	Description      string  `db:"description"`
+	Department       int64   `db:"department"`
+	Responsible      string  `db:"responsible"`
 }

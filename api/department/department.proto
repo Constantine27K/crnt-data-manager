@@ -74,6 +74,7 @@ message Department {
 	int64 id = 1;
 	string name = 2;
 	repeated int64 projects = 3;
+	repeated string members = 4;
 }
 
 message DepartmentCreateRequest {

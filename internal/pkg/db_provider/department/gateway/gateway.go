@@ -37,12 +37,12 @@ const (
 )
 
 var (
-	columns = []string{"id", "name", "projects"}
+	columns = []string{"id", "name", "projects", "members"}
 )
 
 func (g *gateway) Add(department *models.DepartmentRow) (int64, error) {
 	values := []interface{}{
-		department.Name, pq.Array(department.Projects),
+		department.Name, pq.Array(department.Projects), pq.Array(department.Members),
 	}
 
 	query, args, err := g.builder.Insert(table).
@@ -174,6 +174,7 @@ func (g *gateway) Get(filter *models.DepartmentFilter) ([]*models.DepartmentRow,
 			&row.ID,
 			&row.Name,
 			pq.Array(&row.Projects),
+			pq.Array(&row.Members),
 		)
 		if err != nil {
 			log.Error("Gateway.Get scan error",
@@ -205,6 +206,7 @@ func (g *gateway) GetByID(id int64) (*models.DepartmentRow, error) {
 		&row.ID,
 		&row.Name,
 		pq.Array(&row.Projects),
+		pq.Array(&row.Members),
 	)
 	if err != nil {
 		log.Error("Gateway.GetByID scan error",
@@ -227,6 +229,10 @@ func (g *gateway) Update(department *models.DepartmentRow) (int64, error) {
 
 	if len(department.Projects) > 0 {
 		query = query.Set("projects", pq.Array(department.Projects))
+	}
+
+	if len(department.Members) > 0 {
+		query = query.Set("members", pq.Array(department.Members))
 	}
 
 	stmt, args, err := query.ToSql()

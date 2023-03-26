@@ -78,6 +78,9 @@ message Project {
 	string short_name = 3;
 	bool is_archived = 4;
 	repeated int64 responsible_team_ids = 5;
+	string description = 6;
+	int64 department = 7;
+	string responsible = 8;
 }
 
 message ProjectCreateRequest {

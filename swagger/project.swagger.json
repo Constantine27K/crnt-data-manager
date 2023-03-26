@@ -294,6 +294,16 @@
             "type": "string",
             "format": "int64"
           }
+        },
+        "description": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string",
+          "format": "int64"
+        },
+        "responsible": {
+          "type": "string"
         }
       }
     },
