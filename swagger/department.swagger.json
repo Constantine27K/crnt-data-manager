@@ -261,6 +261,12 @@
             "type": "string",
             "format": "int64"
           }
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

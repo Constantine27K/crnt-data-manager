@@ -38,12 +38,13 @@ const (
 )
 
 var (
-	columns = []string{"id", "name", "short_name", "is_archived", "responsible_teams"}
+	columns = []string{"id", "name", "short_name", "is_archived", "responsible_teams", "description", "department", "responsible"}
 )
 
 func (g *gateway) Add(row *models.ProjectRow) (int64, error) {
 	values := []interface{}{
 		row.Name, row.ShortName, row.IsArchived, pq.Array(row.ResponsibleTeams),
+		row.Description, row.Department, row.Responsible,
 	}
 
 	query, args, err := g.builder.Insert(table).
@@ -177,6 +178,9 @@ func (g *gateway) Get(filter *models.ProjectFilter) ([]*models.ProjectRow, error
 			&row.ShortName,
 			&row.IsArchived,
 			pq.Array(&row.ResponsibleTeams),
+			&row.Description,
+			&row.Department,
+			&row.Responsible,
 		)
 		if err != nil {
 			log.Error("Gateway.Get scan error",
@@ -210,6 +214,9 @@ func (g *gateway) GetByID(id int64) (*models.ProjectRow, error) {
 		&row.ShortName,
 		&row.IsArchived,
 		pq.Array(&row.ResponsibleTeams),
+		&row.Description,
+		&row.Department,
+		&row.Responsible,
 	)
 	if err != nil {
 		log.Error("Gateway.GetByID scan error",
@@ -261,6 +268,18 @@ func (g *gateway) Update(row *models.ProjectRow) (int64, error) {
 
 	if len(row.ResponsibleTeams) > 0 {
 		query = query.Set("responsible_teams", pq.Array(row.ResponsibleTeams))
+	}
+
+	if len(row.Description) > 0 {
+		query = query.Set("description", row.Description)
+	}
+
+	if row.Department != 0 {
+		query = query.Set("department", row.Department)
+	}
+
+	if len(row.Responsible) > 0 {
+		query = query.Set("responsible", row.Responsible)
 	}
 
 	query = query.Set("is_archived", row.IsArchived)

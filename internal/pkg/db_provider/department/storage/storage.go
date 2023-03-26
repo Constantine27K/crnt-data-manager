@@ -29,6 +29,7 @@ func (s *storage) Add(department *desc.Department) (int64, error) {
 	row := &models.DepartmentRow{
 		Name:     department.GetName(),
 		Projects: department.GetProjects(),
+		Members:  department.GetMembers(),
 	}
 
 	return s.gw.Add(row)
@@ -54,6 +55,7 @@ func (s *storage) Get(filter *models.DepartmentFilter) ([]*desc.Department, erro
 			Id:       row.ID,
 			Name:     row.Name,
 			Projects: row.Projects,
+			Members:  row.Members,
 		})
 	}
 
@@ -70,6 +72,7 @@ func (s *storage) GetByID(id int64) (*desc.Department, error) {
 		Id:       row.ID,
 		Name:     row.Name,
 		Projects: row.Projects,
+		Members:  row.Members,
 	}, nil
 }
 
@@ -78,6 +81,7 @@ func (s *storage) Update(id int64, department *desc.Department) (int64, error) {
 		ID:       id,
 		Name:     department.GetName(),
 		Projects: department.GetProjects(),
+		Members:  department.GetMembers(),
 	}
 
 	return s.gw.Update(row)

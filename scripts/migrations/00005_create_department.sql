@@ -4,7 +4,8 @@ create table if not exists department
 (
     id       bigserial primary key,
     name     text not null default '',
-    projects integer[]     default array []::integer[]
+    projects integer[]     default array []::integer[],
+    members  text[]        default array []::text[]
 );
 -- +goose StatementEnd
 -- +goose StatementBegin

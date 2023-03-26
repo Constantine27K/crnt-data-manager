@@ -6,7 +6,10 @@ create table if not exists project
     name              text      default '' not null,
     short_name        text      default '' not null,
     is_archived       bool      default false,
-    responsible_teams integer[] default array []::integer[]
+    responsible_teams integer[] default array []::integer[],
+    description       text      default '',
+    department        bigserial            not null,
+    responsible       text                 not null default ''
 );
 -- +goose StatementEnd
 -- +goose StatementBegin

@@ -31,6 +31,9 @@ func (s *storage) Add(project *desc.Project) (int64, error) {
 		ShortName:        project.GetShortName(),
 		IsArchived:       false,
 		ResponsibleTeams: project.GetResponsibleTeamIds(),
+		Description:      project.GetDescription(),
+		Department:       project.GetDepartment(),
+		Responsible:      project.GetResponsible(),
 	}
 
 	return s.gw.Add(row)
@@ -59,6 +62,9 @@ func (s *storage) Get(filter *models.ProjectFilter) ([]*desc.Project, error) {
 			ShortName:          row.ShortName,
 			IsArchived:         row.IsArchived,
 			ResponsibleTeamIds: row.ResponsibleTeams,
+			Description:        row.Description,
+			Department:         row.Department,
+			Responsible:        row.Responsible,
 		})
 	}
 
@@ -77,6 +83,9 @@ func (s *storage) GetByID(id int64) (*desc.Project, error) {
 		ShortName:          row.ShortName,
 		IsArchived:         row.IsArchived,
 		ResponsibleTeamIds: row.ResponsibleTeams,
+		Description:        row.Description,
+		Department:         row.Department,
+		Responsible:        row.Responsible,
 	}
 
 	return result, err
@@ -89,6 +98,9 @@ func (s *storage) Update(id int64, project *desc.Project) (int64, error) {
 		ShortName:        project.GetShortName(),
 		IsArchived:       project.GetIsArchived(),
 		ResponsibleTeams: project.GetResponsibleTeamIds(),
+		Description:      project.GetDescription(),
+		Department:       project.GetDepartment(),
+		Responsible:      project.GetResponsible(),
 	}
 
 	return s.gw.Update(row)
