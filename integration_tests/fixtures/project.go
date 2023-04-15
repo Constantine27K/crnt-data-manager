@@ -7,9 +7,11 @@ type projOpts func(project *project.Project)
 func CreateProject(opts ...projOpts) *project.Project {
 	result := &project.Project{
 		Name:               "Organization",
+		Description:        "test project",
 		ShortName:          "ORG",
 		IsArchived:         false,
 		ResponsibleTeamIds: make([]int64, 0),
+		Responsible:        "me",
 	}
 
 	for _, opt := range opts {

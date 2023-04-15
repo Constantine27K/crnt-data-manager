@@ -17,6 +17,7 @@ func CreateIssue(opts ...issueOpt) *desc.Issue {
 	const (
 		deadline = 24 * time.Hour
 		sp       = 3
+		payment  = 500
 	)
 
 	result := &desc.Issue{
@@ -37,6 +38,7 @@ func CreateIssue(opts ...issueOpt) *desc.Issue {
 		},
 		Priority:    priority.Priority_PRIORITY_MEDIUM,
 		StoryPoints: sp,
+		Payment:     payment,
 		Comments:    &comments.Comments{Items: make([]*comments.Comment, 0)},
 	}
 

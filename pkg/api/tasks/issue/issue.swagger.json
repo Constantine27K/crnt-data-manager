@@ -646,6 +646,10 @@
           "type": "string",
           "format": "int64"
         },
+        "payment": {
+          "type": "number",
+          "format": "double"
+        },
         "children": {
           "type": "array",
           "items": {
