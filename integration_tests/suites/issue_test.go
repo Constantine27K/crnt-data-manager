@@ -242,6 +242,7 @@ func (s *CrntDMSuite) assertIssues(expected, actual *desc.Issue) {
 	require.Equal(s.T(), expected.GetStoryPoints(), actual.GetStoryPoints())
 	require.Equal(s.T(), expected.GetSprintId(), actual.GetSprintId())
 	require.Equal(s.T(), expected.GetProjectId(), actual.GetProjectId())
+	require.Equal(s.T(), expected.GetPayment(), actual.GetPayment())
 }
 
 func (s *CrntDMSuite) assertIssueInfo(issue *desc.Issue, info *desc.IssueInfo) {

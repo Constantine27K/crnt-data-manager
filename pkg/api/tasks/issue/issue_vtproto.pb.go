@@ -5,6 +5,7 @@
 package issue
 
 import (
+	binary "encoding/binary"
 	fmt "fmt"
 	comments "github.com/Constantine27K/crnt-data-manager/pkg/api/comments"
 	priority "github.com/Constantine27K/crnt-data-manager/pkg/api/state/priority"
@@ -14,6 +15,7 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
+	math "math"
 	bits "math/bits"
 )
 
@@ -65,8 +67,16 @@ func (m *Issue) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0xb2
+			dAtA[i] = 0xba
 		}
+	}
+	if m.Payment != 0 {
+		i -= 8
+		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Payment))))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb1
 	}
 	if m.StoryPoints != 0 {
 		i = encodeVarint(dAtA, i, uint64(m.StoryPoints))
@@ -1362,6 +1372,9 @@ func (m *Issue) SizeVT() (n int) {
 	if m.StoryPoints != 0 {
 		n += 2 + sov(uint64(m.StoryPoints))
 	}
+	if m.Payment != 0 {
+		n += 10
+	}
 	if len(m.Children) > 0 {
 		for _, e := range m.Children {
 			l = e.SizeVT()
@@ -2471,6 +2484,17 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 		case 22:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Payment", wireType)
+			}
+			var v uint64
+			if (iNdEx + 8) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			iNdEx += 8
+			m.Payment = float64(math.Float64frombits(v))
+		case 23:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Children", wireType)
 			}
