@@ -30,6 +30,7 @@ type IssueRegistryClient interface {
 	GetIssueByID(ctx context.Context, in *IssueGetByIDRequest, opts ...grpc.CallOption) (*IssueGetByIDResponse, error)
 	GetIssueInfo(ctx context.Context, in *IssueInfoGetRequest, opts ...grpc.CallOption) (*IssueInfoGetResponse, error)
 	GetIssueInfoByID(ctx context.Context, in *IssueInfoGetByIDRequest, opts ...grpc.CallOption) (*IssueInfoGetByIDResponse, error)
+	GetUserPayment(ctx context.Context, in *IssuePaymentGetRequest, opts ...grpc.CallOption) (*IssuePaymentGetResponse, error)
 }
 
 type issueRegistryClient struct {
@@ -112,6 +113,15 @@ func (c *issueRegistryClient) GetIssueInfoByID(ctx context.Context, in *IssueInf
 	return out, nil
 }
 
+func (c *issueRegistryClient) GetUserPayment(ctx context.Context, in *IssuePaymentGetRequest, opts ...grpc.CallOption) (*IssuePaymentGetResponse, error) {
+	out := new(IssuePaymentGetResponse)
+	err := c.cc.Invoke(ctx, "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/GetUserPayment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IssueRegistryServer is the server API for IssueRegistry service.
 // All implementations should embed UnimplementedIssueRegistryServer
 // for forward compatibility
@@ -124,6 +134,7 @@ type IssueRegistryServer interface {
 	GetIssueByID(context.Context, *IssueGetByIDRequest) (*IssueGetByIDResponse, error)
 	GetIssueInfo(context.Context, *IssueInfoGetRequest) (*IssueInfoGetResponse, error)
 	GetIssueInfoByID(context.Context, *IssueInfoGetByIDRequest) (*IssueInfoGetByIDResponse, error)
+	GetUserPayment(context.Context, *IssuePaymentGetRequest) (*IssuePaymentGetResponse, error)
 }
 
 // UnimplementedIssueRegistryServer should be embedded to have forward compatible implementations.
@@ -153,6 +164,9 @@ func (UnimplementedIssueRegistryServer) GetIssueInfo(context.Context, *IssueInfo
 }
 func (UnimplementedIssueRegistryServer) GetIssueInfoByID(context.Context, *IssueInfoGetByIDRequest) (*IssueInfoGetByIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIssueInfoByID not implemented")
+}
+func (UnimplementedIssueRegistryServer) GetUserPayment(context.Context, *IssuePaymentGetRequest) (*IssuePaymentGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserPayment not implemented")
 }
 
 // UnsafeIssueRegistryServer may be embedded to opt out of forward compatibility for this service.
@@ -310,6 +324,24 @@ func _IssueRegistry_GetIssueInfoByID_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _IssueRegistry_GetUserPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssuePaymentGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IssueRegistryServer).GetUserPayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/github.constantine27k.crnt_data_manager.api.tasks.issue.IssueRegistry/GetUserPayment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IssueRegistryServer).GetUserPayment(ctx, req.(*IssuePaymentGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // IssueRegistry_ServiceDesc is the grpc.ServiceDesc for IssueRegistry service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -348,6 +380,10 @@ var IssueRegistry_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetIssueInfoByID",
 			Handler:    _IssueRegistry_GetIssueInfoByID_Handler,
+		},
+		{
+			MethodName: "GetUserPayment",
+			Handler:    _IssueRegistry_GetUserPayment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

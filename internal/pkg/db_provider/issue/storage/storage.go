@@ -21,6 +21,7 @@ type IssueStorage interface {
 	GetInfo(filter *models.IssueFilter) ([]*desc.IssueInfo, error)
 	GetByID(id int64) (*desc.Issue, error)
 	GetInfoByID(id int64) (*desc.IssueInfo, error)
+	GetUserPayment() (map[string]float64, error)
 	Update(id int64, issue *desc.Issue) (int64, error)
 }
 
@@ -345,4 +346,8 @@ func (s *storage) GetInfoByID(id int64) (*desc.IssueInfo, error) {
 		Priority:      priority,
 		StoryPoints:   row.StoryPoints,
 	}, nil
+}
+
+func (s *storage) GetUserPayment() (map[string]float64, error) {
+	return s.gw.GetUserPayment()
 }
