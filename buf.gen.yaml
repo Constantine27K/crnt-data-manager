@@ -35,3 +35,5 @@ plugins:
       - features=marshal+unmarshal+size+pool
       - paths=source_relative
     strategy: directory
+  - plugin: buf.build/protocolbuffers/dart
+    out: ./pkg

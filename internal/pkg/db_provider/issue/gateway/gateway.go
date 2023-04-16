@@ -457,7 +457,7 @@ func (g *gateway) GetUserPayment() (map[string]float64, error) {
 	}
 
 	if rows.Err() != nil {
-		return nil, err
+		return nil, rows.Err()
 	}
 
 	return result, nil
