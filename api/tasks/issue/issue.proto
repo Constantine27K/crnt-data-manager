@@ -69,6 +69,11 @@ service IssueRegistry {
 			get: "/v1/issue_info/{id}"
 		};
 	};
+	rpc GetUserPayment (IssuePaymentGetRequest) returns (IssuePaymentGetResponse) {
+		option (google.api.http) = {
+			get: "/v1/issues/payment"
+		};
+	};
 }
 
 message Issue {
@@ -189,6 +194,14 @@ message IssueInfoGetByIDRequest {
 
 message IssueInfoGetByIDResponse {
 	IssueInfo issue_info = 1;
+}
+
+message IssuePaymentGetRequest {
+
+}
+
+message IssuePaymentGetResponse {
+	map<string, double> user_to_payment = 1;
 }
 
 enum IssueType {

@@ -21,6 +21,7 @@ type IssueGateway interface {
 	GetByID(id int64) (*models.IssueRow, error)
 	GetInfoByID(id int64) (*models.IssueInfoRow, error)
 	GetProjectLastID(id int64) (int64, error)
+	GetUserPayment() (map[string]float64, error)
 	Update(row *models.IssueRow) (int64, error)
 }
 
@@ -430,6 +431,36 @@ func (g *gateway) GetProjectLastID(id int64) (int64, error) {
 	}
 
 	return count, nil
+}
+
+func (g *gateway) GetUserPayment() (map[string]float64, error) {
+	query := `select distinct(assigned), sum(payment) from issue group by assigned`
+	result := make(map[string]float64)
+
+	rows, err := g.db.Query(query)
+	if err != nil {
+		log.Error("Gateway.GetUserPayment query error",
+			zap.Error(err),
+		)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var assigned string
+		var payment float64
+		err = rows.Scan(&assigned, &payment)
+		if err != nil {
+			return nil, err
+		}
+		result[assigned] = payment
+	}
+
+	if rows.Err() != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (g *gateway) AddChild(parentID, childID int64) error {

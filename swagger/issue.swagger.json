@@ -532,6 +532,28 @@
           "IssueRegistry"
         ]
       }
+    },
+    "/v1/issues/payment": {
+      "get": {
+        "operationId": "IssueRegistry_GetUserPayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/issueIssuePaymentGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "IssueRegistry"
+        ]
+      }
     }
   },
   "definitions": {
@@ -758,6 +780,18 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/issueIssueInfo"
+          }
+        }
+      }
+    },
+    "issueIssuePaymentGetResponse": {
+      "type": "object",
+      "properties": {
+        "userToPayment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
           }
         }
       }
