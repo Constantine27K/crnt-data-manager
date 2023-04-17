@@ -36,4 +36,4 @@ plugins:
       - paths=source_relative
     strategy: directory
   - plugin: buf.build/protocolbuffers/dart
-    out: ./pkg
+    out: ./pkg/crnt-data-manager/lib
