@@ -45,7 +45,8 @@ class Issue extends $pb.GeneratedMessage {
     ..p<$fixnum.Int64>(20, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'componentIds', $pb.PbFieldType.K6)
     ..aInt64(21, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storyPoints')
     ..a<$core.double>(22, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'payment', $pb.PbFieldType.OD)
-    ..pc<Issue>(23, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'children', $pb.PbFieldType.PM, subBuilder: Issue.create)
+    ..aInt64(23, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'timeSpent')
+    ..pc<Issue>(24, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'children', $pb.PbFieldType.PM, subBuilder: Issue.create)
     ..hasRequiredFields = false
   ;
 
@@ -73,6 +74,7 @@ class Issue extends $pb.GeneratedMessage {
     $core.Iterable<$fixnum.Int64>? componentIds,
     $fixnum.Int64? storyPoints,
     $core.double? payment,
+    $fixnum.Int64? timeSpent,
     $core.Iterable<Issue>? children,
   }) {
     final _result = create();
@@ -141,6 +143,9 @@ class Issue extends $pb.GeneratedMessage {
     }
     if (payment != null) {
       _result.payment = payment;
+    }
+    if (timeSpent != null) {
+      _result.timeSpent = timeSpent;
     }
     if (children != null) {
       _result.children.addAll(children);
@@ -371,7 +376,16 @@ class Issue extends $pb.GeneratedMessage {
   void clearPayment() => clearField(22);
 
   @$pb.TagNumber(23)
-  $core.List<Issue> get children => $_getList(22);
+  $fixnum.Int64 get timeSpent => $_getI64(22);
+  @$pb.TagNumber(23)
+  set timeSpent($fixnum.Int64 v) { $_setInt64(22, v); }
+  @$pb.TagNumber(23)
+  $core.bool hasTimeSpent() => $_has(22);
+  @$pb.TagNumber(23)
+  void clearTimeSpent() => clearField(23);
+
+  @$pb.TagNumber(24)
+  $core.List<Issue> get children => $_getList(23);
 }
 
 class IssueInfo extends $pb.GeneratedMessage {

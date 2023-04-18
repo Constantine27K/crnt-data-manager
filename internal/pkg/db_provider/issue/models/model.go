@@ -63,6 +63,7 @@ type IssueRow struct {
 	Components    []int64   `db:"components"`
 	StoryPoints   int64     `db:"story_points"`
 	Payment       float64   `db:"payment"`
+	TimeSpent     int64     `db:"time_spent"`
 	Children      []int64   `db:"children"`
 }
 

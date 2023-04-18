@@ -99,7 +99,9 @@ message Issue {
 	repeated int64 component_ids = 20;
 	int64 story_points = 21;
 	double payment = 22;
-	repeated Issue children = 23;
+	// in minutes
+	int64 time_spent = 23;
+	repeated Issue children = 24;
 }
 
 message IssueInfo {

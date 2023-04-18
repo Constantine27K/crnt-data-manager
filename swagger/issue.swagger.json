@@ -672,6 +672,11 @@
           "type": "number",
           "format": "double"
         },
+        "timeSpent": {
+          "type": "string",
+          "format": "int64",
+          "title": "in minutes"
+        },
         "children": {
           "type": "array",
           "items": {

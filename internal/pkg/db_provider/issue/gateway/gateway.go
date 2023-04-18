@@ -44,7 +44,7 @@ const (
 var (
 	columns = []string{"id", "composite_name", "name", "issue_type", "parent_id", "description",
 		"comments", "author", "assigned", "qa", "reviewer", "template", "created_at", "updated_at",
-		"deadline", "status", "priority", "sprint_id", "project_id", "components", "story_points", "payment", "children"}
+		"deadline", "status", "priority", "sprint_id", "project_id", "components", "story_points", "payment", "time_spent", "children"}
 
 	infoColumns = []string{"id", "composite_name", "name", "issue_type", "assigned", "status", "priority", "story_points"}
 )
@@ -54,7 +54,7 @@ func (g *gateway) Add(issueRow *models.IssueRow) (int64, error) {
 		issueRow.CompositeName, issueRow.Name, issueRow.IssueType, issueRow.ParentID, issueRow.Description, issueRow.Comments,
 		issueRow.Author, issueRow.Assigned, issueRow.QA, issueRow.Reviewer, issueRow.Template, issueRow.CreatedAt, issueRow.UpdatedAt,
 		issueRow.Deadline, issueRow.Status, issueRow.Priority, issueRow.SprintID, issueRow.ProjectID,
-		pq.Array(issueRow.Components), issueRow.StoryPoints, issueRow.Payment, pq.Array(issueRow.Children),
+		pq.Array(issueRow.Components), issueRow.StoryPoints, issueRow.Payment, issueRow.TimeSpent, pq.Array(issueRow.Children),
 	}
 
 	query, args, err := g.builder.Insert(table).
@@ -165,6 +165,10 @@ func (g *gateway) Update(issueRow *models.IssueRow) (int64, error) {
 		query = query.Set("payment", issueRow.Payment)
 	}
 
+	if issueRow.TimeSpent != 0 {
+		query = query.Set("time_spent", issueRow.TimeSpent)
+	}
+
 	query = query.Set("components", pq.Array(issueRow.Components)).
 		Set("story_points", issueRow.StoryPoints).
 		Set("updated_at", issueRow.UpdatedAt)
@@ -260,6 +264,7 @@ func (g *gateway) Get(filter *models.IssueFilter) ([]*models.IssueRow, error) {
 			pq.Array(&issueRow.Components),
 			&issueRow.StoryPoints,
 			&issueRow.Payment,
+			&issueRow.TimeSpent,
 			pq.Array(&issueRow.Children),
 		)
 		if err != nil {
@@ -371,6 +376,7 @@ func (g *gateway) GetByID(id int64) (*models.IssueRow, error) {
 		pq.Array(&issueRow.Components),
 		&issueRow.StoryPoints,
 		&issueRow.Payment,
+		&issueRow.TimeSpent,
 		pq.Array(&issueRow.Children))
 	if err != nil {
 		log.Error("Gateway.GetByID scan error",
