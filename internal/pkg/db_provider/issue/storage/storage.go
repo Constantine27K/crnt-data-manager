@@ -90,6 +90,7 @@ func (s *storage) Add(issue *desc.Issue) (int64, error) {
 		Components:    componentIDs,
 		StoryPoints:   issue.GetStoryPoints(),
 		Payment:       issue.GetPayment(),
+		TimeSpent:     issue.GetTimeSpent(),
 		Children:      childrenIDs,
 	}
 
@@ -181,6 +182,7 @@ func (s *storage) Update(id int64, issue *desc.Issue) (int64, error) {
 		Components:  componentIDs,
 		StoryPoints: issue.GetStoryPoints(),
 		Payment:     issue.GetPayment(),
+		TimeSpent:   issue.GetTimeSpent(),
 	}
 
 	return s.gw.Update(model)
@@ -238,6 +240,7 @@ func (s *storage) Get(filter *models.IssueFilter) ([]*desc.Issue, error) {
 			ComponentIds:  row.Components,
 			StoryPoints:   row.StoryPoints,
 			Payment:       row.Payment,
+			TimeSpent:     row.TimeSpent,
 			Children:      children,
 		})
 	}
@@ -322,6 +325,7 @@ func (s *storage) GetByID(id int64) (*desc.Issue, error) {
 		ComponentIds:  row.Components,
 		StoryPoints:   row.StoryPoints,
 		Payment:       row.Payment,
+		TimeSpent:     row.TimeSpent,
 		Children:      children,
 	}, nil
 }

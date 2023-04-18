@@ -24,6 +24,7 @@ create table if not exists issue
     components     integer[]        default array []::integer[],
     story_points   integer          default 0,
     payment        double precision default 0,
+    time_spent     integer          default 0,
     children       integer[]        default array []::integer[]
 );
 -- +goose StatementEnd

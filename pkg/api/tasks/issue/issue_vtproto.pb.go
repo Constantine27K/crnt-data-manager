@@ -67,8 +67,15 @@ func (m *Issue) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0x1
 			i--
-			dAtA[i] = 0xba
+			dAtA[i] = 0xc2
 		}
+	}
+	if m.TimeSpent != 0 {
+		i = encodeVarint(dAtA, i, uint64(m.TimeSpent))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb8
 	}
 	if m.Payment != 0 {
 		i -= 8
@@ -1459,6 +1466,9 @@ func (m *Issue) SizeVT() (n int) {
 	if m.Payment != 0 {
 		n += 10
 	}
+	if m.TimeSpent != 0 {
+		n += 2 + sov(uint64(m.TimeSpent))
+	}
 	if len(m.Children) > 0 {
 		for _, e := range m.Children {
 			l = e.SizeVT()
@@ -2611,6 +2621,25 @@ func (m *Issue) UnmarshalVT(dAtA []byte) error {
 			iNdEx += 8
 			m.Payment = float64(math.Float64frombits(v))
 		case 23:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TimeSpent", wireType)
+			}
+			m.TimeSpent = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TimeSpent |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 24:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Children", wireType)
 			}
