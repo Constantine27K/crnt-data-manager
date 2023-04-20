@@ -440,7 +440,12 @@ func (g *gateway) GetProjectLastID(id int64) (int64, error) {
 }
 
 func (g *gateway) GetUserPayment() (map[string]float64, error) {
-	query := `select distinct(assigned), sum(payment) from issue group by assigned`
+	query := `select distinct(assigned), sum(payment)
+from issue
+where status = 109 or status = 209 or status = 306
+and deadline >= now() - '1 month'::interval
+group by assigned`
+
 	result := make(map[string]float64)
 
 	rows, err := g.db.Query(query)
