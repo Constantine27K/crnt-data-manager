@@ -24,14 +24,14 @@ import (
 	teamGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/gateway"
 	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
-	"github.com/Constantine27K/crnt-data-manager/internal/pkg/rights"
-	authService "github.com/Constantine27K/crnt-data-manager/internal/pkg/services/crnt-auth-service"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/department"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/project"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/sprint"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/tasks/issue"
 	"github.com/Constantine27K/crnt-data-manager/pkg/api/team"
+	"github.com/Constantine27K/crnt-sdk/pkg/authorization"
+	"github.com/Constantine27K/crnt-sdk/pkg/token"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
@@ -106,22 +106,17 @@ func createGrpcServer() {
 	departmentGw := departmentGateway.NewDepartmentGateway(db)
 	departmentStore := departmentStorage.NewDepartmentStorage(departmentGw)
 
-	connAuthService, err := grpc.Dial(
-		os.Getenv("AUTH_SERVICE_ADDRESS"),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
+	tokenMaker, err := token.NewMaker(os.Getenv("TOKEN_SYMMETRIC_KEY"))
 	if err != nil {
-		log.Fatalf("cannot dial auth-service: %v", err)
+		log.Fatalf("failed to create token maker: %v", err)
 	}
-
-	authorizer := authService.NewService(connAuthService)
-	verifier := rights.NewVerifier(authorizer)
+	authorizer := authorization.NewAuthorizer(tokenMaker)
 
 	issue.RegisterIssueRegistryServer(grpcServer, issueService.NewService(issueStore, validator))
 	sprint.RegisterSprintRegistryServer(grpcServer, sprintService.NewService(sprintStore, validator))
-	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(teamStore, validator, verifier))
-	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore, sprintStore, validator, verifier))
-	department.RegisterDepartmentRegistryServer(grpcServer, departmentService.NewService(departmentStore, validator, verifier))
+	team.RegisterTeamRegistryServer(grpcServer, teamService.NewService(teamStore, validator, authorizer))
+	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore, sprintStore, validator, authorizer))
+	department.RegisterDepartmentRegistryServer(grpcServer, departmentService.NewService(departmentStore, validator, authorizer))
 
 	log.Infof("grpc service started on port %s", port)
 
