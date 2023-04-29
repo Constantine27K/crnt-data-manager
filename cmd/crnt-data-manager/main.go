@@ -68,10 +68,10 @@ func setLogger() {
 }
 
 func createGrpcServer() {
-	port := os.Getenv("GRPC_PORT")
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
+	address := os.Getenv("GRPC_ADDRESS")
+	lis, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Error(fmt.Sprintf("failed to listen localhost:%v", port),
+		log.Error(fmt.Sprintf("failed to listen:%v", address),
 			zap.Error(err),
 		)
 	}
@@ -118,7 +118,7 @@ func createGrpcServer() {
 	project.RegisterProjectRegistryServer(grpcServer, projectService.NewService(projectStore, sprintStore, validator, authorizer))
 	department.RegisterDepartmentRegistryServer(grpcServer, departmentService.NewService(departmentStore, validator, authorizer))
 
-	log.Infof("grpc service started on port %s", port)
+	log.Infof("grpc service started on %s", address)
 
 	err = grpcServer.Serve(lis)
 	if err != nil {
@@ -132,13 +132,13 @@ func createHttpServer() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	grpcPort := os.Getenv("GRPC_PORT")
+	grpcAddress := os.Getenv("GRPC_ADDRESS")
 	// dial the gRPC server above to make a client connection
-	conn, err := grpc.Dial(fmt.Sprintf(":%s", grpcPort),
+	conn, err := grpc.Dial(grpcAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		log.Error(fmt.Sprintf("failed to dial localhost:%s", grpcPort),
+		log.Error(fmt.Sprintf("failed to dial:%s", grpcAddress),
 			zap.Error(err),
 		)
 	}
@@ -192,11 +192,11 @@ func createHttpServer() {
 
 	log.Info("swagger created")
 
-	httpPort := os.Getenv("HTTP_PORT")
-	log.Infof("http service started on port %s", httpPort)
+	httpAddress := os.Getenv("HTTP_ADDRESS")
+	log.Infof("http service started on %s", httpAddress)
 
 	// start a standard HTTP server with the router
-	err = http.ListenAndServe(fmt.Sprintf("localhost:%s", httpPort), mux)
+	err = http.ListenAndServe(httpAddress, mux)
 	if err != nil {
 		log.Error("error during listening and serving HTTP",
 			zap.Error(err),
