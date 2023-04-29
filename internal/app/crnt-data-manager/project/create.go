@@ -13,7 +13,7 @@ import (
 )
 
 func (i *Implementation) CreateProject(ctx context.Context, req *desc.ProjectCreateRequest) (*desc.ProjectCreateResponse, error) {
-	err := i.verifier.VerifyAdmin(ctx)
+	_, err := i.authorizer.AuthorizeAdmin(ctx)
 	if err != nil {
 		log.Error("error while verifying rights",
 			zap.Any("project", req.GetProject()),

@@ -11,7 +11,7 @@ import (
 )
 
 func (i *Implementation) UpdateProject(ctx context.Context, req *desc.ProjectUpdateRequest) (*desc.ProjectUpdateResponse, error) {
-	err := i.verifier.VerifyAdmin(ctx)
+	_, err := i.authorizer.AuthorizeAdmin(ctx)
 	if err != nil {
 		log.Error("error while verifying rights",
 			zap.Any("project", req.GetProject()),

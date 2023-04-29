@@ -11,7 +11,7 @@ import (
 )
 
 func (i *Implementation) DepartmentAddProject(ctx context.Context, req *desc.DepartmentAddProjectRequest) (*desc.DepartmentAddProjectResponse, error) {
-	err := i.verifier.VerifyAdmin(ctx)
+	_, err := i.authorizer.AuthorizeAdmin(ctx)
 	if err != nil {
 		log.Error("error while verifying rights",
 			zap.Any("department", req.GetId()),

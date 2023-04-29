@@ -22,10 +22,10 @@ import (
 	teamGateway "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/gateway"
 	teamStorage "github.com/Constantine27K/crnt-data-manager/internal/pkg/db_provider/team/storage"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/infrastructure/postgres"
-	"github.com/Constantine27K/crnt-data-manager/internal/pkg/rights/mocks"
 	"github.com/Constantine27K/crnt-data-manager/internal/pkg/validate"
+	"github.com/Constantine27K/crnt-sdk/pkg/authorization"
+	"github.com/Constantine27K/crnt-sdk/pkg/token"
 	"github.com/joho/godotenv"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 )
@@ -80,21 +80,21 @@ func (s *CrntDMSuite) SetupSuite() {
 	departmentGw := departmentGateway.NewDepartmentGateway(db)
 	departmentStore := departmentStorage.NewDepartmentStorage(departmentGw)
 
-	verifier := &mocks.Verifier{}
-	verifier.On("VerifyAdmin", mock.Anything).Return(nil)
-	verifier.On("VerifyUpdateTeam", mock.Anything, mock.Anything).Return(nil)
-
 	dbHelper := helper.NewDBHelper(db)
+
+	tokenMaker, err := token.NewMaker(os.Getenv("TOKEN_SYMMETRIC_KEY"))
+	require.NoError(s.T(), err)
+	authorizer := authorization.NewAuthorizer(tokenMaker)
 
 	s.ctx = ctx
 	s.cancelFn = cancelFn
 	s.helper = dbHelper
 
 	s.issueService = issueService.NewService(issueStore, validator)
-	s.projectService = projectService.NewService(projectStore, sprintStore, validator, verifier)
-	s.teamService = teamService.NewService(teamStore, validator, verifier)
+	s.projectService = projectService.NewService(projectStore, sprintStore, validator, authorizer)
+	s.teamService = teamService.NewService(teamStore, validator, authorizer)
 	s.sprintService = sprintService.NewService(sprintStore, validator)
-	s.departmentService = departmentService.NewService(departmentStore, validator, verifier)
+	s.departmentService = departmentService.NewService(departmentStore, validator, authorizer)
 }
 
 func (s *CrntDMSuite) TearDownSuite() {

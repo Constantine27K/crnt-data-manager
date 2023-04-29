@@ -11,7 +11,7 @@ import (
 )
 
 func (i *Implementation) CreateTeam(ctx context.Context, req *desc.TeamCreateRequest) (*desc.TeamCreateResponse, error) {
-	err := i.verifier.VerifyAdmin(ctx)
+	_, err := i.authorizer.AuthorizeAdmin(ctx)
 	if err != nil {
 		log.Error("error while verifying rights",
 			zap.Any("team", req.GetTeam()),

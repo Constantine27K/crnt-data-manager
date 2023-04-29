@@ -11,7 +11,7 @@ import (
 )
 
 func (i *Implementation) UpdateDepartment(ctx context.Context, req *desc.DepartmentUpdateRequest) (*desc.DepartmentUpdateResponse, error) {
-	err := i.verifier.VerifyAdmin(ctx)
+	_, err := i.authorizer.AuthorizeAdmin(ctx)
 	if err != nil {
 		log.Error("error while verifying rights",
 			zap.Any("department", req.GetDepartment()),
