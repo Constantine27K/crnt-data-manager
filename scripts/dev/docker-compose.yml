@@ -2,12 +2,15 @@ version: '3'
 services:
   postgres:
     image: bitnami/postgresql:latest
+    hostname: pg-data-manager
     environment:
       - POSTGRESQL_USERNAME=crnt-dm-user
       - POSTGRESQL_PASSWORD=crnt-dm-password
       - POSTGRESQL_DATABASE=crnt-dm-db
     ports:
       - "5432:5432"
+    networks:
+      - crnt-4
 
   pg-up-checker:
     image: oliosinter/ansible-probe:1.0.0
@@ -15,4 +18,10 @@ services:
       PROBE_HOST: postgres
       PROBE_PORT: 5432
       PROBE_TIMEOUT: 20
+    networks:
+      - crnt-4
     command: [ "probe.yml" ]
+
+networks:
+  crnt-4:
+    external: true
