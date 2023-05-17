@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - crnt-4
+      - "crnt-data"
 
   pg-up-checker:
     image: oliosinter/ansible-probe:1.0.0
@@ -18,10 +18,10 @@ services:
       PROBE_HOST: postgres
       PROBE_PORT: 5432
       PROBE_TIMEOUT: 20
-    networks:
-      - crnt-4
     command: [ "probe.yml" ]
+    networks:
+      - "crnt-data"
 
 networks:
-  crnt-4:
+  crnt-data:
     external: true
