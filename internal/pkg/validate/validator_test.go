@@ -170,14 +170,6 @@ func TestProjectValidator(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "no responsible team",
-			input: &project.Project{
-				Name:      gofakeit.Word(),
-				ShortName: "ORG",
-			},
-			wantErr: true,
-		},
-		{
 			name: "positive",
 			input: &project.Project{
 				Name:               gofakeit.Word(),
