@@ -11,7 +11,7 @@ import (
 )
 
 func (i *Implementation) CreateDepartment(ctx context.Context, req *desc.DepartmentCreateRequest) (*desc.DepartmentCreateResponse, error) {
-	_, err := i.authorizer.AuthorizeUser(ctx)
+	_, err := i.authorizer.AuthorizeAdmin(ctx)
 	if err != nil {
 		log.Error("error while verifying rights",
 			zap.Any("department", req.GetDepartment()),
