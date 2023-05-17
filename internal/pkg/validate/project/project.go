@@ -19,7 +19,7 @@ type validator struct {
 func NewValidator() Validator {
 	return &validator{
 		checks: []checker{
-			checkNames, checkTeams,
+			checkNames,
 		},
 	}
 }
@@ -42,14 +42,6 @@ func checkNames(project *projectPack.Project) error {
 
 	if len(project.GetShortName()) < 3 || len(project.GetShortName()) > 5 {
 		return fmt.Errorf("project short name should be greater or equal to 3 symbols, or less or equal to 5 symbols")
-	}
-
-	return nil
-}
-
-func checkTeams(project *projectPack.Project) error {
-	if len(project.GetResponsibleTeamIds()) == 0 {
-		return fmt.Errorf("project should have at least one responsible team")
 	}
 
 	return nil

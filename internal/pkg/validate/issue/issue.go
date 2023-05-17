@@ -22,7 +22,7 @@ type validator struct {
 func NewValidator() Validator {
 	return &validator{
 		checks: []checker{
-			checkTemplate, checkName, checkType, checkDescription, checkAuthor, checkProject,
+			checkName, checkType, checkDescription, checkAuthor, checkProject,
 		},
 	}
 }
