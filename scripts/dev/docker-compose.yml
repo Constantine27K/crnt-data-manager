@@ -8,6 +8,8 @@ services:
       - POSTGRESQL_DATABASE=crnt-dm-db
     ports:
       - "5432:5432"
+    networks:
+      - "crnt-data"
 
   pg-up-checker:
     image: oliosinter/ansible-probe:1.0.0
@@ -16,3 +18,9 @@ services:
       PROBE_PORT: 5432
       PROBE_TIMEOUT: 20
     command: [ "probe.yml" ]
+    networks:
+      - "crnt-data"
+
+networks:
+  crnt-data:
+    external: true
